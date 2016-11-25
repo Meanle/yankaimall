@@ -1,0 +1,74 @@
+<layout name="layout"/>
+<div class="page">
+    <include file="./Apps/Home/View/default/public/tab-bar.html" set="active"/>
+    <div class="content">
+        <div class="page-login">
+            <div class="list-block inset">
+                <ul>
+                    <!-- Text inputs -->
+                    <li>
+                        <div class="item-content">
+                            <div class="item-media"><i class="icon iconfont">&#xe617;</i></div>
+                            <div class="item-inner">
+                                <div class="item-input">
+                                    <input id='oldPass' name='oldPass' type="password" placeholder="请输入旧密码">
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-media"><i class="icon iconfont">&#xe617;</i></div>
+                            <div class="item-inner">
+                                <div class="item-input">
+                                    <input id='newPass' name='newPass' type="password" placeholder="请输入新密码">
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-media"><i class="icon iconfont">&#xe616;</i></div>
+                            <div class="item-inner">
+                                <div class="item-input">
+                                    <input id='reNewPass' onchange="checkPassWord()" name='reNewPass' type="password" placeholder="请确认密码">
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="content-block login-register">
+                <p><a id="editpass" class="button button-big button-fill" onclick="editPass();"  data-transition='fade'>确定修改</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function checkPassWord() {
+        var pass = $('#newPass').val(),
+                rePass = $('#reNewPass').val();
+        if(pass !== rePass) {
+            $.toast('两次输入的密码不一致，请重试！');
+            return false;
+        }
+    }
+
+    function editPass(){
+        var params = {};
+        params.oldPass = $('#oldPass').val();
+        params.newPass = $('#newPass').val();
+        params.reNewPass = $('#reNewPass').val();
+        $.toast('数据处理中，请稍候...');
+        $.post(("{:U('Home/Users/editPass')}"), params, function (data, textStatus) {
+//            var json = JSON.parse(data);
+            if(data.status=='1'){
+                $.toast("密码修改成功");
+                location.href = '{:U("Orders/queryByPage")}';
+            } else {
+                $.toast("原密码不正确，请重试！");
+            }
+        });
+    }
+
+</script>

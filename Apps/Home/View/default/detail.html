@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{$goodsDetails["goodsName"]} | 雁凯跨境馆</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="__ROOT__/Apps/Home/View/default/css/sm.min.css">
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
+    <link rel="stylesheet" href="__ROOT__/Apps/Home/View/default/css/iconfont.css"/>
+    <link rel="stylesheet" href="__ROOT__/Apps/Home/View/default/css/app.css"/>
+</head>
+
+<body>
+
+<div class="page">
+    <div class="content" id='detail-page'>
+        <!-- 这里是页面内容区 -->
+        <style>
+            .list-block,
+            .content-block {
+                margin: 0.75rem 0;
+            }
+        </style>
+        <div class="page-detail" id="pagedetail">
+            <div class="swiper-container swiper-container-horizontal" data-space-between="10">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide" style="max-height: 18rem">
+                        <img class='card-cover' src="__ROOT__/{$goodsDetails['goodsImg']}" alt="">
+                    </div>
+                    <volist name="goodsImgs" id="vo" key="k">
+                        <div class="swiper-slide" style="max-height: 18rem">
+                            <img class='card-cover' src="__ROOT__/{$vo['goodsImg']}" alt="">
+                        </div>
+                    </volist>
+                </div>
+                <div class="swiper-pagination">
+                    <span class="swiper-pagination-bullet swiper-pagination-bullet-active"></span>
+                    <span class="swiper-pagination-bullet"></span><span class="swiper-pagination-bullet"></span>
+                </div>
+            </div>
+            <div class='content-block goods-card'>
+                <h3>{$goodsDetails["goodsName"]}</h3>
+                <if condition="$isvip eq 1">
+                    <p><strong>￥{$goodsDetails["vipPrice"]}</strong>
+                        <del>￥{$goodsDetails["marketPrice"]}</del>
+                    </p>
+                    <else />
+                    <p><strong>￥{$goodsDetails["shopPrice"]}</strong>
+                        <del>￥{$goodsDetails["marketPrice"]}</del>
+                    </p>
+                </if>
+
+
+
+                <div class="row text-center color-gray" style="margin-top: -1.4rem;">
+                    <div style="float: right;margin-right:.5rem ;">
+                        <a class="operate-num button" onclick="favoriteGoods({$goodsDetails['goodsId']})">
+                            <span id='f0_txt' f='{$favoriteGoodsId}'>
+                            <if condition="$favoriteGoodsId gt 0">已收藏<else/>收藏商品</if>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+                <div class="row text-center color-gray" style="margin-top: .5rem;">
+                    <div class="col-33">
+                        <p class="text-left">运费：{$goodsDetails["deliveryStartMoney"]}元</p>
+                        <!--<p>配送费{$goodsDetails["deliveryMoney"]}元</p>-->
+                        <p class="text-left">{$goodsDetails["deliveryFreeMoney"]}元起免运费</p>
+                    </div>
+                    <div class="col-33">月销{$goodsDetails["saleCount"]}笔</div>
+                    <div class="col-33">湖南衡阳</div>
+                </div>
+            </div>
+<!--            <div class="list-block media-list">
+                <ul>
+                    <li>
+                        <a href="#" class="item-link item-content">
+                            <div class="item-inner">
+                                <div class="item-title-row">
+                                    <div class="item-title">选择颜色和尺码</div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>-->
+            <div class='content-block'>
+                <div class="buttons-row">
+                    <a href="#tab-detail" class="tab-link active button">商品介绍</a>
+                    <a href="#tab-comments" class="tab-link button">评论(<?php echo count($goodsAppraises['root'])?>)</a>
+                </div>
+                <div class="tabs">
+                    <div class="tab active content-padded" id='tab-detail'>
+                        <div class="list-block media-list">
+                            <div class="coffeedetail goods-detail-img">
+                                <p>{$goodsDetails["goodsDesc"]}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab" id='tab-comments'>
+                        <div class="list-block media-list">
+                            <ul>
+                                <if condition=" count($goodsAppraises['root']) gt 0">
+                                    <volist name="goodsAppraises['root']" id="vo1">
+                                        <li>
+                                            <div class="item-content">
+                                                <div class="item-media"><img src="{$vo1['userPhoto']}" width="44"></div>
+                                                <div class="item-inner">
+                                                    <div class="item-title-row">
+                                                        <div class="item-title">{$vo1['loginName']}</div>
+                                                        <div class="item-after">{$vo1['createTime']}</div>
+                                                    </div>
+                                                    <div class="item-text">{$vo1['content']}</div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </volist>
+                                    <else/>
+                                    <div class="tab active content-padded" id='tab-details' style="text-align: center">
+                                        <p>还没有评价信息</p>
+                                    </div>
+                                </if>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <p class="h111"></p>
+        <a href="#" id="toTop" style="display: block;" class="gotop iconfont">&#xe606;</a>
+    </div>
+    <nav class="bar bar-tab bottom-bar detail-tabbar">
+        <div class="gwbtnbox">
+            <div class="gwbtn">
+                <ul>
+                    <li class="shop">
+                            <span class="cart js_cartcont">
+                                <a href="{:U('Home/Cart/getCartInfo')}">
+                                    <s class="icon iconfont">&#xe605;</s>
+                                    <i class="tip_number cart_gnum_chk">{$chkgoodsnum}</i><em>购物车</em>
+                                </a>
+                            </span>
+                    </li>
+                    <li class="add_shop ">
+                            <span class="js_cartbtn">
+                                <a class="btna btn-addtocart" href="#" onclick="addCart({$goodsDetails['goodsId']},1,'{$goodsDetails['goodsThums']}','{$rs['userPhone']}');">加入购物车</a>
+                            </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
+<!-- 默认必须要执行$.init(),实际业务里一般不会在HTML文档里执行，通常是在业务页面代码的最后执行 -->
+
+<script src="__PUBLIC__/js/jquery.min.js"></script>
+<script src="__PUBLIC__/plugins/layer/layer.min.js"></script>
+<script src="__ROOT__/Apps/Home/View/default/js/goods.js"></script>
+<script src="__ROOT__/Apps/Home/View/default/js/usercom.js"></script>
+<script>
+    var ThinkPHP = window.Think = {
+        "ROOT": "__ROOT__",
+        "APP": "__APP__",
+        "PUBLIC": "__PUBLIC__",
+        "DEEP": "{:C('URL_PATHINFO_DEPR')}",
+        "MODEL": ["{:C('URL_MODEL')}", "{:C('URL_CASE_INSENSITIVE')}", "{:C('URL_HTML_SUFFIX')}"],
+        "VAR": ["{:C('VAR_MODULE')}", "{:C('VAR_CONTROLLER')}", "{:C('VAR_ACTION')}"],
+        "DOMAIN": "{:WSTDomain()}",
+        "CITY_ID": "{$currArea['areaId']}",
+        "CITY_NAME": "{$currArea['areaName']}",
+        "DEFAULT_IMG": "{:WSTDomain()}/{$CONF['goodsImg']}",
+        "MALL_NAME": "{$CONF['mallName']}",
+        "SMS_VERFY": "{$CONF['smsVerfy']}",
+        "PHONE_VERFY": "{$CONF['phoneVerfy']}",
+        "IS_LOGIN": "{$WST_IS_LOGIN}"
+    };
+</script>
+<script src="__PUBLIC__/js/think.js"></script>
+<script src="__PUBLIC__/js/common.js"></script>
+<script>
+    jQuery.noConflict();
+</script>
+<script type='text/javascript' src='//g.alicdn.com/sj/lib/zepto/zepto.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
+<script type="text/javascript" src="__ROOT__/Apps/Home/View/default/js/gotop.js"></script>
+<script type="text/javascript" src="__ROOT__/Apps/Home/View/default/js/app.js"></script>
+<script type="text/javascript">
+    $.init();
+    toTop(false);
+    gerGnum();
+    function gerGnum(){
+        $.ajax({
+            url:'{:U("Home/Cart/getCartInfo")}',
+            type:'post',
+            data:{"axm":1},
+            timeout: 2000,
+            success:function(data){
+                var cart = WST.toJson(data);
+                var chkgoodsnum = 0;
+                for(var shopId in cart.cartgoods){
+                    var shop = cart.cartgoods[shopId];
+                    for(var goodsId in shop.shopgoods){
+                        var goods = shop.shopgoods[goodsId];
+                        if(goods.ischk==1){
+                            chkgoodsnum++;
+                        }
+                    }
+                };
+                if(chkgoodsnum != 0){
+                    $(".cart_gnum_chk").css('display','block').html(chkgoodsnum);
+                }
+            },
+            error: function(xhr, type, errorThrown) {
+                $.toast('网络故障请刷新重载!');
+            }
+        });
+    };
+</script>
+</body>
+</html>

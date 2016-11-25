@@ -1,0 +1,61 @@
+<layout name="layout"/>
+<div class="page">
+    <include file="./Apps/Home/View/default/public/tab-bar.html" classify="active"/>
+    <div class="header-nav">
+        <include file="./Apps/Home/View/default/search.html"/>
+    </div>
+    <div class="content page-home" id='home-page' style="top: 2.2rem;">
+        <!-- 这里是页面内容区 -->
+        <!--slider-->
+        <div class="list">
+            <volist name="catList" key="k1" id="vo1">
+                <if condition="$vo1['catName'] eq 分类">
+                    <volist name="vo1['catChildren']" key="k2" id="vo2">
+                        <div id="section$k1" class="list-group">
+                            <a data-transition='slide-in' style="display: block">
+                                <div class="card color-default" style="margin: 0;">
+                                    <div valign="bottom" class="card-header color-white no-border no-padding"
+                                         style="height:auto;">
+                                        <img class='card-cover' src="__ROOT__/{:WSTAds($vo1['catId'])[$k2-1]['adFile']}" alt="">
+                                    </div>
+                                </div>
+                            </a>
+                            <div class="row classify-goods">
+                                <volist name="vo2['catChildren']" key="k3" id="vo3">
+                                    <div class="col-25">
+                                        <a href="{:U('Home/Goods/getGoodsList/',array('c1Id'=>$vo1['catId'],'c2Id'=>$vo2['catId'],'c3Id'=>$vo3['catId'],'catName'=>$vo3['catName'],'class'=>$k2))}">{$vo3['catName']}</a>
+                                    </div>
+                                </volist>
+                            </div>
+                        </div>
+                    </volist>
+                </if>
+            </volist>
+        </div>
+    </div>
+</div>
+<script>
+    //    记住当前浏览位置，返回时回到当前浏览位置
+    var c=0;
+    $(function (){
+        sessionStorage.removeItem("top");
+        var a=b=null;
+        if(window.sessionStorage){
+            a=parseInt(sessionStorage.getItem("top2"));
+            b=parseInt(sessionStorage.getItem("size2"));
+            if(a){
+                $('.content').scrollTop(a);
+            }
+        }
+    });
+    // 记住当前浏览位置并存储为session
+    $('.content').on('scroll',  function () {
+        var tops2=$('.content').scrollTop(),
+                height2=$('.content').scrollTop(),
+                scrollbottom=height2-tops2;
+        if(window.sessionStorage){
+            sessionStorage.setItem("top2",tops2);
+            sessionStorage.setItem("size2",c);
+        }
+    })
+</script>

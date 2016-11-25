@@ -1,0 +1,363 @@
+<layout name="layout"/>
+<div class="page">
+    <include file="./Apps/Home/View/default/public/tab-bar.html" index="active"/>
+    <!--<div class="content-padded" style="height: 100%;">-->
+    <!--<div class="develop" style="width: 100%; height: 100%; padding: 40% 0;">-->
+    <!--<p class="icon iconfont" style="width: 100%;text-align: center; font-size: 6rem;    color: #929292;">&#xe6bd;</p>-->
+    <!--<p style="width: 100%;text-align: center;color: #929292;">咦，页面坐着神州11号飞去外太空了！</p>-->
+    <!--</div>-->
+    <!--</div>-->
+    <div class="header-nav">
+        <include file="./Apps/Home/View/default/search.html"/>
+        <div class="header-class" id="navHeight">
+            <nav class="nav-wrap" id="nav-wrap">
+                <ul class="clearfix scroll-fix sort-tab">
+                    <volist name=":WSTGoodsCats()" key="k1" id="vo1">
+                        <volist name="vo1['catChildren']" key="k2" id="vo2">
+                            <if condition="$vo2['catName'] eq 默认">
+                                <volist name="vo2['catChildren']" key="k3" id="vo3">
+                                    <if condition="$k3 eq 1">
+                                        <li>
+                                            <a class="active">{$vo3["catName"]}</a>
+                                        </li>
+                                        <else/>
+                                        <li>
+                                            <a>{$vo3["catName"]}</a>
+                                        </li>
+                                    </if>
+                                </volist>
+                            </if>
+                        </volist>
+                    </volist>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <!--生日日-->
+    <if condition="$isBirthday eq 1">
+        <div class="birthday">
+            <a href="{:U('Home/Welfare/goBirthDay')}"></a>
+        </div>
+    </if>
+    <!--会员日-->
+    <if condition="$isVipday eq 1">
+        <div class="birthday">
+            <a href="{:U('Home/Welfare/goVipDay')}"></a>
+        </div>
+    </if>
+
+    <div class="content page-home" id='home-page'>
+        <!--下拉刷新-->
+        <!--        <div class="pull-to-refresh-layer">
+                    <div class="preloader"></div>
+                    <div class="pull-to-refresh-arrow"></div>
+                </div>-->
+        <!-- 这里是页面内容区 -->
+        <!--slider-->
+        <div class="swiper-container swiper-container-horizontal" data-space-between="10" data-autoplay="3000" data-speed="300">
+            <div class="swiper-wrapper">
+                <volist name=":WSTAds(-1)" id="vo" key="k">
+                    <div class="swiper-slide">
+                        <img class='card-cover'
+                             src="__ROOT__/{$vo['adFile']}"
+                             alt="">
+                    </div>
+                </volist>
+            </div>
+            <div class="swiper-pagination">
+                <span class="swiper-pagination-bullet swiper-pagination-bullet-active"></span>
+                <span class="swiper-pagination-bullet"></span><span class="swiper-pagination-bullet"></span>
+            </div>
+        </div>
+        <div class="index-coffee">
+            <div class="row">
+                <div class="col-33">
+                    <a href="{:U('Home/Users/govipEntityByPages')}">
+                        <p class="index-coffee-icon iconfont">&#xe71a;</p>
+                        <p class="index-coffee-title">黑金特权</p>
+                    </a>
+                </div>
+                <div class="col-33">
+                    <a href="{:U('Index/coffee')}">
+                        <p class="index-coffee-icon iconfont">&#xe633;</p>
+                        <p class="index-coffee-title">咖啡馆</p>
+                    </a>
+                </div>
+                <div class="col-33">
+                    <volist name=":WSTGoodsCats()" key="k1" id="vo1">
+                        <volist name="vo1['catChildren']" key="k2" id="vo2">
+                            <if condition="$vo2['catName'] eq 默认">
+                                <volist name="vo2['catChildren']" key="k3" id="vo3">
+                                    <if condition="$vo3['catName'] eq 超值热卖">
+                                        <a href="{:U('Home/Goods/getGoodsList/',array('c1Id'=>$vo1['catId'],'c2Id'=>$vo2['catId'],'c3Id'=>$vo3['catId'],'catName'=>$vo3['catName'],'class'=>$k3))}">
+                                            <p class="index-coffee-icon iconfont">&#xe635;</p>
+                                            <p class="index-coffee-title">热卖榜</p>
+                                        </a>
+                                    </if>
+                                </volist>
+                            </if>
+                        </volist>
+                    </volist>
+                </div>
+            </div>
+        </div>
+
+        <div class="list">
+            <ul class="clearfix">
+                <volist name=":WSTGoodsCats()" key="k1" id="vo1">
+                    <volist name="vo1['catChildren']" key="k2" id="vo2">
+                        <if condition="$vo2['catName'] eq 默认">
+                            <volist name="vo2['catChildren']" key="k3" id="vo3">
+                                <div id="section{$k3}" class="list-group">
+                                    <div class="list-group-title">
+                                        <span>{$vo3['catName']}</span>
+                                        <p>不可错过</p>
+                                    </div>
+                                    <a href="{:U('Home/Goods/getClassGoodslist/',array('sum'=>$k3,'c1Id'=>$vo1['catId'],'catName'=>$vo3['catName']))}"
+                                       data-transition='slide-in'>
+                                        <div class="card color-default" style="margin: 0 0 .5rem 0;">
+                                            <div style="" valign="bottom"
+                                                 class="card-header color-white no-border no-padding">
+                                                <img class='card-cover'
+                                                     src="__ROOT__/{:WSTAds($vo1['catId'])[$k3-1]['adFile']}" alt="">
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <?php $num = 0;?>
+                                    <ul class="list_sort_list">
+                                        <if condition="$k3 eq 1">
+                                            <foreach name="catList1" key="k4" item="vo4">
+                                                <if condition="$vo4['catName'] eq 分类">
+                                                    <foreach name="vo4['catChildren']" key="k5" item="vo5">
+                                                        <foreach name="vo5['goods']" key="k6" item="vo6">
+                                                            <if condition="$num lt 4">
+                                                                <?php $num ++;?>
+                                                                <li>
+                                                                    <div class="sell-goods"
+                                                                         onclick="goGoodsDetail('{$vo6[goodsId]}')">
+                                                                        <a>
+                                                                            <img alt="" src="__ROOT__/{$vo6['goodsThums']}">
+                                                                        </a>
+                                                                        <p class="txt">
+                                                                            <a>{$vo6['goodsName']}</a>
+                                                                        </p>
+                                                                        <div class="price">
+                                                                            <span class="pri"><em>￥ {$vo6['shopPrice']}</em></span>
+                                                                            <del>￥{$vo6["marketPrice"]}</del>
+                                                                        </div>
+                                                                        <!--<div class="vip-price">
+                                                                            <p>{$vo6['vipPrice']}</p>
+                                                                        </div>-->
+                                                                        <!--<p class="pl"><em>5人评价</em>，<em>好评率100%</em></p>-->
+                                                                    </div>
+                                                                </li>
+                                                            </if>
+                                                        </foreach>
+                                                    </foreach>
+                                                </if>
+                                            </foreach>
+                                        </if>
+                                        <if condition="$k3 eq 2">
+                                            <foreach name="catList2" key="k4" item="vo4">
+                                                <if condition="$vo4['catName'] eq 分类">
+                                                    <foreach name="vo4['catChildren']" key="k5" item="vo5">
+                                                        <foreach name="vo5['goods']" key="k6" item="vo6">
+                                                            <if condition="$num lt 4">
+                                                                <?php $num ++;?>
+                                                                <li>
+                                                                    <div class="sell-goods"
+                                                                         onclick="goGoodsDetail('{$vo6[goodsId]}')">
+                                                                        <a>
+                                                                            <img alt="" src="__ROOT__/{$vo6['goodsThums']}">
+                                                                        </a>
+                                                                        <p class="txt">
+                                                                            <a>{$vo6['goodsName']}</a>
+                                                                        </p>
+                                                                        <div class="price">
+                                                                            <span class="pri"><em>￥ {$vo6['shopPrice']}</em></span>
+                                                                            <del>￥{$vo6["marketPrice"]}</del>
+                                                                        </div>
+                                                                       <!-- <div class="vip-price">
+                                                                            <p>{$vo6['vipPrice']}</p>
+                                                                        </div>-->
+                                                                        <!--<p class="pl"><em>5人评价</em>，<em>好评率100%</em></p>-->
+                                                                    </div>
+                                                                </li>
+                                                            </if>
+                                                        </foreach>
+                                                    </foreach>
+                                                </if>
+                                            </foreach>
+                                        </if>
+                                        <if condition="$k3 eq 3">
+                                            <foreach name="catList3" key="k4" item="vo4">
+                                                <if condition="$vo4['catName'] eq 分类">
+                                                    <foreach name="vo4['catChildren']" key="k5" item="vo5">
+                                                        <foreach name="vo5['goods']" key="k6" item="vo6">
+                                                            <if condition="$num lt 4">
+                                                                <?php $num ++;?>
+                                                                <li>
+                                                                    <div class="sell-goods"
+                                                                         onclick="goGoodsDetail('{$vo6[goodsId]}')">
+                                                                        <a>
+                                                                            <img alt="" src="__ROOT__/{$vo6['goodsThums']}">
+                                                                        </a>
+                                                                        <p class="txt">
+                                                                            <a>{$vo6['goodsName']}</a>
+                                                                        </p>
+                                                                        <div class="price">
+                                                                            <span class="pri"><em>￥ {$vo6['shopPrice']}</em></span>
+                                                                            <del>￥{$vo6["marketPrice"]}</del>
+                                                                        </div>
+                                                                        <!--<div class="vip-price">
+                                                                            <p>{$vo6['vipPrice']}</p>
+                                                                        </div>-->
+                                                                        <!--<p class="pl"><em>5人评价</em>，<em>好评率100%</em></p>-->
+                                                                    </div>
+                                                                </li>
+                                                            </if>
+                                                        </foreach>
+                                                    </foreach>
+                                                </if>
+                                            </foreach>
+                                        </if>
+                                        <if condition="$k3 eq 4">
+                                            <foreach name="catList4" key="k4" item="vo4">
+                                                <if condition="$vo4['catName'] eq 分类">
+                                                    <foreach name="vo4['catChildren']" key="k5" item="vo5">
+                                                        <foreach name="vo5['goods']" key="k6" item="vo6">
+                                                            <if condition="$num lt 4">
+                                                                <?php $num ++;?>
+                                                                <li>
+                                                                    <div class="sell-goods"
+                                                                         onclick="goGoodsDetail('{$vo6[goodsId]}')">
+                                                                        <a>
+                                                                            <img alt="" src="__ROOT__/{$vo6['goodsThums']}">
+                                                                        </a>
+                                                                        <p class="txt">
+                                                                            <a>{$vo6['goodsName']}</a>
+                                                                        </p>
+                                                                        <div class="price">
+                                                                            <span class="pri"><em>￥ {$vo6['shopPrice']}</em></span>
+                                                                            <del>￥{$vo6["marketPrice"]}</del>
+                                                                        </div>
+                                                                        <!--<div class="vip-price">
+                                                                            <p>{$vo6['vipPrice']}</p>
+                                                                        </div>-->
+                                                                        <!--<p class="pl"><em>5人评价</em>，<em>好评率100%</em></p>-->
+                                                                    </div>
+                                                                </li>
+                                                            </if>
+                                                        </foreach>
+                                                    </foreach>
+                                                </if>
+                                            </foreach>
+                                        </if>
+                                    </ul>
+                                    <div class="list-more">
+                                        <p><a style="color: #000;"
+                                              href="{:U('Home/Goods/getClassGoodslist/',array('sum'=>$k3,'c1Id'=>$vo1['catId'],'catName'=>$vo3['catName']))}"
+                                              data-transition='slide-in'>更多</a></p>
+                                    </div>
+                                </div>
+                            </volist>
+                        </if>
+                    </volist>
+                </volist>
+                <div id="" style="font-size: .55rem;text-align: center;padding: .2rem 0 0 0;">客服电话:4000-665-133</div>
+                <div id="shop-info" style="font-size: .55rem;text-align: center;padding: .2rem;">门店地址:衡阳市蒸湘区解放大道21号华新步步高一楼</div>
+            </ul>
+        </div>
+    </div>
+    <div id="alerter" style="position:fixed;height:100%;width:100%;top: 0;left: 0;background:rgba(103, 103, 103, 0.23);z-index: 999999">
+        <div style="margin: 50% auto; position: relative;">
+            <p class="closealerter" style="position: absolute; top: 0; right: 0;width: 1.5rem;height: 1.5rem;"></p>
+            <img style="width: 100%" src="__ROOT__/Apps/Home/View/default/img/alert.png">
+            <p class="closealerter" style="position: absolute;bottom: 2.5rem;height: 2rem;width: 100%;"></p>
+        </div>
+    </div>
+</div>
+<script type='text/javascript' src="__ROOT__/Apps/Home/View/default/js/cookie.js" charset='utf-8'></script>
+<script src="__PUBLIC__/js/jquery.min.js"></script>
+<script>
+
+    var isfirst = sessionStorage.getItem("first");
+    if(isfirst){
+        jQuery("#alerter").css('display','none');
+    }else{
+        jQuery(".closealerter").click(function (){
+            jQuery("#alerter").hide(100);
+        });
+        sessionStorage.setItem("first", "1");
+    }
+
+
+    //    进入商品详情
+    function goGoodsDetail(id) {
+        location.href = "{:U('Home/Goods/getGoodsDetails/')}&goodsId=" + id;
+    }
+    jQuery(function (){
+        //    首页生日日和会员日显示
+        var interval=setInterval(tiao,5000);
+        var intervals=setInterval(tiao,5500);
+        jQuery('.birthday').click(function () {
+            clearInterval(interval,intervals);
+        });
+        //    定位锚点
+        var stop2 = $("#section2").offset().top;
+        var stop3 = $("#section3").offset().top;
+        var stop4 = $("#section4").offset().top;
+        jQuery(".sort-tab li").click(function() {
+            var t = $(this).index();
+            if(t == 0) {
+                jQuery("#home-page").stop().animate({scrollTop: '0px'}, 700);
+                $(".sort-tab li a").removeClass("active");
+                $(".sort-tab li a").eq(t).addClass("active");
+            } else {
+                $(".sort-tab li a").removeClass("active");
+                $(".sort-tab li a").eq(t).addClass("active");
+                var tnum = t+1;
+                var section = "section" + tnum;
+                console.log(section);
+                if(section == "section2"){
+                    jQuery(".content").stop().animate({scrollTop: stop2-90}, 500);
+                }else if(section == "section3"){
+                    jQuery(".content").stop().animate({scrollTop: stop3-90}, 500);
+                }else if(section == "section4"){
+                    jQuery(".content").stop().animate({scrollTop: stop4-90}, 500);
+                }
+            }
+        });
+    });
+//    首页生日日和会员日动画
+    function tiao(){
+        jQuery(".birthday").animate({left:"-1rem"},250,function(){jQuery(".birthday").animate({left:"-0.5rem"},250);});
+        jQuery(".vipday").animate({right:"-5.5rem"},250,function(){jQuery(".vipday").animate({right:"-5rem"},250);});
+    };
+//    记住浏览位置，返回时回到当前位置
+    var c=0;
+    jQuery(function (){
+        sessionStorage.removeItem("top");
+        var a=b=null;
+        if(window.sessionStorage){
+            a=parseInt(sessionStorage.getItem("top1"));
+            b=parseInt(sessionStorage.getItem("size1"));
+            if(a){
+                jQuery('.content').scrollTop(a);
+            }
+        }
+    });
+
+    // 记住当前浏览位置并存储为session
+    jQuery('.content').on('scroll',  function () {
+        var tops1=jQuery('.content').scrollTop(),
+                height1=jQuery('.content').scrollTop(),
+                scrollbottom=height1-tops1;
+        if(window.sessionStorage){
+            sessionStorage.setItem("top1",tops1);
+            sessionStorage.setItem("size1",c);
+        }
+    })
+    jQuery.noConflict();
+</script>
+

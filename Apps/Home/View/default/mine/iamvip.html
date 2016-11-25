@@ -1,0 +1,80 @@
+<layout name="layout"/>
+<div class="page">
+    <div class="content page-home infinite-scroll" id='vip-page' style="margin-bottom: 0;">
+        <div class="list">
+            <div class="list-group-title" style="margin: 0;">
+                <div class="vip-title-img text-center">
+                    <div class="item-content text-center">
+                        <div class="item-media"><img src="{:WSTImgPath($WST_USER['userPhoto'])}" width="80">
+                        </div>
+                        <div class="item-inner">
+                            <div class="item-title-row">
+                                <div class="item-title">
+                                    <span class="iconfont" style="font-size: 1.4rem;vertical-align: middle;margin-right: 0.4rem">&#xe6b8;</span>
+                                    {$WST_USER["loginName"]}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-content">
+                <div class="card-content">
+                    <!--以下是会员不是会员特价商品日显示-->
+
+                    <volist name="articleList" key="k1" id="vo1">
+                        <volist name="vo1[articlecats]" key="k2" id="vo2">
+
+                        </volist>
+                    </volist>
+                    <!--end-->
+
+                    <!--以下是会员卡日特价商品，只有在制定日期显示-->
+                    <div class="vip-date iamvip">
+                        <p class="color-gray" style="padding-bottom: 0; ">
+                            <span class="iconfont" style="font-size: 1.4rem;vertical-align: middle;">&#xe62c;</span>
+                            <span>{$WST_USER["loginName"]}</span>
+                            <span style="color: #ccc;font-size: .5rem">黑金会员</span>
+                        </p>
+                        <p class="twocode"><img src="__ROOT__/Apps/Home/View/default/img/twocode.png"></p>
+                        <div class="list coffee-content-block">
+                            <ul class="list_sort_list collect_list">
+                                    <div class="content-padded" style="height: 100%; margin-top: 0;">
+                                        <div class="develop" style="width: 100%; height: 100%; padding:0;">
+                                            <p style="width: 100%;text-align: center;color: #929292;"><span class="bvipcard">卡号：</span><span>{$vipcard[cardId]}</span></p>
+                                            <p style="width: 100%;text-align: center;color: #929292;"><span class="bvipcard">密码：</span><span>{$vipcard[cardPassword]}</span></p>
+                                            <p style="width: 100%;text-align: center;color: #929292;"><span class="bvipcard">办理日期：</span><span>{$vipcard[startTime]}</span></p>
+                                            <p style="width: 100%;text-align: center;color: #929292;"><span class="bvipcard">有效期至：</span><span>{$vipcard[endTime]}</span></p>
+                                        </div>
+                                    </div>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="content-block row">
+                        <p class="col-40" style="margin: 0 auto;float: none">
+                            <input id="goIndex" class="button button-fill" style="background: #ffbe00;color: #fff;" type="submit"
+                                   data-transition='fade' value="前去购物" />
+                        </p>
+                    </div>
+                    <div class="card-content-inner" style="padding: 0 1.5rem .5rem 1.5rem;">
+                        <p class="color-gray">
+                        </p>
+                        <p style="color: #ccc;font-size: 0.85rem;">您的特权</p>
+                        <p>1.咖啡吧饮品半价</p>
+                        <p>2.会员生日当天大礼包</p>
+                        <p>3.每周会员特价产品</p>
+                        <p>4.线上线下均享会员价</p>
+                        <p>5.购物积分兑换</p>
+                        <p>6.免费体验彩妆、护肤沙龙活动</p>
+                    </div>
+                    <!--end-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('#goIndex').click(function () {
+        location.href = "{:U('Index/index')}";
+    })
+</script>

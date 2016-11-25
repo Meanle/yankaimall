@@ -1,0 +1,177 @@
+<layout name="layout"/>
+<div class="page">
+    <div class="content" id='detail-page'>
+        <!-- 这里是页面内容区 -->
+        <div class="page-check" id="pagecheck">
+            <div class="list-block list-num">
+                <ul>
+                    <li class="item-content">
+                        <div class="item-media"><i class="icon icon-f7"></i></div>
+                        <div class="item-inner">
+                            <div class="item-title">
+                                <span>订单编号:</span>{$orderInfo["order"]["orderNo"]}
+                            </div>
+                            <div class="item-after coffee-price">
+                                    <if condition='($orderInfo["orderStatus"] eq -3) OR ($orderInfo["orderStatus"] eq -4)'>
+                                    拒收<if condition='$orderInfo["isRefund"] eq 1'>(已退款)<else/>(未退款)</if>
+                                    <elseif condition='$orderInfo["order"]["orderStatus"] eq -2'/>未付款
+                                    <elseif condition='$orderInfo["order"]["orderStatus"] eq -1'/>已取消
+                                    <elseif condition='$orderInfo["order"]["orderStatus"] eq 0'/>未受理
+                                    <elseif condition='$orderInfo["order"]["orderStatus"] eq 1'/>已受理
+                                    <elseif condition='$orderInfo["order"]["orderStatus"] eq 2'/>打包中
+                                    <elseif condition='$orderInfo["order"]["orderStatus"] eq 3'/>配送中
+                                    <elseif condition='$orderInfo["order"]["orderStatus"] eq 4'/>已到货
+                                    <elseif condition='$orderInfo["order"]["orderStatus"] eq 5'/>确认已收货
+                                    </if>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="list-block media-list">
+                <ul>
+                    <volist name="orderInfo['goodsList']" id="goods" key='key1'>
+                        <li>
+                            <a class="item-content" href="{:U('Home/Goods/getGoodsDetails/',array('goodsId'=>$goods['goodsId']))}">
+                                <div class="item-media"><img src="__ROOT__/{$goods['goodsThums']}" width="80"></div>
+                                <div class="item-inner">
+                                    <div class="item-title-row">
+                                        <div class="item-title">{$goods["goodsName"]}<if condition="$goods['goodsAttrName'] neq ''">【{$goods['goodsAttrName']}】</if></div>
+                                        <div class="item-after">
+                                            <span class="coffee-price">￥{$goods["shopPrice"]}</span>
+                                            <span>x{$goods["goodsNums"]}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                    </volist>
+                </ul>
+            </div>
+            <div class="card facebook-card">
+                <div class="card-content">
+                    <div class="coffee-message">
+                        <div class="item-input">
+                            <div class="list-block media-list">
+                                <ul>
+                                    <li style="font-size: .7rem;color: #5f646e;">
+                                        <div class="item-inner">
+                                            <div class="item-title">
+                                                <span>收货人信息</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <a class="item-content" href="javascript:;">
+                                            <div class="item-inner">
+                                                <div class="item-title-row">
+                                                    <div class="item-title">收货人姓名:</div>
+                                                    <div class="item-after">
+                                                        {$orderInfo["order"]["userName"]}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="item-content" href="javascript:;">
+                                            <div class="item-inner">
+                                                <div class="item-title-row">
+                                                    <div class="item-title">收货地址:</div>
+                                                    <div class="item-after">
+                                                        <if condition="$orderInfo['catName'][0]['catName'] eq '咖啡馆'">
+                                                            {$orderInfo["order"]["orderRemarks"]}
+                                                            <else/>
+                                                            <span id="user-address">{$orderInfo["order"]["userAddress"]}</span>
+                                                            <script>
+                                                                var span = document.getElementById('user-address');
+                                                                var address = span.innerHTML;
+                                                                var newAddr = address.split('蒸湘区 默认 ');
+                                                                span.innerHTML = newAddr[0]+newAddr[1];
+                                                            </script>
+                                                        </if>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="item-content" href="javascript:;">
+                                            <div class="item-inner">
+                                                <div class="item-title-row">
+                                                    <div class="item-title">联系电话:</div>
+                                                    <div class="item-after">
+                                                        {$orderInfo["order"]["userPhone"]}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="item-content" href="javascript:;">
+                                            <div class="item-inner">
+                                                <div class="item-title-row">
+                                                    <div class="item-title">期望送达时间:</div>
+                                                    <div class="item-after">
+                                                        {$orderInfo["order"]["requireTime"]}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <div class="line-bg"></div>
+                                    <li style="font-size: .7rem;color: #5f646e;">
+                                        <div class="item-inner">
+                                            <div class="item-title">
+                                                <span>日志信息</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <volist name="orderInfo['logs']" id="log" key='key1'>
+                                        <li>
+                                            <a class="item-content" href="javascript:;">
+                                                <div class="item-inner">
+                                                    <div class="item-title-row">
+                                                        <div class="item-title">{$log["logTime"]}</div>
+                                                        <div class="item-after">
+                                                            {$log["logContent"]}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    </volist>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="line-bg"></div>
+                    <div class="coffee-money">
+                        <div class="list-block list-num">
+                            <ul>
+                                <li class="item-content">
+                                    <div class="item-inner">
+                                        <div class="item-title">
+                                            <span>订单总额</span>
+                                        </div>
+                                        <div class="item-after coffee-price">￥{$orderInfo["order"]["totalMoney"]+$orderInfo["order"]["deliverMoney"]}</div>
+                                    </div>
+                                </li>
+                                <li class="item-content">
+                                    <div class="item-inner">
+                                        <div class="item-title">
+                                        </div>
+                                        <div class="item-after coffee-price">
+                                            <span class="jine">支付金额</span>
+                                            <span>￥{$orderInfo["order"]["realTotalMoney"]}</span>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

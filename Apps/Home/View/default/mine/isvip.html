@@ -1,0 +1,106 @@
+<layout name="layout"/>
+<div class="page">
+    <div class="content page-home infinite-scroll" id='vip-page' style="margin-bottom: 0;">
+        <div class="list">
+            <div class="list-group-title" style="margin: 0;">
+                <div class="vip-title-img text-center">
+                    <div class="item-content text-center">
+                        <div class="item-media"><img src="{:WSTImgPath($WST_USER['userPhoto'])}" width="80">
+                        </div>
+                        <div class="item-inner">
+                            <div class="item-title-row">
+                                <div class="item-title">
+                                    <span class="iconfont"
+                                          style="font-size: 1.4rem;vertical-align: middle;margin-right: 0.4rem">&#xe6b8;</span>
+                                    {$WST_USER["loginName"]}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-content">
+                <div class="card-content">
+                    <!--以下是会员不是会员特价商品日显示-->
+
+                    <volist name="articleList" key="k1" id="vo1">
+                        <volist name="vo1[articlecats]" key="k2" id="vo2">
+
+                        </volist>
+                    </volist>
+                    <div class="card-content-inner" style="display: none">
+                        <p class="color-gray"><span class="iconfont"
+                                                    style="font-size: 1.4rem;vertical-align: middle;margin-right: 0.4rem"></span>黑金卡特权
+                        </p>
+                        <p>1.咖啡吧饮品半价</p>
+                        <p>2.会员生日当天大礼包</p>
+                        <p>3.每周会员特价产品</p>
+                        <p>4.线上线下均享会员价</p>
+                        <p>5.购物积分兑换</p>
+                        <p>6.免费体验彩妆、护肤沙龙活动</p>
+                    </div>
+                    <!--end-->
+
+                    <!--以下是会员卡日特价商品，只有在制定日期显示-->
+                    <div class="vip-date">
+                        <p class="color-gray" style="padding-bottom: 0; ">
+                            <span class="iconfont" style="font-size: 1.4rem;vertical-align: middle;">&#xe62c;</span>
+                            <span>会员日福利</span>
+                            <span style="color: #ccc;font-size: .5rem">黑金会员专享</span>
+                        </p>
+                        <div class="list coffee-content-block">
+                            <ul class="list_sort_list collect_list">
+                                <empty name="catList">
+                                    <div class="content-padded" style="height: 100%;">
+                                        <div class="develop" style="width: 100%; height: 100%; padding: 20% 0;">
+                                            <p class="icon iconfont"
+                                               style="width: 100%;text-align: center; font-size: 6rem;    color: #929292;">
+                                                &#xe621;</p>
+                                            <p style="width: 100%;text-align: center;color: #929292;">抱歉还不是会员日！</p>
+                                        </div>
+                                    </div>
+                                    <else/>
+                                    <foreach name="catList[0]['catChildren']" key="k4" item="vo4">
+                                        <foreach name="vo4['catChildren']" key="k5" item="vo5">
+                                            <if condition="$vo4['catName'] eq 折扣商品">
+                                                <?php $catId = 0;?>
+                                                <if condition="$vo5['catName'] eq 会员日">
+                                                    <?php $catId = $vo5['catId'];?>
+                                                </if>
+                                                <foreach name="vo4['goods']" key="k5" item="vo5">
+                                                        <if condition="$vo5['goodsCatId3'] eq $catId">
+                                                            <li>
+                                                                <div>
+                                                                    <a class=""
+                                                                       href="{:U('Home/Goods/getGoodsDetails/',array('goodsId'=>$vo5['goodsId']))}">
+                                                                        <img alt="" src="__ROOT__/{$vo5['goodsThums']}">
+                                                                    </a>
+                                                                    <p class="txt">
+                                                                        <a href="#">{$vo5['goodsName']}</a>
+                                                                    </p>
+                                                                    <div class="price">
+                                                            <span class="pri">
+                                                              <em class="vip-tag-price">黑金尊享</em>
+                                                              <em>￥{$vo5['shopPrice']}</em>
+                                                            </span>
+                                                                    </div>
+                                                                    <!--<p class="hei_si" onclick='location.href="{:U('Home/Goods/getGoodsDetails/',array('goodsId'=>$goods['goodsId']))}"'>立即购买</p>-->
+                                                                    <!--<p class="pl"><em>5人评价</em>，<em>好评率100%</em></p>-->
+                                                                </div>
+                                                            </li>
+                                                        </if>
+                                                </foreach>
+                                            </if>
+                                        </foreach>
+                                    </foreach>
+                                </empty>
+                            </ul>
+                        </div>
+                    </div>
+                    <!--end-->
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

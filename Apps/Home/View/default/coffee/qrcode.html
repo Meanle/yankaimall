@@ -1,0 +1,152 @@
+<!DOCTYPE>
+<html lang="zh-cn">
+<head>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>收银台</title>
+    <meta name="keywords" content="{$CONF['mallKeywords']},微信支付" />
+    <meta name="description" content="{$CONF['mallDesc']},微信支付" />
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
+    <link rel="stylesheet" href="__ROOT__/Apps/Home/View/default/css/iconfont.css"/>
+    <link rel="stylesheet" href="__ROOT__/Apps/Home/View/default/css/common.css" />
+    <link rel="stylesheet" href="__ROOT__/Apps/Home/View/default/css/ordersuccess.css" />
+    <link rel="stylesheet" href="__ROOT__/Apps/Home/View/default/css/base.css" />
+    <link rel="stylesheet" href="__ROOT__/Apps/Home/View/default/css/head.css" />
+    <link rel="stylesheet" href="__ROOT__/Apps/Home/View/default/css/pslocation.css" />
+    <link rel="stylesheet" href="__ROOT__/Apps/Home/View/default/css/magnifier.css" />
+    <style type="text/css">
+        .impowerBox {display: inline-block;line-height: 1.6;position: relative;text-align: center;vertical-align: middle;width: 100%;z-index: 1;}
+        .impowerBox .title {font-size: 20px;text-align: center;}
+        .impowerBox .qrcode {border: 1px solid #e2e2e2;margin-top: 15px;width: 280px;}
+        .impowerBox .info {margin: 0 auto;width: 280px;}
+        .impowerBox .status {padding: 7px 14px;text-align: left;}
+        .impowerBox .status.normal {background-color: #E23C3D;border-radius: 100px;margin-top: 15px;}
+        .impowerBox .status.status_browser {text-align: center;}
+        .impowerBox .status p {font-size: 13px;}
+        .impowerBox .status_txt p {position: relative;top: -2px;}
+        .impowerBox .status_icon {display: inline-block;margin-right: 5px;vertical-align: middle;}
+        .impowerBox .status_txt {display: inline-block;vertical-align: middle;}
+        .impowerBox .status_txt p {margin: 0;position: relative;}
+        .impowerBox .icon38_msg {display: inline-block;height: 38px;width: 38px;}
+        #qrcode img{width:300px;height:300px;border:1px solid #dddddd;}
+    </style>
+</head>
+
+<body class="root61">
+<include file="./Apps/Home/View/default/header_common.html" />
+<div class="w" style="width: 100%;">
+    <div>
+        <div>
+<!--            <header class="bar bar-nav">
+                <p onclick="goback()" class="button button-link button-nav pull-left back">
+                    <span class="icon icon-left" style="line-height: 2.2rem;"></span>
+                </p>
+                <h1 class="title"></h1>
+            </header>-->
+
+        </div>
+
+        <div class="wst-ods-success-tb">
+            <form autocomplete="off" method="get">
+                <div class="wst-ods-success-tc" style="background-color: #F8F8F8; padding: 0;">
+
+                    <div class="wst-ods-success-tf" style="width:inherit;">
+                        <div class="wst-ods-success-l25">
+                            <if condition="count($orders) gt 0">
+                                <div class="wst-ods-success-tg">请你尽快支付，以便订单快速处理！</div>
+                                <div>
+                                    共{$orderCnt}张订单，订单金额
+                                    <span id="wst-order-details" style="color: #1D94D7; cursor: pointer;">
+                                       ￥{$needPay}
+                                    </span>
+                                </div>
+                                <div id="wst-orders-box"
+                                     style="margin-left: 75px; display: none;">
+                                    <volist name="orders" id="order">
+                                        <div>订单：{$key}</div>
+                                        <volist name="order" id="goods">
+                                            <div>{$goods["goodsName"]}&nbsp;&nbsp;{$goods["goodsAttrName"]}</div>
+                                        </volist> </volist>
+                                </div>
+                                待付金额：<span class="wst-ods-success-ti">￥{$needPay}</span> 元
+
+                                <div class="main impowerBox" style="margin-left: -5px;">
+                                    <if condition="$out_trade_no != ''">
+
+                                        <div class="wrp_code" style="position:relative;">
+                                            <div>
+                                                <div style="width:inherit;height:322px;text-align: center;padding-bottom:10px;" id="qrcode"></div>
+                                                <div class="info" style="color:#ffffff;margin-bottom:10px;">
+                                                    <div class="status status_browser js_status normal" style="background-color: #0894ec;border-radius: .2rem"
+                                                         id="wx_default_tip">
+                                                        <p>请长按二维码识别进行支付</p>
+                                                    </div>
+                                                </div>
+                                                <!--<div style="width:90%;">-->
+                                                    <!--<img src="__ROOT__/Apps/Home/View/default/images/wxphone.png" style="width:90%;"/>-->
+                                                <!--</div>-->
+                                                <div style="clear:both;"></div>
+                                            </div>
+
+                                        </div>
+
+                                        <else/>
+                                        <div>订单信息不正确，不能进行支付!</div>
+                                    </if>
+                                </div>
+
+                                <else />
+                                <div class="wst-ods-success-tj">您的订单已支付!</div>
+                            </if>
+                        </div>
+                    </div>
+                    <div class="wst-clear"></div>
+                </div>
+            </form>
+            <div class="wst-clear"></div>
+
+        </div>
+    </div>
+</div>
+
+<div class="wst-clear"></div>
+<div style="height: 20px;"></div>
+
+
+<script src="__PUBLIC__/js/common.js"></script>
+<script src="__PUBLIC__/plugins/layer/layer.min.js"></script>
+<script src="__ROOT__/Apps/Home/View/default/js/index.js"></script>
+<script src="__ROOT__/Apps/Home/View/default/js/common.js"></script>
+<script src="__ROOT__/Apps/Home/View/default/js/orders.js"></script>
+
+<script src="__PUBLIC__/js/qrcode.js"></script>
+<script>
+    <if condition="$out_trade_no != ''">
+        if (<?php echo $wxQrcodePayResult["code_url"] != NULL; ?>) {
+        var url = "<?php echo $code_url;?>";
+        //参数1表示图像大小，取值范围1-10；参数2表示质量，取值范围'L','M','Q','H'
+        var qr = qrcode(10, 'M');
+        qr.addData(url);
+        qr.make();
+        $("#qrcode").html(qr.createImgTag());
+    }
+    </if>
+    setInterval(function(){
+        var params = {};
+        params.trade_no = "{$out_trade_no}";
+        $.ajax({
+            url:"{:U('Home/WxPay/getPayStatus')}",
+            data:params,
+            type:"POST",
+            dataType:"json",
+            success:function(data){
+                if(data.status==1){
+                    location.href = "{:U('Home/WxPay/paySuccess')}";
+                }
+            }
+        });
+    },1500);
+</script>
+</body>
+</html>

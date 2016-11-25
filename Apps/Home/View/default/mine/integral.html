@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>积分商城</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="favicon.ico"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
+    <link rel="stylesheet" href="__ROOT__/Apps/Home/View/default/css/iconfont.css"/>
+    <link rel="stylesheet" href="__ROOT__/Apps/Home/View/default/css/app.css"/>
+    <link rel="stylesheet" href="__ROOT__/Apps/Home/View/default/css/oders.css"/>
+    <script type='text/javascript' src="__ROOT__/Apps/Home/View/default/js/zepto.min.js" charset='utf-8'></script>
+    <script src="__PUBLIC__/js/jquery.min.js"></script>
+</head>
+
+
+<body>
+<div class="page">
+    <div class="content pull-to-refresh-content page-home infinite-scroll" id='integral-page'>
+        <div class="pull-to-refresh-layer">
+            <div class="preloader"></div>
+            <div class="pull-to-refresh-arrow"></div>
+        </div>
+        <!--<?php dump($catList[0]["catChildren"]) ?>-->
+        <!--<script>console.info('');</script>
+        <p>{$catAds} </p>-->
+
+        <!-- 这里是页面内容区 -->
+        <!--slider-->
+        <div class="swiper-container swiper-container-horizontal" data-space-between="10">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <img class='card-cover'
+                         src="//gdp.alicdn.com/bao/uploaded/i1/TB1kzlgHVXXXXbtXpXXXXXXXXXX_!!0-item_pic.jpg_640x640.jpg"
+                         alt="">
+                </div>
+                <div class="swiper-slide">
+                    <img class='card-cover'
+                         src="//gdp.alicdn.com/bao/uploaded/i2/TB1mEnmHXXXXXXHapXXXXXXXXXX_!!0-item_pic.jpg_640x640.jpg"
+                         alt="">
+                </div>
+                <div class="swiper-slide">
+                    <img class='card-cover'
+                         src="//gdp.alicdn.com/bao/uploaded/i4/TB13mgfHpXXXXcVXFXXXXXXXXXX_!!2-item_pic.png_640x640.jpg"
+                         alt="">
+                </div>
+            </div>
+            <div class="swiper-pagination"><span
+                    class="swiper-pagination-bullet swiper-pagination-bullet-active"></span><span
+                    class="swiper-pagination-bullet"></span><span class="swiper-pagination-bullet"></span></div>
+        </div>
+        <div class="list">
+            <div class="content-padded">
+                <div class="rankings">
+                    <span class="integralicon"></span>
+                    <span>排行榜</span>
+                </div>
+                <div class="k-rules">
+                    <span class="integralicon"></span>
+                    <span>K币规则</span>
+                </div><br>
+            </div>
+            <!--<div class="news">
+                <div class="news-title">
+                    <span class="iconfont">&#xe615;</span>最新动态
+                </div>
+                <div class="news-content">
+                    秋儿用K币换了一套好东西
+                </div>
+            </div>-->
+            <div class="clearfix"></div>
+
+            <volist name="catList" key="k1" id="vo1">
+                <volist name="vo1['catChildren']" key="k2" id="vo2">
+                    <if condition="$vo2['catName'] eq 积分商城">
+                        <volist name="vo2['catChildren']" key="k3" id="vo3">
+                            <div class="list-group-title" style="margin: .5rem auto;">
+                                <p style="text-align: left;">{$vo3['catName']}</p>
+                            </div>
+                            <ul class="list_sort_list" style="width: 100%; padding-bottom: 20px;">
+                                <foreach name="vo2['goods']" key="k4" item="vo4">
+                                    <li>
+                                        <div>
+                                            <a class="" href="/kk-shop/index.php?m=Home&amp;c=Goods&amp;a=getGoodsDetails&amp;goodsId={$vo4['goodsId']}&amp;isScorePay=1">
+                                              <img alt="" src="__ROOT__/{$vo4['goodsThums']}">
+                                            </a>
+                                            <p class="txt">
+                                                <a href="#"
+                                                   style="display: inline-block; width: 45%; height: auto; white-space:nowrap; overflow: hidden; text-overflow:ellipsis;">{$vo4['goodsName']}</a>
+                                                <a class="button"
+                                                   style="float: right; width: 55%; font-size: .55rem; height: auto; color: #0894ec;"
+                                                   href="javascript:;" onclick="addToCart({$vo4['goodsId']}, 0, '{$vo4["goodsName"]}')">立即兑换</a>
+                                            </p>
+                                            <div class="price">
+                                                <span class="pri"><em>￥ {$vo4['shopPrice']}</em></span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </foreach>
+                            </ul>
+                        </volist>
+                    </if>
+                </volist>
+            </volist>
+        </div>
+    </div>
+</div>
+<script>
+    var ThinkPHP = window.Think = {
+        "ROOT": "__ROOT__",
+        "APP": "__APP__",
+        "PUBLIC": "__PUBLIC__",
+        "DEEP": "{:C('URL_PATHINFO_DEPR')}",
+        "MODEL": ["{:C('URL_MODEL')}", "{:C('URL_CASE_INSENSITIVE')}", "{:C('URL_HTML_SUFFIX')}"],
+        "VAR": ["{:C('VAR_MODULE')}", "{:C('VAR_CONTROLLER')}", "{:C('VAR_ACTION')}"],
+        "DOMAIN": "{:WSTDomain()}",
+        "CITY_ID": "{$currArea['areaId']}",
+        "CITY_NAME": "{$currArea['areaName']}",
+        "DEFAULT_IMG": "{:WSTDomain()}/{$CONF['goodsImg']}",
+        "MALL_NAME": "{$CONF['mallName']}",
+        "SMS_VERFY": "{$CONF['smsVerfy']}",
+        "PHONE_VERFY": "{$CONF['phoneVerfy']}",
+        "IS_LOGIN": "{$WST_IS_LOGIN}"
+    };
+</script>
+<script src="__PUBLIC__/js/think.js"></script>
+<script src="__PUBLIC__/js/common.js"></script>
+<script src="__PUBLIC__/plugins/layer/layer.min.js"></script>
+<script type="text/javascript" src="__ROOT__/Apps/Home/View/default/js/goods.js"></script>
+<script>
+    jQuery.noConflict();
+</script>
+<script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
+<script type="text/javascript" src="__ROOT__/Apps/Home/View/default/js/app.js"></script>
+<!-- 默认必须要执行$.init(),实际业务里一般不会在HTML文档里执行，通常是在业务页面代码的最后执行 -->
+<script>
+    $.config = {router: false};             //关闭sui路由功能
+    $.init();
+    $(".rankings").click(function (){
+        location.href = "{:U('Home/Orders/goRanksPage')}";
+    });
+    $(".k-rules").click(function (){
+        location.href = "{:U('Home/Orders/goRulesPage')}";
+    });
+
+    function addToCart(goodsId, type, goodsThums) {
+        addCart(goodsId, type, goodsThums);
+        /*jQuery.post('{:U(Home/Orders/updateStatus)}', goodsId, function(data) {
+            console.info(data);
+        });*/
+        setTimeout(function() {
+            location.href = "/kk-shop/index.php?m=Home&c=Orders&a=checkIntegralOrder";
+        }, 500);
+    }
+</script>
+
+</body>
+</html>
+
+
+
+
+
+

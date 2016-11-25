@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>咖啡订单</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
+    <link rel="stylesheet" href="__ROOT__/Apps/Home/View/default/css/iconfont.css"/>
+    <link rel="stylesheet" href="__ROOT__/Apps/Home/View/default/css//app.css"/>
+    <link rel="stylesheet" href="__ROOT__/Apps/Home/View/default/css/oders.css"/>
+    <script src="__ROOT__/Apps/Home/View/default/js/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript">
+        var WST = ThinkPHP = window.Think = {
+            "ROOT": "__ROOT__",
+            "APP": "__APP__",
+            "PUBLIC": "__PUBLIC__",
+            "DEEP": "{:C('URL_PATHINFO_DEPR')}",
+            "MODEL": ["{:C('URL_MODEL')}", "{:C('URL_CASE_INSENSITIVE')}", "{:C('URL_HTML_SUFFIX')}"],
+            "VAR": ["{:C('VAR_MODULE')}", "{:C('VAR_CONTROLLER')}", "{:C('VAR_ACTION')}"],
+            "DOMAIN": "{:WSTDomain()}",
+        }
+    </script>
+    <script src="__PUBLIC__/js/common.js"></script>
+    <script src="__PUBLIC__/js/think.js"></script>
+    <!--<script src="__PUBLIC__/plugins/layer/layer.min.js"></script>-->
+    <script src="__ROOT__/Apps/Home/View/default/js/usercom.js"></script>
+    <script>
+        $.noConflict();
+    </script>
+</head>
+
+<body>
+<div class="page">
+    <div class="content" id="oders-entity">
+        <div class="buttons-row">
+            <a href="#tab1" class="tab-link active button tab1">未消费</a>
+            <a href="#tab2" class="tab-link button tab2">已消费</a>
+        </div>
+
+        <div class="tabs">
+            <div id="tab1" class="tab active">
+                <?php $num =0; ?>
+                <empty name="orderList">
+                    <else/>
+                    <volist name="orderList['root']" id="order" key='key1'>
+                        <if condition="$order['orderStatus'] lt 4 and $order['goodslist'][0]['catName'] eq 咖啡馆">
+                            <?php $num++; ?>
+                            <div class="content-block">
+                                <div class="list-block list-num">
+                                    <ul>
+                                        <li class="item-content">
+                                            <div class="item-media"><i class="icon icon-f7"></i></div>
+                                            <div class="item-inner">
+                                                <div class="item-title">
+                                                    <span class="ctitlenum ctitlenum-name">编号:{$order["orderNo"]}</span>
+                                                    <span class="ctitlenum ctitlenum-time">下单时间:{$order["createTime"]}</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="list-block media-list">
+                                    <ul>
+                                        <volist name="order['goodslist']" id="goods" key='key2'>
+                                            <if condition="$goods['catName'] eq 咖啡馆 ">
+                                                <li>
+                                                    <a href="{:U('Home/Goods/getCoffeeGoodsDetails/',array('goodsId'=>$goods['goodsId']))}" class="item-content">
+                                                        <div class="item-media">
+                                                            <img src="__ROOT__/{$goods['goodsThums']}" width="80">
+                                                        </div>
+                                                        <div class="item-inner">
+                                                            <div class="item-title-row">
+                                                                <div class="item-title"></div>
+                                                                <div class="item-after">
+                                                                    <span class="coffee-price">{$goods['goodsName']}</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                            </if>
+                                        </volist>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="list-block list-num">
+                                <ul>
+                                    <li class="item-content">
+                                        <div class="item-media"><i class="icon icon-f7"></i></div>
+                                        <div class="item-inner">
+                                            <div class="item-title">
+                                                    <if condition="$order['orderStatus'] eq -2">
+                                                        <span>订单金额：</span>
+                                                        <span style="color: #e4393c;">￥{$order['totalMoney']}</span>
+                                                        <elseif condition="$order['orderStatus'] eq -1"/>
+                                                        <span>订单状态：</span>
+                                                        <span>已取消</span>已取消
+                                                        <elseif condition="$order['orderStatus'] eq 0"/>
+                                                        <span>订单状态：</span>
+                                                        <span>未受理</span>
+                                                        <elseif condition="$order['orderStatus'] eq 1"/>
+                                                        <span>订单状态：</span>
+                                                        <span>已受理</span>
+                                                        <elseif condition="$order['orderStatus'] eq 2"/>
+                                                        <span>订单状态：</span>
+                                                        <span>打包中</span>
+                                                        <elseif condition="$order['orderStatus'] eq 3"/>
+                                                        <span>订单状态：</span>
+                                                        <span>配送中</span>
+                                                        <elseif condition="$order['orderStatus'] eq 4"/>
+                                                        <span>订单状态：</span>
+                                                        <span>已完成</span>
+                                                        <elseif condition="$order['orderStatus'] eq 5"/>
+                                                        <span>订单状态：</span>
+                                                        <span>已收货</span>
+                                                    </if>
+                                            </div>
+                                                <if condition="$order['orderStatus'] eq -2">
+                                                    <div class="item-after go-check">
+                                                        <a onclick="orderCancel({$order[orderId]},3)">取消</a>
+                                                    </div>
+                                                    <div class="item-after go-check">
+                                                        <a onclick="toPay({$order[orderId]})">去付款</a>
+                                                    </div>
+                                                    <elseif condition="$order['orderStatus'] eq -1"/>
+                                                    <div class="item-after go-check">
+                                                        <a onclick="showOrder({$order[orderId]})">查看</a>
+                                                    </div>
+                                                    <elseif condition="$order['orderStatus'] eq 0"/>
+                                                    <div class="item-after go-check">
+                                                        <a onclick="showOrder({$order[orderId]})">查看</a>
+                                                    </div>
+                                                    <elseif condition="$order['orderStatus'] eq 1"/>
+                                                    <div class="item-after go-check">
+                                                        <a onclick="showOrder({$order[orderId]})">查看</a>
+                                                    </div>
+                                                    <elseif condition="$order['orderStatus'] eq 2"/>
+                                                    <div class="item-after go-check">
+                                                        <a onclick="showOrder({$order[orderId]})">查看</a>
+                                                    </div>
+                                                    <elseif condition="$order['orderStatus'] eq 3"/>
+                                                    <div class="item-after go-check">
+                                                        <a onclick="orderConfirm({$order[orderId]})">确认收货</a>
+                                                    </div>
+                                                    <elseif condition="$order['orderStatus'] eq 4"/>
+                                                    <div class="item-after go-check">
+                                                        <a onclick="showOrder({$order[orderId]})">查看</a>
+                                                    </div>
+                                                    <elseif condition="$order['orderStatus'] eq 5"/>
+                                                    <div class="item-after go-check">
+                                                        <a onclick="showOrder({$order[orderId]})">查看</a>
+                                                    </div>
+                                                </if>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </if>
+                    </volist>
+                </empty>
+                <if condition="$num eq 0">
+                    <div class="content-block">
+                        <div class="card" style="box-shadow: none">
+                            <div class="card-content">
+                                <div class="card-content-inner" style="background: #efeff4">
+                                    <div class="page-cart" style="background: #efeff4"><i class="gwc_ic"></i>还没有相关消费~
+                                        <a style="margin-top: 0.5rem;" class="gwc_btn1" href="__ROOT__/index.php?m=Home&c=Index&a=index">去逛逛</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </if>
+            </div>
+            <div id="tab2" class="tab">
+                <?php $nums=0; ?>
+                <empty name="orderList">
+                    <else/>
+                    <volist name="orderList['root']" id="order" key='key1'>
+                        <if condition="$order['orderStatus'] egt 4 and $order['goodslist'][0]['catName'] eq 咖啡馆">
+                            <?php $nums++; ?>
+                            <div class="content-block">
+                                <div class="list-block list-num">
+                                    <ul>
+                                        <li class="item-content">
+                                            <div class="item-media"><i class="icon icon-f7"></i></div>
+                                            <div class="item-inner">
+                                                <div class="item-title">
+                                                    <span class="ctitlenum ctitlenum-name">编号:{$order["orderNo"]}</span>
+                                                    <span class="ctitlenum ctitlenum-time">下单时间:{$order["createTime"]}</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="list-block media-list">
+                                    <ul>
+                                        <volist name="order['goodslist']" id="goods" key='key2'>
+                                            <if condition="$goods['catName'] eq 咖啡馆 ">
+                                                <li>
+                                                    <a href="{:U('Home/Goods/getCoffeeGoodsDetails/',array('goodsId'=>$goods['goodsId']))}" class="item-content">
+                                                        <div class="item-media"><img
+                                                                src="__ROOT__/{$goods['goodsThums']}"
+                                                                width="80"></div>
+                                                        <div class="item-inner">
+                                                            <div class="item-title-row">
+                                                                <div class="item-title"></div>
+                                                                <div class="item-after">
+                                                                    <span class="coffee-price">{$goods['goodsName']}</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                            </if>
+                                        </volist>
+                                    </ul>
+                                </div>
+                                <div class="list-block list-num">
+                                    <ul>
+                                        <li class="item-content">
+                                            <div class="item-media"><i class="icon icon-f7"></i></div>
+                                            <div class="item-inner">
+                                                <div class="item-title">
+                                                    <if condition="$order['orderStatus'] eq -2">
+                                                        <span>订单金额：</span>
+                                                        <span style="color: #e4393c;">￥{$order['totalMoney']}</span>
+                                                        <elseif condition="$order['orderStatus'] eq -1"/>
+                                                        <span>订单状态：</span>
+                                                        <span>已取消</span>已取消
+                                                        <elseif condition="$order['orderStatus'] eq 0"/>
+                                                        <span>订单状态：</span>
+                                                        <span>未受理</span>
+                                                        <elseif condition="$order['orderStatus'] eq 1"/>
+                                                        <span>订单状态：</span>
+                                                        <span>已受理</span>
+                                                        <elseif condition="$order['orderStatus'] eq 2"/>
+                                                        <span>订单状态：</span>
+                                                        <span>打包中</span>
+                                                        <elseif condition="$order['orderStatus'] eq 3"/>
+                                                        <span>订单状态：</span>
+                                                        <span>配送中</span>
+                                                        <elseif condition="$order['orderStatus'] eq 4"/>
+                                                        <span>订单状态：</span>
+                                                        <span>已完成</span>
+                                                        <elseif condition="$order['orderStatus'] eq 5"/>
+                                                        <span>订单状态：</span>
+                                                        <span>已收货</span>
+                                                    </if>
+                                                </div>
+                                                <if condition="$order['orderStatus'] eq -2">
+                                                    <div class="item-after go-check">
+                                                        <a onclick="orderCancel({$order[orderId]},3)">取消</a>
+                                                    </div>
+                                                    <div class="item-after go-check">
+                                                        <a onclick="toPay({$order[orderId]})">去付款</a>
+                                                    </div>
+                                                    <elseif condition="$order['orderStatus'] eq -1"/>
+                                                    <div class="item-after go-check">
+                                                        <a onclick="showOrder({$order[orderId]})">查看</a>
+                                                    </div>
+                                                    <elseif condition="$order['orderStatus'] eq 0"/>
+                                                    <div class="item-after go-check">
+                                                        <a onclick="showOrder({$order[orderId]})">查看</a>
+                                                    </div>
+                                                    <elseif condition="$order['orderStatus'] eq 1"/>
+                                                    <div class="item-after go-check">
+                                                        <a onclick="showOrder({$order[orderId]})">查看</a>
+                                                    </div>
+                                                    <elseif condition="$order['orderStatus'] eq 2"/>
+                                                    <div class="item-after go-check">
+                                                        <a onclick="showOrder({$order[orderId]})">查看</a>
+                                                    </div>
+                                                    <elseif condition="$order['orderStatus'] eq 3"/>
+                                                    <div class="item-after go-check">
+                                                        <a onclick="orderConfirm({$order[orderId]})">确认收货</a>
+                                                    </div>
+                                                    <elseif condition="$order['orderStatus'] eq 4"/>
+                                                    <div class="item-after go-check">
+                                                        <a onclick="showOrder({$order[orderId]})">查看</a>
+                                                    </div>
+                                                    <elseif condition="$order['orderStatus'] eq 5"/>
+                                                    <div class="item-after go-check">
+                                                        <a onclick="showOrder({$order[orderId]})">查看</a>
+                                                    </div>
+                                                </if>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </if>
+                    </volist>
+                </empty>
+                <if condition="$nums eq 0">
+                    <div class="content-block">
+                        <div class="card" style="box-shadow: none">
+                            <div class="card-content">
+                                <div class="card-content-inner" style="background: #efeff4">
+                                    <div class="page-cart" style="background: #efeff4"><i class="gwc_ic"></i>还没有相关消费~
+                                        <a style="margin-top: 0.5rem;" class="gwc_btn1" href="__ROOT__/index.php?m=Home&c=Index&a=index">去逛逛</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </if>
+            </div>
+        </div>
+    </div>
+</div>
+<script type='text/javascript' src='//g.alicdn.com/sj/lib/zepto/zepto.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
+<!-- 默认必须要执行$.init(),实际业务里一般不会在HTML文档里执行，通常是在业务页面代码的最后执行 -->
+<script>
+    $.init();
+    function toOrder() {
+    }
+    //去支付
+    function toPay(id){
+        var params = {};
+        params.orderId = id;
+        $.ajax({
+            url: '{:U("Home/Orders/checkOrderPay")}',
+            type: 'post',
+            data: params,
+            success: function (json) {
+                if(json.status==1){
+                    location.href= "{:U('Home/Payments/toPay')}"+'&orderId='+params.orderId;
+                }else if(json.status==-2){
+                    var rlist = json.rlist;
+                    var garr = new Array();
+                    for(var i=0;i<rlist.length;i++){
+                        garr.push(rlist[i].goodsName+rlist[i].goodsAttrName);
+                    }
+                    $.toast('订单中商品【'+garr.join("，")+'】库存不足，不能进行支付。', {icon: 5});
+                }else{
+                    $.toast('您的订单已支付!', {icon: 5});
+                    setTimeout(function(){
+                        location.href = '{:U("Home/Orders/queryDeliveryByPage")}';
+                    },1500);
+                }
+            }
+        });
+    }
+    //  确认收货
+    function orderConfirm(id,type){
+        if(type==1){
+            $.confirm('您确定收货吗?',
+                    function () {
+                        $.toast('数据处理中，请稍候...');
+                        $.ajax({
+                            url: '{:U("Home/Orders/orderConfirm")}',
+                            type: 'post',
+                            data: {orderId:id,type:type},
+                            success: function (data) {
+                                if(data.status>0){
+                                    $.toast('确认收货成功');
+                                    location.reload();
+                                }else if(data.status==-1){
+                                    $.toast('操作失败，订单状态已发生改变，请刷新后再重试 !');
+                                }else{
+                                    $.toast('操作失败，请与商城管理员联系 !');
+                                }
+                            }
+                        });
+                    }
+            );
+        }
+    }
+    //去评价页面跳转
+    function appraiseOrder(id){
+        var id = id;
+        location.href = '{:U("Home/GoodsAppraises/toAppraises")}'+'&orderId='+id;
+    }
+    //查看订单详情
+    function showOrder(id){
+        var id = id;
+        location.href = '{:U("Home/Orders/getOrderDetails")}'+'&orderId='+id;
+    }
+    //取消订单
+    function orderCancel(id,type){
+        if(type==3){
+            $.confirm('您确定取消该订单吗?',
+                    function () {
+                        $.toast('数据处理中，请稍候...');
+                        $.ajax({
+                            url: '{:U("Home/Orders/orderCancel")}',
+                            type: 'post',
+                            data: {orderId:id},
+                            success: function (data) {
+                                if(data.status>0){
+                                    $.toast('取消订单成功');
+                                    location.reload();
+                                }else if(data.status==-1){
+                                    $.toast('操作失败，请刷新后再重试 !');
+                                }else{
+                                    $.toast('操作失败，请与商城管理员联系 !');
+                                }
+                            }
+                        });
+                    }
+            );
+        }else {
+            $.toast('该订单无法取消...');
+        }
+    }
+</script>
+</body>
+
+</html>

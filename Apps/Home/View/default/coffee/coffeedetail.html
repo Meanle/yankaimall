@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>咖啡详情</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
+    <link rel="stylesheet" href="__ROOT__/Apps/Home/View/default/css/iconfont.css"/>
+    <link rel="stylesheet" href="__ROOT__/Apps/Home/View/default/css/app.css"/>
+</head>
+
+<body>
+<include file="./Apps/Home/View/default/header_nav.html"/>
+<div class="page page-current">
+    <!--    <header class="bar bar-nav">
+            <a onclick="goback()" class="button button-link button-nav pull-left back">
+                <span class="icon icon-left"></span>
+            </a>
+            <h1 class="title">详情</h1>
+        </header>-->
+    <a style="display: none;" href="http://www.wstmall.net">Powered&nbsp;By&nbsp;<strong><span style="color: #3366FF">WSTMall</span></strong></a>
+    <div class="content" id='detail-page'>
+        <!-- 这里是页面内容区 -->
+        <style>
+            .list-block,
+            .content-block {
+                margin: 0.75rem 0;
+            }
+        </style>
+        <div class="page-detail" id="pagedetail">
+            <div class="swiper-container swiper-container-horizontal" data-space-between="10">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <img class='card-cover' src="__ROOT__/{$goodsDetails['goodsImg']}" alt="">
+                    </div>
+                    <volist name="goodsImgs" id="vo" key="k">
+                        <div class="swiper-slide">
+                            <img class='card-cover' src="__ROOT__/{$vo['goodsImg']}" alt="">
+                        </div>
+                    </volist>
+                </div>
+            </div>
+            <div class='content-block goods-card coffee-ope'>
+                <h3>{$goodsDetails["goodsName"]}</h3>
+                <if condition="isValidVip() eq 1">
+                    <p><strong>￥{$goodsDetails["vipPrice"]}</strong>
+                        <del>￥{$goodsDetails['marketPrice']}</del>
+                    </p>
+                    <else/>
+                    <p><strong>￥{$goodsDetails["shopPrice"]}</strong>
+                        <del>￥{$goodsDetails['marketPrice']}</del>
+                    </p>
+                </if>
+
+                <div class="row text-center color-gray" style="margin-top: -1.7rem;">
+                    <div class="operate" style="float: right;margin-right:.5rem ;">
+                        <span class="operate-num btnCart"
+                              onclick="addCart({$goodsDetails['goodsId']},0,'{$goodsDetails["
+                              goodsName"]}','{$rs['userPhone']}')">加入购物车</span>
+                    </div>
+                </div>
+            </div>
+            <div class='content-block coffee-content-block'>
+                <div class="buttons-row">
+                    <a class="tab-link active button">咖啡介绍</a>
+                    <a class="tab-link button">评论(<?php echo count($goodsAppraises['root'])?>)</a>
+                </div>
+                <div class="tabs">
+                    <div class="tab active content-padded" id='tab-detail'>
+                        <div class="list-block media-list">
+                            <div class="coffeedetail goods-detail-img">
+                                <p>{$goodsDetails["goodsDesc"]}</p>
+                                <ul>
+                                    <li>
+                                        <img style="width: 100%;" class="lazyImg img-ks-lazyload" src="__ROOT__/{$goodsDetails['goodsImg']}">
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab" id='tab-comments'>
+                        <div class="list-block media-list">
+                            <ul>
+                                <if condition=" count($goodsAppraises['root']) gt 0">
+                                    <volist name="goodsAppraises['root']" id="vo1">
+                                        <if condition="$vo1['content'] !='' ">
+                                            <li>
+                                                <div class="item-content">
+                                                    <div class="item-media"><img src="{$vo1['userPhoto']}" width="44"></div>
+                                                    <div class="item-inner">
+                                                        <div class="item-title-row">
+                                                            <div class="item-title">{$vo1['userName']}</div>
+                                                            <div class="item-after"
+                                                                 style="font-size: .6rem;color:#9e9e9e;line-height: 1rem;">
+                                                                {$vo1['createTime']}
+                                                            </div>
+                                                        </div>
+                                                        <div class="item-text">{$vo1['content']}</div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </if>
+                                    </volist>
+                                    <else/>
+                                    <div class="tab active content-padded" id='tab-details' style="text-align: center">
+                                        <p>还没有评价信息</p></div>
+                                </if>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a href="#" id="toTop" style="display: block;" class="gotop iconfont">&#xe606;</a>
+    </div>
+    <nav class="bar bar-tab bottom-bar">
+        <div class="coffee-cart">
+        </div>
+        <div class="gwbtnbox coffee-gocheck">
+        </div>
+    </nav>
+</div>
+
+<script src="__PUBLIC__/js/common.js"></script>
+<script src="__PUBLIC__/plugins/layer/layer.min.js"></script>
+<script src="__ROOT__/Apps/Home/View/default/js/common.js"></script>
+<script src="__ROOT__/Apps/Home/View/default/js/goods.js"></script>
+<script type="text/javascript" src="__ROOT__/Apps/Home/View/default/js/gotop.js"></script>
+<script>
+    //    返回顶部
+    toTop(false);
+    $(".buttons-row .tab-link").click(function () {
+        var $index = $(".buttons-row .tab-link").index(this);
+        $(this).addClass("active").siblings().removeClass("active");
+        $(".tabs > .tab").eq($index).show().siblings().hide();
+    });
+    //加载页面判断购物车是否有物品，并显示
+    jQuery.post(Think.U('Home/Cart/getCoffeeCartInfo'), {"axm": 1}, function (data) {
+        var cart = WST.toJson(data);
+        console.log(cart);
+        var html = new Array();
+        var totalmoney = 0, chkgoodsnum = 0, goodsnum = 0;
+        html.push('<div class="list-block media-list person-card"><ul><li>');
+        //for(var i=0;i<cart.cartgoods.length;i++){
+        for (var shopId in cart.cartgoods) {
+            var shop = cart.cartgoods[shopId];
+            html.push("<div class='item-check' id='cart_shop_li_" + shopId + "'><input type='checkbox' onclick='cartChkShop(this)' id='chk_shop_" + shopId + "' value='" + shopId + "' name='chk_shop'/><span>选择该店铺:" + shop.shopgoods[0].shopName + "</span></div>");
+            for (var goodsId in shop.shopgoods) {
+                var goods = shop.shopgoods[goodsId];
+                goodsnum++;
+                if (goods.ischk == 1) {
+                    chkgoodsnum++;
+                    if('{:isValidVip()}' == '1'){
+                        totalmoney = totalmoney + parseFloat(goods.vipPrice * goods.cnt);
+                    }else{
+                        totalmoney = totalmoney + parseFloat(goods.shopPrice * goods.cnt);
+                    }
+                    totalmoney = totalmoney.toFixed(2);
+                }
+                var url = Think.U("Home/Goods/getGoodsDetails", "goodsId=" + goods.goodsId);
+                html.push("<div class='item-content'><div class='item-media'>" +
+                        "<a href='" + url + "'><input type='hidden' id='price_" + goods.goodsId + "_" + goods.goodsAttrId + "' value='" + goods.shopPrice + "'/>" +
+                        "<input type='checkbox' onclick='cartChkGoods(this)' class='cart-goods-check cgoodsId' id='chk_goods_" + goods.goodsId + "_" + goods.goodsAttrId + "' name='chk_goods_" + goods.shopId + "' value='" + goods.goodsId + "' parent='" + goods.shopId + "' dataId='" + goods.goodsAttrId + "' isBook='" + goods.isBook + "' " + (goods.ischk == 1 ? "checked" : "") + ">" +
+                        "<img src='" + WST.DOMAIN + "/" + goods.goodsThums + "' /></a>" +
+                        "</div>" +
+                        "<div class='item-inner'><div class='item-title-row'>" +
+                        "<div class='cart-close-box' style=''>" +
+                        "<span class='cart-colse' price=" + goods.shopPrice + " cnt=" + goods.cnt + " spId=" + goods.shopId + " onclick=removeCartGoods(this,'" + goods.goodsId + "','" + goods.goodsAttrId + "');></span></div>" +
+                        "<a href='" + url + "' class='item-title'><span class='goodsname'>" + goods.goodsName + "</span><span>￥" + goods.shopPrice + "</span></a></div>" +
+                        "<div class='item-subtitle'><div class='operate'>" +
+                        "<span id='numl_" + goods.goodsId + "_" + goods.goodsAttrId + "' onclick='changeCatGoodsnum(1," + goods.shopId + "," + goods.goodsId + "," + goods.goodsAttrId + "," + goods.isBook + ")' class='icon iconfont add'>&#xe60c;</span>" +
+                        "<span id='buy-span_" + goods.goodsId + "_" + goods.goodsAttrId + "' class='operate-num'>x " + goods.cnt + "</span><input type='hidden' id='buy-num_" + goods.goodsId + "_" + goods.goodsAttrId + "' value='" + goods.cnt + "' style='width:40px;'/>" +
+                        "<span id='numl_" + goods.goodsId + "_" + goods.goodsAttrId + "' onclick='changeCatGoodsnum(2," + goods.shopId + "," + goods.goodsId + "," + goods.goodsAttrId + "," + goods.isBook + ")' class='icon iconfont minus'>&#xe611;</span></div></div></div></div>");
+            }
+        }
+        ;
+        html.push('</li></ul></div>');
+        html = html.join("");
+        if (goodsnum == 0) {
+            var html = '<div class="gwbtnbox coffee-gwbtnbox"><div class="gwbtn"><ul><li class="shop"><span class="cart js_cartcont icon iconfont"><a href="#"><s class="icon iconfont" style="font-size: 2rem">&#xe607;</s></a></span></li><li><span class="cart js_cartcont icon iconfont">来一杯香浓的咖啡么？</span></li></ul></div></div>';
+            $(".bottom-bar").append(html);
+        } else {
+            var html = '<div class="gwbtn"><ul onclick="openOpreat()"><li class="shop"><span class="cart js_cartcont"><span class="cart_gnum_chk">' + chkgoodsnum + '</span><a href="#"><s class="icon iconfont" style="font-size: 2rem">&#xe607;</s></a></span></li>' +
+                    '<li class="coffee-price"><div>总价￥<span id="cart_handler_right_totalmoney">' + totalmoney + '</span></div><div><span>已选<span class="cart_gnum_chk cart_price">' + chkgoodsnum + '</span>个商品</span>' +
+                    '</div> </li></ul><div class="add_shop "><span class="js_cartbtn"><a class="button button-fill" href="{:U('Home/Orders/checkCoffeeOrderInfo')}">选好了</a></span></div></div>';
+            $(".coffee-gocheck").append(html);
+        }
+        ;
+        //            $(".cart_gnum_chk").html(chkgoodsnum);
+        //            $('#cart_handler_right_totalmoney').html(totalmoney);
+        $(".coffee-cart").append(html);
+    });
+    eleShopCart = document.querySelector(".coffee-ope");
+    // 绑定点击事件
+    if (eleShopCart) {
+        [].slice.call(document.getElementsByClassName("btnCart"))
+                .forEach(function (button) {
+                    button.addEventListener("click", function (event) {
+//                    $(this).parent().find('.bg-addcart').addClass('added');
+                        WST.msg("正在操作...", {offset: '200px'});
+//                    var msg= layer.load('数据加载中');
+                        setTimeout(function () {
+                            $(".coffee-gocheck").fadeIn();
+                            jQuery.post(Think.U('Home/Cart/getCoffeeCartInfo'), {"axm": 1}, function (data) {
+                                var cart = WST.toJson(data);
+                                var totalmoney = 0, chkgoodsnum = 0, goodsnum = 0;
+                                for (var shopId in cart.cartgoods) {
+                                    var shop = cart.cartgoods[shopId];
+                                    for (var goodsId in shop.shopgoods) {
+                                        var goods = shop.shopgoods[goodsId];
+                                        goodsnum++;
+                                        if (goods.ischk == 1) {
+                                            chkgoodsnum++;
+                                            if('{:isValidVip()}' == '1'){
+                                                totalmoney = totalmoney + parseFloat(goods.vipPrice * goods.cnt);
+                                            }else{
+                                                totalmoney = totalmoney + parseFloat(goods.shopPrice * goods.cnt);
+                                            }
+                                            totalmoney = totalmoney.toFixed(2);
+                                        }
+                                    }
+                                }
+                                if (goodsnum != 0) {
+                                    $(".coffee-gwbtnbox").fadeOut();
+                                    var html = '<div class="gwbtn"><ul onclick="openOpreat()"><li class="shop"><span class="cart js_cartcont"><span class="cart_gnum_chk">' + chkgoodsnum + '</span><a href="#"><s class="icon iconfont" style="font-size: 2rem">&#xe607;</s></a></span></li>' +
+                                            '<li class="coffee-price"><div>总价￥<span id="cart_handler_right_totalmoney">' + totalmoney + '</span></div><div><span>已选<span class="cart_gnum_chk cart_price">' + chkgoodsnum + '</span>个商品</span>' +
+                                            '</div> </li></ul><div class="add_shop "><span class="js_cartbtn"><a class="button button-fill" href="{:U('Home/Orders/checkCoffeeOrderInfo')}">选好了</a></span></div></div>';
+                                    $(".coffee-gocheck").append(html);
+                                } else {
+                                    $(".coffee-gocheck").fadeOut();
+                                }
+                                $(".cart_gnum_chk").html(chkgoodsnum);
+                                $('#cart_handler_right_totalmoney').html(totalmoney);
+                            });
+                        }, 2000)
+                    });
+                });
+    }
+    function openOpreat() {
+        jQuery.post(Think.U('Home/Cart/getCoffeeCartInfo'), {"axm": 1}, function (data) {
+            var cart = WST.toJson(data);
+            var html = new Array();
+            var totalmoney = 0, chkgoodsnum = 0, goodsnum = 0;
+            html.push('<div class="list-block media-list person-card"><ul><li>');
+            //for(var i=0;i<cart.cartgoods.length;i++){
+            for (var shopId in cart.cartgoods) {
+                var shop = cart.cartgoods[shopId];
+                html.push("<div class='item-check' id='cart_shop_li_" + shopId + "'><input type='checkbox' onclick='cartChkShop(this)' id='chk_shop_" + shopId + "' value='" + shopId + "' name='chk_shop'/><span>选择该店铺:" + shop.shopgoods[0].shopName + "</span></div>");
+                for (var goodsId in shop.shopgoods) {
+                    var goods = shop.shopgoods[goodsId];
+                    goodsnum++;
+                    if (goods.ischk == 1) {
+                        chkgoodsnum++;
+                        if('{:isValidVip()}' == '1'){
+                            totalmoney = totalmoney + parseFloat(goods.vipPrice * goods.cnt);
+                        }else{
+                            totalmoney = totalmoney + parseFloat(goods.shopPrice * goods.cnt);
+                        }
+                        totalmoney = totalmoney.toFixed(2);
+                    }
+                    var url = Think.U("Home/Goods/getGoodsDetails", "goodsId=" + goods.goodsId);
+                    html.push("<div class='item-content'><div class='item-media'>" +
+                            "<a href='" + url + "'><input type='hidden' id='price_" + goods.goodsId + "_" + goods.goodsAttrId + "' value='" + goods.shopPrice + "'/>" +
+                            "<input type='checkbox' onclick='cartChkGoods(this)' class='cart-goods-check cgoodsId' id='chk_goods_" + goods.goodsId + "_" + goods.goodsAttrId + "' name='chk_goods_" + goods.shopId + "' value='" + goods.goodsId + "' parent='" + goods.shopId + "' dataId='" + goods.goodsAttrId + "' isBook='" + goods.isBook + "' " + (goods.ischk == 1 ? "checked" : "") + ">" +
+                            "<img src='" + WST.DOMAIN + "/" + goods.goodsThums + "' /></a>" +
+                            "</div>" +
+                            "<div class='item-inner'><div class='item-title-row'>" +
+                            "<a href='" + url + "' class='item-title'><span class='goodsname'>" + goods.goodsName + "</span>" +
+                            "<if condition='isValidVip() eq 1'><span>￥"+goods.vipPrice+"</span><else/><span>￥"+goods.shopPrice+"</span></if>" +
+                            "</a><div class='cart-close-box item-title' style=''>" +
+                            "<span class='cart-colse iconfont' price=" + goods.shopPrice + " cnt=" + goods.cnt + " spId=" + goods.shopId + " onclick=removeCartGoods(this,'" + goods.goodsId + "','" + goods.goodsAttrId + "');>&#xe610;</span></div></div>" +
+                            "<div class='item-subtitle'><div class='operate'>" +
+                            "<span id='numl_" + goods.goodsId + "_" + goods.goodsAttrId + "' onclick='changeCatGoodsnum(1," + goods.shopId + "," + goods.goodsId + "," + goods.goodsAttrId + "," + goods.isBook + ")' class='icon iconfont add'>&#xe60c;</span>" +
+                            "<span id='buy-span_" + goods.goodsId + "_" + goods.goodsAttrId + "' class='operate-num'>x " + goods.cnt + "</span><input type='hidden' id='buy-num_" + goods.goodsId + "_" + goods.goodsAttrId + "' value='" + goods.cnt + "' style='width:40px;'/>" +
+                            "<span id='numl_" + goods.goodsId + "_" + goods.goodsAttrId + "' onclick='changeCatGoodsnum(2," + goods.shopId + "," + goods.goodsId + "," + goods.goodsAttrId + "," + goods.isBook + ")' class='icon iconfont minus'>&#xe60d;</span></div></div></div></div>");
+
+                }
+            }
+            ;
+            html.push('</li></ul></div>');
+            html = html.join("");
+            $(".cart_gnum_chk").html(chkgoodsnum);
+            $('#cart_handler_right_totalmoney').html(totalmoney);
+            $(".coffee-cart").html(html);
+        });
+        $(".coffee-cart").toggle('quick');
+    }
+    function removeCartGoods(obj, goodsId, goodsAttrId) {
+        jQuery.post(Think.U('Home/Cart/delCartGoods'), {
+            goodsId: goodsId,
+            goodsAttrId: goodsAttrId,
+            "axm": 1
+        }, function (data) {
+            var cart = WST.toJson(data);
+            var spId = $(obj).attr("spId");
+            $(obj).parent().parent().parent().parent().remove();
+            if ($("input[name='chk_goods_" + spId + "']").length == 0) {
+                $("#cart_shop_li_" + spId).remove();
+                $(".coffee-cart").fadeOut();
+                $(".coffee-gocheck").fadeOut();
+                var html = '<div class="gwbtnbox coffee-gwbtnbox"><div class="gwbtn"><ul><li class="shop"><span class="cart js_cartcont icon iconfont"><a href="#"><s class="icon iconfont" style="font-size: 2rem">&#xe607;</s></a></span></li><li><span class="cart js_cartcont icon iconfont">来一杯香浓的咖啡么？</span></li></ul></div></div>';
+                $(".bottom-bar").append(html);
+            }
+            var totalmoney = 0, goodsnum = 0;
+            for (var shopId in cart.cartgoods) {
+                var shop = cart.cartgoods[shopId];
+                for (var goodsId in shop.shopgoods) {
+                    var goods = shop.shopgoods[goodsId];
+                    goodsnum++;
+                    totalmoney = totalmoney + parseFloat(goods.shopPrice * goods.cnt);
+                    totalmoney = totalmoney.toFixed(2);
+                }
+            }
+            $("#cart_handler_right_totalmoney, .wst-nvg-cart-price").html(totalmoney);
+            $('.cart_num, .cart_gnum_chk').html(goodsnum);
+            $(".cart_gnum").html(goodsnum);
+        });
+    }
+    $(".add_shop ").click(function () {
+        $(".coffee-cart").css('display', 'none');
+//            return false;
+    });
+    function goback() {
+        window.history.back();
+//       window.location.href =  Think.U('Home/Index/index');
+    }
+</script>
+</body>
+
+</html>

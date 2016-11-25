@@ -1,0 +1,3 @@
+<?php
+//000000086400a:5:{i:0;a:4:{s:4:"adId";s:2:"21";s:6:"adName";s:7:"雁凯1";s:5:"adURL";s:0:"";s:6:"adFile";s:39:"Upload/adspic/2016-11/583591602fd72.png";}i:1;a:4:{s:4:"adId";s:2:"22";s:6:"adName";s:7:"雁凯2";s:5:"adURL";s:0:"";s:6:"adFile";s:39:"Upload/adspic/2016-11/5833b104579f8.png";}i:2;a:4:{s:4:"adId";s:2:"23";s:6:"adName";s:7:"雁凯3";s:5:"adURL";s:0:"";s:6:"adFile";s:39:"Upload/adspic/2016-11/5833b21a8e613.png";}i:3;a:4:{s:4:"adId";s:2:"24";s:6:"adName";s:7:"雁凯4";s:5:"adURL";s:0:"";s:6:"adFile";s:39:"Upload/adspic/2016-11/5833df55ce9b7.png";}i:4;a:4:{s:4:"adId";s:2:"25";s:6:"adName";s:7:"雁凯5";s:5:"adURL";s:0:"";s:6:"adFile";s:39:"Upload/adspic/2016-11/582a7749c6001.jpg";}}
+?>

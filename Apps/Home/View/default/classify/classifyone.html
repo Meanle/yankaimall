@@ -1,0 +1,123 @@
+<layout name="layout"/>
+<div class="page">
+    <include file="./Apps/Home/View/default/public/tab-bar.html" classify="active"/>
+    <div class="header-nav">
+        <include file="./Apps/Home/View/default/search.html" />
+        <div class="header-class" id="navHeight">
+            <nav class="nav-wrap" id="nav-wrap">
+                <div class="nav-mobile">Click</div>
+                <ul class="clearfix scroll-fix sort-tab">
+                    <volist name=":WSTGoodsCats()" key="k1" id="vo1">
+                        <volist name="vo1['catChildren']" key="k2" id="vo2">
+                            <if condition="$vo2['catName'] eq 默认">
+                                <volist name="vo2['catChildren']" key="k3" id="vo3">
+                                    <if condition="$k3 eq 1">
+                                        <li>
+                                            <a class="active" href="#">{$vo3["catName"]}</a>
+                                        </li>
+                                        <else/>
+                                        <li>
+                                            <a href="#">{$vo3["catName"]}</a>
+                                        </li>
+                                    </if>
+                                </volist>
+                            </if>
+                        </volist>
+                    </volist>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <div class="content pull-to-refresh-content page-home infinite-scroll" id='home-page'>
+        <div class="pull-to-refresh-layer">
+            <div class="preloader"></div>
+            <div class="pull-to-refresh-arrow"></div>
+        </div>
+        <!-- 这里是页面内容区 -->
+        <div class="list" style="margin-top: 2.2rem;">
+            <ul class="list_sort_list collect_list">
+                    <li>
+                        <div class="sell-goods">
+                            <a class="" href="{:U('Home/Goods/getGoodsDetails/',array('goodsId'=>$goods['goodsId']))}">
+                                <img alt="" src="__ROOT__/{$goods['goodsThums']}">
+                            </a>
+                            <p class="txt">
+                                <a href="#">{$goods['goodsName']}</a>
+                            </p>
+                            <div class="price">
+									<span class="pri">
+			                        <em>￥{$goods['shopPrice']}</em>
+			                    </span>
+                            </div>
+                            <div class="vip-price">
+                                <p><em>￥</em>{$goods['vipPrice']}</p>
+                            </div>
+                            <p class="hei_si">立即购买</p>
+                            <!--<p class="pl"><em>5人评价</em>，<em>好评率100%</em></p>-->
+                        </div>
+                    </li>
+                <li>
+                    <div class="sell-goods">
+                        <a class="" href="{:U('Home/Goods/getGoodsDetails/',array('goodsId'=>$goods['goodsId']))}">
+                            <img alt="" src="__ROOT__/{$goods['goodsThums']}">
+                        </a>
+                        <p class="txt">
+                            <a href="#">{$goods['goodsName']}</a>
+                        </p>
+                        <div class="price">
+									<span class="pri">
+			                        <em>￥{$goods['shopPrice']}</em>
+			                    </span>
+                        </div>
+                        <div class="vip-price">
+                            <p><em>￥</em>{$goods['vipPrice']}</p>
+                        </div>
+                        <p class="hei_si">立即购买</p>
+                        <!--<p class="pl"><em>5人评价</em>，<em>好评率100%</em></p>-->
+                    </div>
+                </li>
+                <li>
+                    <div class="sell-goods">
+                        <a class="" href="{:U('Home/Goods/getGoodsDetails/',array('goodsId'=>$goods['goodsId']))}">
+                            <img alt="" src="__ROOT__/{$goods['goodsThums']}">
+                        </a>
+                        <p class="txt">
+                            <a href="#">{$goods['goodsName']}</a>
+                        </p>
+                        <div class="price">
+									<span class="pri">
+			                        <em>￥{$goods['shopPrice']}</em>
+			                    </span>
+                        </div>
+                        <div class="vip-price">
+                            <p><em>￥</em>{$goods['vipPrice']}</p>
+                        </div>
+                        <p class="hei_si">立即购买</p>
+                        <!--<p class="pl"><em>5人评价</em>，<em>好评率100%</em></p>-->
+                    </div>
+                </li>
+                <li>
+                    <div class="sell-goods">
+                        <a class="" href="{:U('Home/Goods/getGoodsDetails/',array('goodsId'=>$goods['goodsId']))}">
+                            <img alt="" src="__ROOT__/{$goods['goodsThums']}">
+                        </a>
+                        <p class="txt">
+                            <a href="#">{$goods['goodsName']}</a>
+                        </p>
+                        <div class="price">
+									<span class="pri">
+			                        <em>￥{$goods['shopPrice']}</em>
+			                    </span>
+                        </div>
+                        <div class="vip-price">
+                            <p><em>￥</em>{$goods['vipPrice']}</p>
+                        </div>
+                        <p class="hei_si">立即购买</p>
+                        <!--<p class="pl"><em>5人评价</em>，<em>好评率100%</em></p>-->
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>购物车</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
+    <link rel="stylesheet" href="__ROOT__/Apps/Home/View/default/css/iconfont.css"/>
+    <link rel="stylesheet" href="__ROOT__/Apps/Home/View/default/css/app.css"/>
+</head>
+
+<body>
+<include file="./Apps/Home/View/default/header_nav.html" />
+<div class="page page-current">
+    <a style="display: none;" href="http://www.wstmall.net">Powered&nbsp;By&nbsp;<strong><span style="color: #3366FF">WSTMall</span></strong></a>
+    <include file="./Apps/Home/View/default/public/tab-bar.html" cart="active"/>
+    <div class="content" id="cart-page">
+        <empty name="cartInfo['cartgoods']">
+            <div id="cart-nil">
+                <!-- 这里是页面内容区 -->
+                <div class="page-cart">
+                    <i class="gwc_ic"></i>
+                    <p class="p1">购物车空空如也~</p>
+                    <a class="gwc_btn1" href="{:U('Index/index')}">去逛逛</a>
+                </div>
+            </div>
+            <br/>
+            <else/>
+            <empty name="sessions">
+                <div id="cart-nils">
+                    <!-- 这里是页面内容区 -->
+                    <div class="page-cart">
+                        <i class="gwc_ic"></i>
+                        <p class="p1">购物车为空哦~</p>
+                        <a class="gwc_btn1" href="{:U('Index/index')}">去逛逛</a>
+                    </div>
+                </div>
+                <br/>
+                <else/>
+                <form id="have-cart-nils" action="" method="post">
+                    <div class="page-cart-list">
+                        <ul>
+                            <li class="cartgoods-list" id="">
+                                <dl>
+                                    <!--产品循环开始-->
+                                    <volist name="cartInfo['cartgoods']" id="shopgoods">
+                                        <div id="wst_cart_shop_{$key}" data="{$key}" disabled="true"></div>
+                                        <dt class="clx">
+                                            <!--<div style="height: 600px;"><?php dump($cartInfo['cartgoods'][34]['shopgoods'][0]['shopId']); ?></div>-->
+                                            <input type="checkbox" onclick="cartChkShop(this)" id='chk_shop_{$shopgoods["shopgoods"][0][shopId]}' value="{$shopgoods["shopgoods"][0][shopId]}" class="cus_chk" name="chk_shop" />
+                                            <em>选择该店铺:{$shopgoods["shopgoods"][0][shopName]}</em>
+                                        </dt>
+                                        <volist name="shopgoods['shopgoods']" key="key2" id="goods">
+                                            <dd class="clx" id="qty-51879-124614" jqstock="468" jqtmprcredit="130"
+                                                jqtmprcash=""
+                                                jqtmpprice="130.00" jqshopprice="130.00" jqtmpid="51879"
+                                                jqtmpspec="124614"
+                                                jqimportprice="15.47" jqtype="1" activeid="0">
+                                                <if condition="$isvip eq 1">
+                                                    <input type='hidden' id='price_{$goods["goodsId"]}_{$goods["goodsAttrId"]}' value='{$goods["vipPrice"]}'/>
+                                                    <else />
+                                                    <input type='hidden' id='price_{$goods["goodsId"]}_{$goods["goodsAttrId"]}' value='{$goods["shopPrice"]}'/>
+                                                </if>
+                                                <!-- isBook='"+goods.isBook+"' "+(goods.ischk==1?"checked":"")+"-->
+                                                <input onclick='cartChkGoods(this)' isBook="{$goods['isBook']}" parent="{$goods['shopId']}" dataId="{$goods['goodsAttrId']}" type='checkbox' class='cus_chk cart-goods-check cgoodsId' id='chk_goods_{$goods["goodsId"]}_{$goods["goodsAttrId"]}' name='chk_goods_{$goods["shopId"]}' <if condition="$goods.ischk eq 1">checked</if> value='{$goods["goodsId"]}' />
+                                                <input class="chb-slave" name="selected[124614]" type="checkbox"
+                                                       checked="checked"
+                                                       style="display:none;">
+                                                <a href="{:U('Home/Goods/getGoodsDetails/',array('goodsId'=>$goods['goodsId']))}">
+                                                    <img src="__ROOT__/{$goods['goodsThums']}" name="lazyImg" alt=""
+                                                         style="display: block;">
+                                                </a>
+                                                <p class="txt">
+                                                    <a href="{:U('Home/Goods/getGoodsDetails/',array('goodsId'=>$goods['goodsId']))}">{$goods["goodsName"]}</a>
+                                                    <a onclick="removeCartGoods(this,'{$goods["goodsId"]}','{$goods["goodsAttrId"]}')" spId="{$goods['shopId']}" style="float: right;margin-right:5px; font-size: 1rem" class="iconfont">&#xe610;</a>
+                                                    <if condition="$goods['attrVal'] neq ''">
+                                                        【{$goods['attrName']}:{$goods['attrVal']}】
+                                                    </if>
+                                                </p>
+
+                                                <p class="price clx">
+                                                    <if condition="$isvip eq 1">
+                                                            <em>¥{$goods["vipPrice"]}元</em><i>x<b class="item-count">{$goods["cnt"]}</b><input type='hidden' id='buy-num_{$goods["goodsId"]}_{$goods["goodsAttrId"]}' value='{$goods["cnt"]}' style='width:40px;'/></i>
+                                                        <else />
+                                                        <em>¥{$goods["shopPrice"]}元</em><i>x<b class="item-count">{$goods["cnt"]}</b><input type='hidden' id='buy-num_{$goods["goodsId"]}_{$goods["goodsAttrId"]}' value='{$goods["cnt"]}' style='width:40px;'/></i>
+                                                    </if>
+                                                </p>
+                                                <p class="give">
+                                                </p>
+                                            </dd>
+                                        </volist>
+                                    </volist>
+                                </dl>
+                                <dl>
+                                    <!--产品循环结束-->
+                                    <dd class="show_tips" style="display:none">
+                                        <p class="thetips n1000" style="display:none"><i class="icon-warning"></i>根据海关规定购买多件的总价不能超过2000元，请您分多次购买。
+                                        </p>
+                                    </dd>
+                                    <dd class="jsmbox">
+                                        <div class="clx">
+                                            <span class="s1 left">结算<!--<em class="em-item-count">1件</em>--></span>
+                                            <div class="js right">
+                                                <!--<?php  dump($cartInfo); ?>-->
+                                                <p>商品总额：<em>￥<span class="em-item-amount">{$cartInfo["gtotalMoney"]}</span></em></p>
+                                                <p>优惠：<em class="em-item-promotion-minus">-￥{$shopgoods["deliveryFreeMoney"]}</em>
+                                                </p>
+                                                <p>税费：<em class="em-item-import">￥{$shopgoods["deliveryMoney"]}</em></p>
+                                                <p class="p1">总计（不含运费）：<em>￥<span class="em-item-amount">{$cartInfo['totalMoney']}</span></em></p>
+                                                <a class="cus_btn1 submitBtn"
+                                                   href="{:U('Home/Orders/checkOrderInfo')}">去结算</a>
+                                            </div>
+                                        </div>
+                                    </dd>
+                                </dl>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </empty>
+        </empty>
+    </div>
+</div>
+<script src="__PUBLIC__/js/common.js"></script>
+<script src="__PUBLIC__/plugins/layer/layer.min.js"></script>
+<script src="__ROOT__/Apps/Home/View/default/js/common.js"></script>
+<script src="__ROOT__/Apps/Home/View/default/js/goods.js"></script>
+<script type="text/javascript">
+    function removeCartGoods(obj,goodsId,goodsAttrId){
+        jQuery.post(Think.U('Home/Cart/delCartGoods') ,{goodsId:goodsId,goodsAttrId:goodsAttrId},function(data) {
+            var cart = WST.toJson(data);
+            var spId = $(obj).attr("spId");
+            $(obj).parent().parent().remove();
+            if($("input[name='chk_goods_"+spId+"']").length==0){
+                $("#chk_shop_"+spId).parent().remove();
+            }
+            if($("input[name='chk_shop']").length==0){
+                $("#have-cart-nils").fadeOut();
+                var html = '<div id="cart-nil"><div class="page-cart"><i class="gwc_ic"></i><p class="p1">购物车为空哦~</p>'+
+                '<a class="gwc_btn1" href="{:U('Index/index')}">去逛逛</a></div></div>';
+                $("#cart-page").html(html);
+            }
+            var totalmoney = 0, goodsnum = 0;
+            for(var shopId in cart.cartgoods){
+                var shop = cart.cartgoods[shopId];
+                for(var goodsId in shop.shopgoods){
+                    var goods = shop.shopgoods[goodsId];
+                    goodsnum++;
+                    totalmoney = totalmoney + parseFloat(goods.shopPrice * goods.cnt);
+                    totalmoney = totalmoney.toFixed(2);
+                }
+            }
+            $(".em-item-amount").html(totalmoney);
+            $('.cart_num, .cart_gnum_chk').html(goodsnum);
+            $(".cart_gnum").html(goodsnum);
+        });
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,43 @@
+<layout name="layout"/>
+<div class="page">
+    <form method="post" action="{:U('Home/Welfare/registerCard')}">
+        <div class="content page-home" id='vip-page' style="margin-bottom: 0;">
+            <div class="list-block inset vip-active-input">
+                <div class="item-title content-padded">
+                    <p class="item-subtitle">黑金卡卡号</p>
+                </div>
+                <ul style="background: #2e2e2e">
+                    <li>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-input">
+                                    <input id='oldPass' name='cardId' type="number" placeholder="请输入黑金卡卡号">
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <div class="item-title content-padded">
+                    <p class="item-subtitle">黑金卡密码</p>
+                </div>
+                <ul style="background: #2e2e2e">
+                    <li>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-input">
+                                    <input id='newPass' name='cardPassword' type="password" placeholder="请输入黑金卡密码">
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="content-block login-register row">
+                <p class="col-40" style="margin: 0 auto;float: none">
+                    <input id="" class="button button-fill" style="background: #ffbe00;color: #000;" type="submit"
+                       data-transition='fade' value="激活" />
+                </p>
+            </div>
+        </div>
+    </form>
+</div>

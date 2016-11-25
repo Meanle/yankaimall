@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>卖家登录 - {$CONF['mallTitle']}</title>
+		<meta name="keywords" content="{$CONF['mallKeywords']}" />
+		<meta name="description" content="{$CONF['mallDesc']},卖家登录" />
+		<link rel="stylesheet" href="__ROOT__/Apps/Home/View/default/css/app.css" />
+	</head>
+	<body>
+	<include file="./Apps/Home/View/default/header_nav.html" />
+		<div class="lg-container">
+			<section class="st-panel st-bg" id="st-panel-6">
+				<div class="login-form">
+					<h2 style="margin-bottom: 1rem;">雁凯跨境生活馆</h2>
+					<div id="login-form">
+						<input id="username" name="txtuser" type="text" class="text" placeholder="用户名">
+						<input id="password" name="txtpwd" type="password" placeholder="密码">
+						<div class="item-input input-define sell-login">
+							<input id="verify" type="text" placeholder="请输入验证码">
+							<label class="img">
+								<img style='vertical-align:middle;cursor:pointer;width: 100%;border-radius: 3rem;'
+									 class='verifyImg'
+									 src='__ROOT__/Apps/Home/View/default/images/clickForVerify.png'
+									 title='刷新验证码' alt="点击刷新验证码" onclick='getVerify()'/>
+							</label>
+						</div>
+						<button id="loginbtn" type="submit" onclick="login();">登录</button>
+						<p><a href="##">忘记密码?</a></p>
+						<div id="wrong">
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+		<script src="__PUBLIC__/js/common.js"></script>
+		<script src="__ROOT__/Apps/Home/View/default/sell/js/common.js"></script>
+		<script src="__ROOT__/Apps/Home/View/default/sell/js/shoplogin.js"></script>
+	</body>
+</html>

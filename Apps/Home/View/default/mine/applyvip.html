@@ -1,0 +1,267 @@
+<layout name="layout"/>
+<div class="page">
+    <div class="content page-home" id='vip-page' style="margin-bottom: 0;">
+        <div class="list">
+            <div class="list-group-title" style="margin: 0;">
+                <p class="title-img">
+                    <img src="__ROOT__/Apps/Home/View/default/img/vip.png">
+                </p>
+            </div>
+            <div class="card-content">
+                <div class="card-content-inner" style="padding-bottom: 0;">
+                    <div class="color-gray">
+                        <p>选择办理年限:</p>
+                        <div class="content-padded">
+                            <div class="row vip-year">
+                                <div class="col-33 on">
+                                    <a href="#" class="button button-big button-fill button-dark">
+                                        <p>一年</p>
+                                        <p>￥200</p>
+                                    </a>
+                                </div>
+                                <div class="col-33">
+                                    <a href="#" class="button button-big button-fill button-dark">
+                                        <p>两年</p>
+                                        <p>￥400</p>
+                                    </a>
+                                </div>
+                                <div class="col-33">
+                                    <a href="#" class="button button-big button-fill button-dark">
+                                        <p>三年</p>
+                                        <p>￥600</p>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <p>有效期至: <em class="last-time"></em></p>
+                    </div>
+                </div>
+                <div class="card-content-inner" style="padding-top: 0;">
+                    <p>请选择支付方式:</p>
+                    <div class="list-block media-list list-way">
+                        <ul style="background: none">
+                            <li>
+                                <label class="label-checkbox item-content" style="padding-left: 0;">
+                                    <div class="pay wechatpay" id="wechatpay">
+                                    </div>
+                                    <div class="item-inner">
+                                        <div class="item-title-row">
+                                            <div class="item-title item-gray">微信支付</div>
+                                            <!--<div class="item-after">logo</div>-->
+                                        </div>
+                                        <div class="item-subtitle">精选促销安装5.0以上的版本</div>
+                                    </div>
+                                    <input type="radio" name="my-radio" data-index="1" checked="checked">
+                                    <div class="item-media"><i class="icon icon-form-checkbox"></i></div>
+                                </label>
+                            </li>
+                            <li>
+                                <label class="label-checkbox item-content" style="padding-left: 0;" id="blPayWay">
+                                    <div class="pay wepay" id="wepay"></div>
+                                    <div class="item-inner">
+                                        <div class="item-title-row">
+                                            <div class="item-title">余额支付</div>
+                                        </div>
+                                        <div class="item-subtitle">可用余额￥<span>{$data['money']}</span></div>
+                                    </div>
+                                    <input type="radio" name="my-radio" data-index="1">
+                                    <div class="item-media"><i class="icon icon-form-checkbox"></i></div>
+                                </label>
+                            </li>
+                        </ul>
+                        <form action="{:U('Home/Welfare/buyCardWithWxPay')}" method="post">
+                            <p class="check_btn">
+                                <input type="hidden" id="cardYear" name="cardYear"/>
+                                <input class="button button-big button-fill" data-transition="fade" id="submit-form" type="submit"
+                                       value="立即支付"/>
+                            </p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var year = 1;
+    var mydate = new Date();
+    $(function () {
+        var now = mydate.getFullYear() + 1 + "年";
+        now += mydate.getMonth() + 1 + "月";
+        now += mydate.getDate() + "日";
+        $(".last-time").html(now);
+        $('#cardYear').val(year);
+    });
+    $(".vip-year .col-33").click(function () {
+        var t = $(this).index() + 1;
+        year = t;
+        $(this).addClass("on").siblings().removeClass("on");
+        var str = mydate.getFullYear() + t + "年";
+        str += mydate.getMonth() + 1 + "月";
+        str += mydate.getDate() + "日";
+        $('.last-time').html(str);
+        $('#cardYear').val(year);
+    });
+    $('.label-checkbox').click(function () {
+        var className = $(this).children().first();
+        if (className.hasClass('wechatpay')) {
+            $('form').attr('action', '{:U("Home/Welfare/buyCardWithWxPay")}');
+            $('#submit-form').attr('type', 'submit').removeAttr('onclick');
+            $('#wepay').removeClass('blPayWay');
+        }else {
+            $('#submit-form').attr('type', 'button').attr('onclick', "balence()");
+            $('form').attr('action', '');
+            if(!className.hasClass('blPayWay'))
+                className.addClass('blPayWay');
+        }
+    });
+
+    $('#blPayWay').click(function() {
+        console.info(1);
+        if($('#wepay').hasClass('blPayWay')) {
+            console.info(2);
+            if($('#no-more-1').length != 0 && $('#no-more-1').attr('index') != '999') {
+                console.info($('#no-more-1').val());
+                $('#submit-form').css('background', '#bbb')
+                        .removeAttr('onclick').val($('#no-more-1').val() + '秒后可重新发送');
+            }
+        }
+    });
+
+    function timeCalter() {
+        var second = 60;
+        var text = $('#phone-text').length, btn = $('#submit-form');
+        setTimeout(function() {
+            var f = setInterval(function() {
+
+                if($('#no-more-1').length == 0) {
+                    $('body').append('<input type="hidden" id="no-more-1" index="0"/>');
+                }
+                $('#no-more-1').attr('index', '0');
+
+                if(second >= 0) {
+                    if(text == 0) {
+                        $('#phone-text').append('(<span id="content">'+second+'</span>秒后可重新发送)');
+                        text = $('#phone-text').length;
+                    }
+
+                    if($('#no-more-1').attr('index') == '0' && ($('.wepay').hasClass('blPayWay'))) {
+                        btn.css({
+                            'background': '#bbb'
+                        }).removeAttr('onclick').val(second+'秒后可重新发送短信验证');
+                    }else {
+                        btn.css('background', '#0894ec').val('立即支付');
+                    }
+
+                    $('#no-more-1').val(second);
+                    $('#content').html(second);
+                    second -= 1;
+                }else {
+                    $('#phone-text').html('已向您手机号{$Phone}发送支付验证码');
+                    btn.css({
+                        'background': '#0894ec',
+                    }).attr('onclick', 'balence()').val('立即支付');
+                    $('#no-more-1').attr('index', '999');
+                    window.clearInterval(f);
+                }
+            }, 1000);
+        }, 10);
+    }
+
+    function sendMsgAction(value, count) {
+        if(value == '' && $('#no-more').length == 0) {
+            $('body').append('<input type="hidden" id="no-more"/>');
+            $.prompt('<p id="phone-text">已向您手机号{$Phone}发送支付验证码</p>',
+                    function (value) {
+
+                        reViewCode(value, count);
+                    },
+                    function (value) {
+                        $.alert('您已取消支付');
+                    }
+            );
+        }else {
+            $.prompt('<p id="phone-text">请重新输入验证码</p>',
+                    function (value) {
+                        reViewCode(value, count);
+                    },
+                    function (value) {
+                        $.alert('您已取消支付');
+                    }
+            );
+        }
+    }
+
+    function reViewCode(value, count) {
+        if (count < 3) {
+            $.ajax({
+                url: '{:U("Home/Users/true_sms")}',
+                type: 'post',
+                data: {
+                    tel: "{$rs['userPhone']}",
+                    code: value,
+                    id: "{$rs['userId']}",
+                },
+                success: function (json) {
+                    if (json.code == 1) {
+                        var year = $('#cardYear').val();
+                        window.location.href = '{:U("Home/Welfare/buyCardWithBalancePay")}'+"&cardYear="+year;
+                    } else {
+                        $.alert(json.msg);
+                        count += 1;
+                        sendMsgAction(value, count);
+                    }
+                },
+                error: function (json) {
+                    alert(json.msg);
+                }
+            });
+        } else {
+            $.alert('您已输错超过三次，请重新获取验证码！');
+            return false;
+        }
+    }
+
+    function balence() {
+        var data = $('form').serialize();
+        var phone = "{$rs['userPhone']}";
+        var length = data.length
+        var years = data.substring((length-1),length);
+        var money = "{$data['money']}";
+        if(money < years*200){
+            alert("余额不足，请充值！");
+            return;
+        }
+
+        if(phone.length == 0){
+            location.href = "{:U('Home/Users/phonelogins')}";
+            return;
+        }
+        $.confirm('余额支付需要短信验证,点击确定发送验证码开始验证',
+            function () {
+                timeCalter();
+                $.ajax({
+                    url: '{:U("Home/Users/sms")}',
+                    type: 'post',
+                    data: {
+                        tel: phone
+                    },
+                    success: function (json) {
+                        if(json.code == 0) {
+                            $.alert(json.msg);
+                            return false;
+                        }
+                        sendMsgAction('', 0);
+                    },
+                    error: function (json) {
+                        console.log(json);
+                    }
+                });
+            },
+            function () {
+                $.alert('您已取消支付');
+            }
+        );
+
+    }
+</script>

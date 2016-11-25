@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="format-detection" content="telephone=no"/>
+    <title>订单详情</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
+    <link rel="stylesheet" href="__ROOT__/Apps/Home/View/default/css/iconfont.css"/>
+    <link rel="stylesheet" href="__ROOT__/Apps/Home/View/default/css/app.css"/>
+</head>
+
+<body>
+<div class="page">
+    <div class="content" id='detail-page'>
+        <!-- 这里是页面内容区 -->
+        <div class="page-check" id="pagecheck">
+            <foreach name="catgoods" item="vo1" key="k1">
+                <div class="list-block list-num">
+                    <ul>
+                        <li class="item-content">
+                            <div class="item-media"><i class="icon icon-f7"></i></div>
+                            <div class="item-inner">
+                                <div class="item-title">
+                                    <span>商品数量：</span>
+                                    <span>{$vo1['totalCnt']}</span>
+                                </div>
+                                <div class="item-after coffee-price">￥ {$vo1['totalMoney']}</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="list-block media-list">
+                    <foreach name="vo1['shopgoods']" item="vo2" key="k2">
+                        <ul>
+                            <li>
+                                <a class="item-content">
+                                    <div class="item-media"><img
+                                            src="__ROOT__/{$vo2['goodsThums']}"
+                                            width="80"></div>
+                                    <div class="item-inner">
+                                        <div class="item-title-row">
+                                            <div class="item-title">{$vo2['goodsName']}</div>
+                                            <div class="item-after">
+                                                <span class="coffee-price">￥ {$vo2['shopPrice']}</span>
+                                                <span>x{$vo2['cnt']}</span>
+                                            </div>
+                                        </div>
+                                        <!--<div class="item-subtitle">(热)</div>
+                                        <div class="item-text">多放些糖...</div>-->
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </foreach>
+                </div>
+            </foreach>
+            <div class="card facebook-card">
+                <div class="card-header no-border">
+                    <div class="facebook-avatar"><img
+                            src="http://gqianniu.alicdn.com/bao/uploaded/i4//tfscom/i3/TB10LfcHFXXXXXKXpXXXXXXXXXX_!!0-item_pic.jpg_250x250q60.jpg"
+                            width="34" height="34"></div>
+                    <div class="facebook-name">衡阳店</div>
+                    <div class="facebook-date">
+								<span class="coffee-send" style="display: none;">
+        		送至<em>1</em>号
+        	</span>
+                        <span>请选择对应的座位</span>
+                    </div>
+                </div>
+
+                <div class="card-content">
+                    <div class="pickseat">
+                        <ul>
+                            <li>1</li>
+                            <li>2</li>
+                            <li>3</li>
+                            <li>4</li>
+                            <li>5</li>
+                            <li>6</li>
+                            <li>7</li>
+                            <li>8</li>
+                            <li>9</li>
+                            <li>10</li>
+                            <li>11</li>
+                            <li>12</li>
+                            <li>13</li>
+                            <li>14</li>
+                        </ul>
+                    </div>
+
+                    <script>
+                        var userName = "{:session('WST_USER.loginName')}";
+                        var userPhone = ("{:session('WST_USER.userPhone')}") ? "{:session('WST_USER.userPhone')}" : '13213231211';
+                    </script>
+
+                    <div style="display: none;">
+                        <div id="consignee1"
+                        <if condition="count($addressList) eq 0">style='display:none'</if>
+                        >
+                        <div>
+                            <span class="wst-chkod-s1-title">收货人信息 </span>
+                            <input type="hidden" id="paddressId" value="{$addressList[0]['addressId']}"/>
+                            <span class="wst-chkod-s1-upd"><a
+                                    href="javascript:toEditAddress({$addressList[0]['addressId']});">[修改]</a></span>
+                        </div>
+                        <volist name="addressList" key="k" id="address">
+
+                            <if condition="$k eq 1">
+                                <input type="hidden" id="consigneeId" name="consigneeId"
+                                       value="{$address['addressId']}"/>
+                                <div id="showaddinfo">
+                                    <div>
+                                        <span style="font-weight: bold;" id="get-user-name">{$address["userId"]}</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <if condition="$address['userPhone'] neq ''">
+                                            <span id="get-user-phone">{$address["userPhone"]}</span>
+                                            <else/>
+                                            <span id="get-user-tel">{$address["userTel"]}</span>
+                                        </if>
+                                    </div>
+                                    <div>
+                                        {$address["areaName1"]}{$address["areaName2"]}{$address["areaName3"]}{$address["communityName"]}{$address["address"]}&nbsp;&nbsp;&nbsp;&nbsp;
+                                    </div>
+                                </div>
+                            </if>
+                        </volist>
+                        <if condition="count($addressList) eq 0">
+                            <div id="showaddinfo"></div>
+                            <input type="hidden" id="consigneeId" name="consigneeId"/>
+                        </if>
+                    </div>
+
+                    <div id="consignee2" style="<if condition=" count($addressList) gt 0
+                    ">display:none;</if>">
+                    <div>
+                        <span class="wst-chkod-cg-title">收货人信息 </span>
+                    </div>
+                    <div>
+                        <div id="userAddressDiv">
+                            <div id="flagdiv" style="display: none;"></div>
+                            <volist name="addressList" key="key" id="address">
+                                <div id="caddress_{$address['addressId']}">
+                                    <label>
+                                        <input id="seladdress_{$address['addressId']}"
+                                               onclick="changeAddress({$address['addressId']});" name="seladdress"
+                                               type="radio"
+                                        <if condition="$key eq 1">checked="checked"</if>
+                                        value="{$address['addressId']}"/>
+                                        <span style="font-weight: bold;" id="radusername_{$address['addressId']}">{$address["userName"]}&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                        <span id="radaddress_{$address['addressId']}">
+										{$address["areaName1"]}{$address["areaName2"]}{$address["areaName3"]}{$address["communityName"]}{$address["address"]}&nbsp;&nbsp;&nbsp;&nbsp;
+										<if condition="$address['userPhone'] neq ''">
+											{$address["userPhone"]}
+										<else/>
+											{$address["userTel"]}
+										</if>
+										</span>
+                                    </label>
+                                    <span class="optionspan wst-opt-upd">[<a
+                                            onclick="javascript:editAddress({$address['addressId']});">修改</a>]</span>
+                                    <span class="optionspan wst-opt-del">[<a
+                                            onclick="javascript:delAddress({$address['addressId']});">删除</a>]</span>
+                                </div>
+                            </volist>
+                        </div>
+                        <div>
+                            <label>
+                                <input id="seladdress_0" name="seladdress" type="radio" value="0"
+                                       onclick="changeAddress(0);"
+                                <if condition="count($addressList) eq 0">checked="checked"</if>
+                                />使用新地址
+                            </label>
+                        </div>
+                    </div>
+                    <div id="address_form" style="">
+                        <input type='hidden' id='consignee_add_cityId' name='consignee_add_cityId'
+                               value="{$currArea['areaId']}"/>
+                        <input type='hidden' id='consignee_add_cityName' name='consignee_add_cityName'/>
+                        <div class="wst-chkod-line35">
+                            <div class="wst-chkod-cg-pp"><span style="color: red;">*</span>收货人：</div>
+                            <div style="float: left; width: 700px;">
+                                <input type="text" class="input adsipt" style="width: 200px;" maxlength="50"
+                                       name="consignee_add_userName" id="consignee_add_userName"/>&nbsp;
+                            </div>
+                            <div style="clear: both;"></div>
+                        </div>
+                        <div class="wst-chkod-line35">
+                            <div class="wst-chkod-cg-ads"><span style="color: red;">*</span>收货地址：</div>
+                            <div class="wst-chkod-area-box">
+                                <select name="consignee_add_countyId" id="consignee_add_countyId" class="adsipt"
+                                        onchange="loadCommunitys(this);">
+                                    <option value="0" selected="selected">请选择</option>
+                                    <volist name="areaList2" key="key" id="area">
+                                        <option value="{$area['areaId']}">{$area["areaName"]}</option>
+                                    </volist>
+                                </select>
+                                <select name="consignee_add_CommunityId" id="consignee_add_CommunityId" class="adsipt"
+                                        onchange="checkArea();">
+                                    <option value="0" selected="selected">请选择</option>
+                                </select>
+                                <input type="text" class="input adsipt" style="width: 350px;" maxlength="150"
+                                       name="consignee_add_address" id="consignee_add_address"/>&nbsp;
+                            </div>
+                            <div style="clear: both;"></div>
+                        </div>
+                        <div class="wst-chkod-line35">
+                            <div class="wst-chkod-cg-pno"><span style="color: red;">*</span>手机号码：</div>
+                            <div class="wst-chkod-cg-pno-box">
+                                <input type="text" class="input adsipt" style="width: 150px;" maxlength="11"
+                                       name="consignee_add_userPhone" id="consignee_add_userPhone"
+                                       onkeyup="javascript:WST.isChinese(this,1)"
+                                       onkeypress="return WST.isNumberdoteKey(event)"/>
+                                &nbsp;或&nbsp;&nbsp;&nbsp;&nbsp;
+                                固定电话:<input type="text" class="input adsipt" style="width: 150px;" maxlength="15"
+                                            name="consignee_add_userTel" id="consignee_add_userTel"/>(例：020-88888888)&nbsp;
+                            </div>
+                            <div style="clear: both;"></div>
+                        </div>
+                        <div class="wst-chkod-line35">
+                            <div class="wst-chkod-cg-pno"><span style="color: red;">*</span>是否默认地址：</div>
+                            <div class="wst-chkod-cg-pno-box">
+                                <label>
+                                    <input type='radio' name='consignee_add_isDefault' id='consignee_add_isDefault_1'
+                                           vallue='1'>是
+                                </label>
+                                <label>
+                                    <input type='radio' name='consignee_add_isDefault' id='consignee_add_isDefault_0'
+                                           vallue='0'>否
+                                </label>
+                            </div>
+                            <div style="clear: both;"></div>
+                        </div>
+                    </div>
+
+                    <div class="wst-checkout wst-chkod-sbx" id="checkout">
+                        <li onclick="saveAddress()">
+                            <span id="saveConsigneeTitleDiv"></span>
+                        </li>
+                        <div style="clear: both;"></div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div style="display: none;">
+                <div style="display: none;">
+                    <div id="userAddressDiv">
+                        <div id="flagdiv" style="display: none;"></div>
+                        <volist name="addressList" key="key" id="address">
+                            <div id="caddress_{$address['addressId']}">
+                                <label>
+                                    <input id="seladdress_{$address['addressId']}"
+                                           onclick="changeAddress({$address['addressId']});" name="seladdress"
+                                           type="radio"
+                                    <if condition="$key eq 1">checked="checked"</if>
+                                    value="{$address['addressId']}"/>
+                                    <span style="font-weight: bold;" id="radusername_{$address['addressId']}">{$address["userName"]}&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                    <span id="radaddress_{$address['addressId']}">
+										{$address["areaName1"]}{$address["areaName2"]}{$address["areaName3"]}{$address["communityName"]}{$address["address"]}&nbsp;&nbsp;&nbsp;&nbsp;
+										<if condition="$address['userPhone'] neq ''">
+											{$address["userPhone"]}
+										<else/>
+											{$address["userTel"]}
+										</if>
+										</span>
+                                </label>
+                                <span class="optionspan wst-opt-upd">[<a
+                                        onclick="javascript:editAddress({$address['addressId']});">修改</a>]</span>
+                                <span class="optionspan wst-opt-del">[<a
+                                        onclick="javascript:delAddress({$address['addressId']});">删除</a>]</span>
+                            </div>
+                        </volist>
+                    </div>
+                    <div>
+                        <label>
+                            <input id="seladdress_0" name="seladdress" type="radio" value="0"
+                                   onclick="changeAddress(0);"
+                            <if condition="count($addressList) eq 0">checked="checked"</if>
+                            />使用新地址
+                        </label>
+                    </div>
+                </div>
+                <div id="address_form" style="">
+                    <input type='hidden' id='consignee_add_cityId' name='consignee_add_cityId'
+                           value="{$currArea['areaId']}"/>
+                    <input type='hidden' id='consignee_add_cityName' name='consignee_add_cityName'/>
+                    <div class="wst-chkod-line35">
+                        <div class="wst-chkod-cg-pp"><span style="color: red;">*</span>收货人：</div>
+                        <div style="float: left; width: 700px;">
+                            <input type="text" class="input adsipt" style="width: 200px;" maxlength="50"
+                                   name="consignee_add_userName" id="consignee_add_userName"/>&nbsp;
+                        </div>
+                        <div style="clear: both;"></div>
+                    </div>
+                    <div class="wst-chkod-line35">
+                        <div class="wst-chkod-cg-ads"><span style="color: red;">*</span>收货地址：</div>
+                        <div class="wst-chkod-area-box">
+                            <select name="consignee_add_countyId" id="consignee_add_countyId" class="adsipt"
+                                    onchange="loadCommunitys(this);">
+                                <option value="0" selected="selected">请选择</option>
+                                <volist name="areaList2" key="key" id="area">
+                                    <option value="{$area['areaId']}">{$area["areaName"]}</option>
+                                </volist>
+                            </select>
+                            <select name="consignee_add_CommunityId" id="consignee_add_CommunityId" class="adsipt"
+                                    onchange="checkArea();">
+                                <option value="0" selected="selected">请选择</option>
+                            </select>
+                            <input type="text" class="input adsipt" style="width: 350px;" maxlength="150"
+                                   name="consignee_add_address" id="consignee_add_address"/>&nbsp;
+                        </div>
+                        <div style="clear: both;"></div>
+                    </div>
+                    <div class="wst-chkod-line35">
+                        <div class="wst-chkod-cg-pno"><span style="color: red;">*</span>手机号码：</div>
+                        <div class="wst-chkod-cg-pno-box">
+                            <input type="text" class="input adsipt" style="width: 150px;" maxlength="11"
+                                   name="consignee_add_userPhone" id="consignee_add_userPhone"
+                                   onkeyup="javascript:WST.isChinese(this,1)"
+                                   onkeypress="return WST.isNumberdoteKey(event)"/>
+                            &nbsp;或&nbsp;&nbsp;&nbsp;&nbsp;
+                            固定电话:<input type="text" class="input adsipt" style="width: 150px;" maxlength="15"
+                                        name="consignee_add_userTel" id="consignee_add_userTel"/>(例：020-88888888)&nbsp;
+                        </div>
+                        <div style="clear: both;"></div>
+                    </div>
+                    <div class="wst-chkod-line35">
+                        <div class="wst-chkod-cg-pno"><span style="color: red;">*</span>是否默认地址：</div>
+                        <div class="wst-chkod-cg-pno-box">
+                            <label>
+                                <input type='radio' name='consignee_add_isDefault' id='consignee_add_isDefault_1'
+                                       vallue='1'>是
+                            </label>
+                            <label>
+                                <input type='radio' name='consignee_add_isDefault' id='consignee_add_isDefault_0'
+                                       vallue='0'>否
+                            </label>
+                        </div>
+                        <div style="clear: both;"></div>
+                    </div>
+                </div>
+
+                <div class="wst-checkout wst-chkod-sbx" id="checkout">
+                    <li onclick="saveAddress()">
+                        <span id="saveConsigneeTitleDiv"></span>
+                    </li>
+                    <div style="clear: both;"></div>
+                </div>
+            </div>
+
+
+            <div class="coffee-message">
+                <div class="item-title">
+                    小票留言
+                </div>
+                <div class="item-input">
+                    <textarea id="remarks" placeholder="想说什么尽情倾诉吧！"></textarea>
+                </div>
+            </div>
+            <div class="line-bg"></div>
+            <div class="coffee-money">
+                <div class="list-block list-num">
+                    <ul>
+                        <li class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title">
+                                    <span>咖啡金额</span>
+                                </div>
+                                <foreach name="catgoods" item="vo1" key="k1">
+                                    <div class="item-after coffee-price">￥ {$vo1['totalMoney']}</div>
+                                </foreach>
+                            </div>
+                        </li>
+                        <li class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title">
+                                </div>
+                                <div class="item-after coffee-price">
+                                    <span class="jine">支付金额</span>
+                                    <foreach name="catgoods" item="vo1" key="k1">
+                                        <span id="money">￥ {$vo1['totalMoney']}</span>
+                                    </foreach>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="line-bg"></div>
+            <div class="coffee-check">
+                <div class="list-block media-list list-num">
+                    <ul>
+                        <li class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title">
+                                    <span>支付方式</span>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <label class="label-checkbox item-content">
+                                <input type="radio" name="my-radio" data-index="1" checked="checked">
+                                <div class="item-media"><i class="icon icon-form-checkbox"></i></div>
+                                <div class="item-inner">
+                                    <div class="item-title-row">
+                                        <div class="item-title">微信支付</div>
+                                        <!--<div class="item-after">logo</div>-->
+                                    </div>
+                                    <div class="item-subtitle">精选促销安装5.0以上的版本</div>
+                                    <div class="item-text">首次支付随机立减</div>
+                                </div>
+                                <div class="pay wechatpay">
+                                </div>
+                            </label>
+                        </li>
+
+                        <li>
+                            <label class="label-checkbox item-content">
+                                <input type="radio" name="my-radio" data-index="2" disabled>
+                                <div class="item-media"><i class="icon icon-form-checkbox"></i></div>
+                                <div class="item-inner">
+                                    <div class="item-title-row">
+                                        <div class="item-title">支付宝</div>
+                                        <!--<div class="item-after">logo</div>-->
+                                    </div>
+                                    <div class="item-subtitle">精选促销安装支付宝app使用</div>
+                                    <div class="item-text">暂不支持支付宝支付</div>
+                                </div>
+                                <div class="pay alipay">
+                                </div>
+                            </label>
+                        </li>
+
+                        <li>
+                            <label class="label-checkbox item-content">
+                                <input type="radio" name="my-radio" disabled data-index="1">
+                                <div class="item-media"><i class="icon icon-form-checkbox"></i></div>
+                                <div class="item-inner">
+                                    <div class="item-title-row">
+                                        <div class="item-title">ApplePay</div>
+                                    </div>
+                                    <div class="item-subtitle">首次支付随机立减</div>
+                                    <div class="item-text">暂不支持ApplePay</div>
+                                </div>
+                                <div class="pay wepay"></div>
+                            </label>
+                        </li>
+                        <li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p class="check_btn">
+        <a class="button button-big button-fill" data-transition='fade' onclick="javascript:submitOrder();">立即支付</a>
+    </p>
+
+</div>
+</div>
+</div>
+<!-- 默认必须要执行$.init(),实际业务里一般不会在HTML文档里执行，通常是在业务页面代码的最后执行 -->
+<script src="__PUBLIC__/js/jquery.min.js"></script>
+<script>
+    var ThinkPHP = window.Think = {
+        "ROOT": "__ROOT__",
+        "APP": "__APP__",
+        "PUBLIC": "__PUBLIC__",
+        "DEEP": "{:C('URL_PATHINFO_DEPR')}",
+        "MODEL": ["{:C('URL_MODEL')}", "{:C('URL_CASE_INSENSITIVE')}", "{:C('URL_HTML_SUFFIX')}"],
+        "VAR": ["{:C('VAR_MODULE')}", "{:C('VAR_CONTROLLER')}", "{:C('VAR_ACTION')}"],
+        "DOMAIN": "{:WSTDomain()}",
+        "CITY_ID": "{$currArea['areaId']}",
+        "CITY_NAME": "{$currArea['areaName']}",
+        "DEFAULT_IMG": "{:WSTDomain()}/{$CONF['goodsImg']}",
+        "MALL_NAME": "{$CONF['mallName']}",
+        "SMS_VERFY": "{$CONF['smsVerfy']}",
+        "PHONE_VERFY": "{$CONF['phoneVerfy']}",
+        "IS_LOGIN": "{$WST_IS_LOGIN}"
+    };
+</script>
+<script src="__PUBLIC__/js/think.js"></script>
+<script src="__PUBLIC__/js/common.js"></script>
+<script src="__PUBLIC__/plugins/layer/layer.min.js"></script>
+<script src="__ROOT__/Apps/Home/View/default/js/orders.js"></script>
+<script>
+    jQuery.noConflict();
+</script>
+<script type='text/javascript' src='__ROOT__/Apps/Home/View/default/js/zepto.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
+<script type="text/javascript" src="__ROOT__/Apps/Home/View/default/js/app.js"></script>
+
+
+<script type="text/javascript">
+    $.init();
+    setTimeout(saveAddress, 500);
+    $(".pickseat ul li").click(function () {
+        $(this).addClass('on').siblings().removeClass("on");
+        $('.coffee-send').css('display', 'inline-block');
+        var n = $(this).index() + 1;
+        $(".coffee-send em").html(n);
+    });
+    function subCheckArea() {
+        var communityId = $("#consignee_add_CommunityId").val();
+        <volist name="shopColleges" key="key" id="shopCollege">
+            var shopCollege = ',{$shopCollege},';
+            var idx = shopCollege.indexOf(","+communityId+",");
+            if(idx==-1){
+                $("#areaOk").val("0");
+                WST.msg("店铺“"+$("#sp_{$key-1}").html()+"”中的商品不在配送区域内！");
+                return false;
+            }else{
+                $("#areaOk").val("1");
+            }
+        </volist>
+        return true;
+    }
+</script>
+</body>
+
+</html>

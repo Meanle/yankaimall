@@ -1,0 +1,155 @@
+<layout name="layout"/>
+<div class="page">
+    <include file="./Apps/Home/View/default/public/tab-bar.html" set="active"/>
+    <div class="content">
+        <div class="page-login">
+            <div class="list-block inset">
+                <ul>
+                    <!-- Text inputs -->
+                    <li>
+                        <div class="item-content">
+                            <div class="item-media"><i class="icon iconfont">&#xe618;</i></div>
+                            <div class="item-inner">
+                                <div class="item-input input-define">
+                                    <input id="phonenum" <if condition="$user['userPhone']">value="{$user['userPhone']}"<else />placeholder="手机号码"</if> oninput="javascript:changeNum();" onblur="javascript:isPhoneNum();" type="number">
+                                    <label class="img" style="line-height: 2.15rem">
+                                        <p id="getVer" class="notClick">点击获取验证码</p>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-media"><i class="icon iconfont">&#xe615;</i></div>
+                            <div class="item-inner">
+                                <div class="item-input">
+                                    <input id="loginName" style="font-size: 0.6rem" name="loginName" onpaste="return false;" type="text" placeholder="请输入验证码">
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+            <div class="content-block login-register">
+                <p><a id="registsubmit" class="button button-big button-fill" onclick="edit();"  data-transition='fade'>确定修改</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function changeNum() {
+        var phoneNum = $("#phonenum").val().toString().length;
+        if(phoneNum == 11){
+            var mobile = /^(13[0-9]{9}|17[0-9]{9}|15[012356789][0-9]{8}|18[0256789][0-9]{8}|147[0-9]{8}$)/;
+            if(!mobile.test($("#phonenum").val())){
+                $.toast('请输入正确的手机号码！');
+                $("#phonenum").focus();
+                return false;
+            }
+            $("#getVer").css('color','#0894ec');
+            $("#getVer").removeClass('notClick');
+        }
+    }
+    function isPhoneNum(){
+        var phoneNum = $("#phonenum").val().toString().length;
+        if(phoneNum != 11){
+            $.toast('请输入正确的手机号码！');
+            $("#phonenum").focus();
+            return false;
+        }
+    }
+    $("#getVer").click(function (){
+        var tel = $('#phonenum').val();
+        $.ajax({
+            url:'{:U("Home/Users/phoneIsUse")}',
+            type:'post',
+            data:{
+                tel:tel
+            },
+            success:function(json){
+                var code = json.code;
+                if(code){
+                    //var tel = $('#phonenum').val();
+                    $.ajax({
+                        url:'{:U("Home/Users/sms")}',
+                        type:'post',
+                        data:{
+                            tel:tel
+                        },
+                        success:function(json){
+                            $.alert(json.msg);
+                            if(json.code == 1){
+                                $('#getVer').addClass('button-dark');
+                                $('#getVer').attr('disabled','disabled');
+                                var timing = 60;
+                                var clock = setInterval(function(){
+                                    $('#getVer').html( timing + '秒后重新获取');
+                                    timing--;
+                                    if(timing==0){
+                                        clearInterval(clock);
+                                        $('#getVer').html('获取验证码');
+                                        $('#getVer').removeAttr('disabled');
+                                    }
+                                },1000);
+                            }
+                        },
+                        error:function(json){
+                            console.log(json);
+                        }
+                    });
+                }else {
+                    $.alert(json.msg);
+                }
+            },
+            error:function(json){
+                console.log(json);
+
+            }
+        });
+
+
+
+    })
+
+    function edit(){
+        var id = "<?php echo session('WST_USER.userId') ?>";
+        var code = $('#loginName').val();
+        var tel = $('#phonenum').val();
+        var phoneNum = $("#phonenum").val().toString().length;
+        if(phoneNum == 11){
+            var mobile = /^(13[0-9]{9}|17[0-9]{9}|15[012356789][0-9]{8}|18[0256789][0-9]{8}|147[0-9]{8}$)/;
+            if(!mobile.test($("#phonenum").val())){
+                $.toast('请输入正确的手机号码！');
+                $("#phonenum").focus();
+                return false;
+            }
+        }
+        if(code.length!=4){$.alert('验证码格式错误')}
+        $.ajax({
+            url:'{:U("Home/Users/true_sms")}',
+            type:'post',
+            data:{
+                tel:tel,
+                code:code,
+                id:id,
+            },
+            success:function(json){
+                if(json.code==1){
+                    alert(json.msg);
+                    setTimeout(function(){
+                        window.location.href = '{:U("Orders/queryByPage")}';
+                    },1000);
+                }else{
+                    alert(json.msg);
+                }
+            },
+            error:function(json){
+                alert(json.msg);
+                //window.location.href = '';
+            }
+        });
+    }
+
+</script>

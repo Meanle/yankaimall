@@ -1,0 +1,177 @@
+<layout name="layout"/>
+<div class="page">
+    <include file="./Apps/Home/View/default/public/tab-bar.html" set="active"/>
+    <div class="content">
+        <!-- 这里是页面内	容区 -->
+        <div class="page-settings">
+            <div class="list-block media-list person-card">
+                <ul>
+                    <li>
+                        <div href="#" class="item-content">
+                            <div class="item-media" style="position: relative">
+                                <img src="{:WSTImgPath($WST_USER['userPhoto'])}" width="80">
+                                <if condition="$vipcard eq 1">
+                                    <span class="iconfont" style="font-size: 1.4rem;vertical-align: middle;position: absolute;right: 0;top: 0;color: #1d1c1c;">
+                                        &#xe637;
+                                    </span>
+                                </if>
+                            </div>
+                            <div class="item-inner">
+                                <div class="item-title-row">
+                                    <div class="item-title">{$WST_USER["loginName"]}</div>
+                                </div>
+<!--                                <div class="item-subtitle">
+                                    积分:<em><?php $aa=$WST_USER["userScore"]; $bb=$WST_USER["userTotalScore"] ;echo $aa+$bb?></em>
+                                </div>-->
+                                <div class="item-subtitle">
+                                    <p>上次登陆时间: </p>
+                                    {$WST_USER["lastTime"]}
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="row text-center row-nomargin">
+                <div class="col-20" onclick="getAllOrderDetails(1)" style="cursor: pointer;">
+                    <h4>{$statusList[-2]}</h4>
+                    <div class="color-gray">待付款</div>
+                </div>
+                <div class="col-20" onclick="getAllOrderDetails(2)" style="cursor: pointer;">
+                    <h4>{$statusList[2]}</h4>
+                    <div class="color-gray">待发货</div>
+                </div>
+                <div class="col-20" onclick="getAllOrderDetails(3)" style="cursor: pointer;">
+                    <h4>{$statusList[3]}</h4>
+                    <div class="color-gray">待收货</div>
+                </div>
+                <div class="col-20" onclick="getAllOrderDetails(4)" style="cursor: pointer;">
+                    <h4>{$statusList[4]}</h4>
+                    <div class="color-gray">待评价</div>
+                </div>
+                <div class="col-20" onclick="gooders()" style="cursor: pointer;">
+                    <h4 class="iconfont" style="font-size: .85rem">&#xe6b9;</h4>
+                    <div class="color-gray">订单</div>
+                </div>
+            </div>
+            <div class="list-block list">
+                <div class="row noline text-center">
+                    <div class="col-25" onclick="getCollects()">
+                        <h4 class="collect iconfont"></h4>
+                        <div class="color-gray">商品收藏</div>
+                    </div>
+                    <div class="col-25" onclick="gomywalletEntityByPages()">
+                        <h4 class="coupon iconfont"></h4>
+                        <div class="color-gray">我的钱包</div>
+                    </div>
+                    <div class="col-25" onclick="getvipcards()">
+                        <h4 class="vip"></h4>
+                        <div class="color-gray">黑金卡</div>
+                    </div>
+                    <div class="col-25" onclick="getintegral()">
+                        <h4 class="integral"></h4>
+                        <div class="color-gray">积分商城</div>
+                    </div>
+
+                    <if condition="$isVipDay">
+                        <div class="col-25" onclick="goVipDay()">
+                            <h4 class="black-vip"></h4>
+                            <div class="color-gray">黑金尊享</div>
+                        </div>
+                    </if>
+                </div>
+            </div>
+            <div class="list-block list">
+                <ul>
+                    <li class="item-content item-link" onclick="goEditPhone()">
+                        <div class="item-media"><i class="icon icon-card"></i></div>
+                        <div class="item-inner">
+                            <div class="item-title">绑定/修改手机</div>
+                            <if condition="$user['userPhone']"><div class="item-after item-after-color">已绑定</div><else /><div class="item-after item-after-color">未绑定</div></if>
+                        </div>
+                    </li>
+                    <li class="item-content item-link" onclick="goEditPass()">
+                        <div class="item-media"><i class="icon icon-settings"></i></div>
+                        <div class="item-inner">
+                            <div class="item-title">修改密码</div>
+                        </div>
+                    </li>
+                    <li class="item-content item-link" onclick="goEditInfo()">
+                        <div class="item-media"><i class="icon icon-me"></i></div>
+                        <div class="item-inner">
+                            <div class="item-title">个人资料</div>
+                        </div>
+                    </li>
+                    <!--							<li class="item-content item-link">
+                                                    <div class="item-media"><i class="icon icon-message"></i></div>
+                                                    <div class="item-inner">
+                                                        <div class="item-title">消息通知</div>
+                                                    </div>
+                                                </li>
+                                                <li class="item-content item-link">
+                                                    <div class="item-media"><i class="icon icon-friends"></i></div>
+                                                    <div class="item-inner">
+                                                        <div class="item-title">帮助中心</div>
+                                                    </div>
+                                                </li>-->
+                </ul>
+            </div>
+<!--            <div class="content-block">
+                <a href="{:U('Home/Users/logout')}" data-transition='slide-out' class="button button-big button-fill">退出登录</a>
+            </div>-->
+        </div>
+    </div>
+</div>
+<script>
+    function gooders() {
+        location.href = "{:U('Home/Orders/queryPayByPage')}";
+    }
+    function goodercoffee() {
+        location.href = "{:U('Home/Orders/queryReceiveByPage')}";
+
+    }
+    function goodercoffee1() {
+        location.href = "{:U('Home/Orders/queryAppraiseByPage')}";
+
+    }
+    function odersclass() {
+        location.href = "{:U('Home/Orders/odersclass')}";
+
+    }
+    function getAllOrderDetails(type) {
+        var type = type;
+        location.href = "{:U('Home/Orders/goqueryEntityByPage')}" + "&type=" + type;
+
+    }
+    function getCollects() {
+        location.href = "{:U('Home/Favorites/queryByPage')}";
+    }
+
+    function gomywalletEntityByPages() {
+        location.href = "{:U('Home/Users/gomywalletEntityByPages')}";
+    }
+
+    function getvipcards() {
+        location.href = "{:U('Home/Users/govipEntityByPages')}";
+    }
+    function getintegral() {
+        alert('暂未开放');
+    }
+    function getfeedbackDetails() {
+        location.href = "{:U('Home/Users/getfeedbackDetails')}";
+    }
+    function goEditPass() {
+        location.href = "{:U('Home/Users/toEditPass')}";
+    }
+    function goEditInfo() {
+        location.href = "{:U('Home/Users/toEdit')}";
+    }
+
+    function goEditPhone() {
+        location.href = "{:U('Home/Users/phonelogins')}";
+    }
+
+    function goVipDay() {
+        location.href = "{:U('Home/Welfare/goVipDay')}";
+    }
+</script>

@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="format-detection" content="telephone=no"/>
+    <title>订单详情</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
+    <link rel="stylesheet" href="__ROOT__/Apps/Home/View/default/css/iconfont.css"/>
+    <link rel="stylesheet" href="__ROOT__/Apps/Home/View/default/css/app.css"/>
+    <script src="__PUBLIC__/js/jquery.min.js"></script>
+    <script>
+        var ThinkPHP = window.Think = {
+            "ROOT": "__ROOT__",
+            "APP": "__APP__",
+            "PUBLIC": "__PUBLIC__",
+            "DEEP": "{:C('URL_PATHINFO_DEPR')}",
+            "MODEL": ["{:C('URL_MODEL')}", "{:C('URL_CASE_INSENSITIVE')}", "{:C('URL_HTML_SUFFIX')}"],
+            "VAR": ["{:C('VAR_MODULE')}", "{:C('VAR_CONTROLLER')}", "{:C('VAR_ACTION')}"],
+            "DOMAIN": "{:WSTDomain()}",
+            "CITY_ID": "{$currArea['areaId']}",
+            "CITY_NAME": "{$currArea['areaName']}",
+            "DEFAULT_IMG": "{:WSTDomain()}/{$CONF['goodsImg']}",
+            "MALL_NAME": "{$CONF['mallName']}",
+            "SMS_VERFY": "{$CONF['smsVerfy']}",
+            "PHONE_VERFY": "{$CONF['phoneVerfy']}",
+            "IS_LOGIN": "{$WST_IS_LOGIN}"
+        };
+    </script>
+    <script src="__PUBLIC__/js/think.js"></script>
+    <script src="__PUBLIC__/js/common.js"></script>
+    <script src="__PUBLIC__/plugins/layer/layer.min.js"></script>
+    <script src="__ROOT__/Apps/Home/View/default/js/orders.js"></script>
+    <style>
+        #get-user-phone, #get-user-tel, #get-user-name, .get-user-addr {
+            display: inline-block;
+            float:right;
+            max-width: 70%;
+        }
+        .addr-input {
+            background-color: #fff;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: .2rem;
+            color: #000;
+            line-height: 140%;
+        }
+        .addr-textarea {
+            border: 1px solid #d0cece;
+            border-radius: .2rem;
+            width: 100%;
+            height: 5rem;
+            resize: none;
+            line-height: 1.4;
+            padding: .4rem;
+        }
+        .wst-chkod-line35 {
+            margin-bottom: .5rem;
+        }
+    </style>
+</head>
+
+<body>
+<div class="page">
+    <div class="content" id='detail-page'>
+        <!-- 这里是页面内容区 -->
+        <div class="page-check" id="pagecheck">
+            <foreach name="catgoods" item="vo1" key="k1">
+                <div class="list-block list-num">
+                    <ul>
+                        <li class="item-content">
+                            <div class="item-media"><i class="icon icon-f7"></i></div>
+                            <div class="item-inner">
+                                <div class="item-title">
+                                    <span>商品数量：</span>
+                                    <span>{$vo1['totalCnt']}</span>
+                                </div>
+                                <div class="item-after coffee-price">￥ {$vo1['totalMoney']}</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="list-block media-list">
+                    <foreach name="vo1['shopgoods']" item="vo2" key="k2">
+                        <ul>
+                            <li>
+                                <a class="item-content">
+                                    <div class="item-media"><img
+                                            src="__ROOT__/{$vo2['goodsThums']}"
+                                            width="80"></div>
+                                    <div class="item-inner">
+                                        <div class="item-title-row">
+                                            <div class="item-title">{$vo2['goodsName']}</div>
+                                            <div class="item-after">
+                                                <if condition="isValidVip() eq 1">
+                                                    <span class="coffee-price">￥ {$vo2['vipPrice']}</span>
+                                                    <else/>
+                                                    <span class="coffee-price">￥ {$vo2['shopPrice']}</span>
+                                                </if>
+                                                <span>&nbsp;x&nbsp;{$vo2['cnt']}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </foreach>
+                </div>
+            </foreach>
+
+            <if condition="count($addressList) neq 0">
+                <div id="consignee1" class="default-address card facebook-card"
+                     style="margin-bottom: .7rem; padding-top: .5rem;"
+                    <if condition="count($addressList) eq 0">style='display:none'</if> >
+                    <div class="card-content">
+                        <div>
+                            <em class="wst-chkod-s1-title">收货人信息 </em>
+                            <input type="hidden" id="paddressId" value="{$addressList[0]['addressId']}"/>
+                            <span class="wst-chkod-s1-upd get-user-addr"><a
+                                    href="javascript:toEditAddress({$addressList[0]['addressId']});">[修改]</a></span>
+                        </div>
+                        <volist name="addressList" key="k" id="address">
+
+                            <if condition="$k eq 1">
+                                <input type="hidden" id="consigneeId" name="consigneeId"
+                                       value="{$address['addressId']}"/>
+                                <div id="showaddinfo">
+                                    <div>
+                                        收件人姓名：<span style="font-weight: bold;" id="get-user-name">{$address["userName"]}</span><br />
+                                        <if condition="$address['userPhone'] neq ''">
+                                            联系电话：<span id="get-user-phone">{$address["userPhone"]}</span>
+                                            <else/>
+                                            联系电话：<span id="get-user-tel">{$address["userTel"]}</span>
+                                        </if>
+                                    </div>
+                                    <div style="margin-bottom: .5rem;">
+                                        收货地址： <span class="get-user-addr">{$address["areaName1"]} {$address["areaName2"]} {$address["address"]}</span><!--{$address["areaName3"]}{$address["communityName"]}-->
+                                    </div>
+                                </div>
+                            </if>
+                        </volist>
+                        <if condition="count($addressList) eq 0">
+                            <div id="showaddinfo"></div>
+                            <input type="hidden" id="consigneeId" name="consigneeId"/>
+                        </if>
+                    </div>
+                </div>
+            </if>
+
+            <div id="consignee2" class="card facebook-card" style="<if condition=" count($addressList) gt 0
+                ">display:none;</if>">
+                <div class="card-content">
+                    <div class="line-bg"></div>
+                    <div>
+                        <em class="wst-chkod-cg-title">收货人信息 </em>
+                    </div>
+                    <div>
+                        <div id="userAddressDiv">
+                            <div id="flagdiv" style="display: none;"></div>
+                            <volist name="addressList" key="key" id="address">
+                                <div id="caddress_{$address['addressId']}" style="margin-bottom: .5rem;">
+                                    <label>
+                                        <input id="seladdress_{$address['addressId']}"
+                                               onclick="changeAddress({$address['addressId']});" name="seladdress"
+                                               type="radio"
+                                        <if condition="$key eq 1">checked="checked"</if>
+                                        value="{$address['addressId']}"/> 请在下方修改该地址
+                                    </label>
+                                    <span class="optionspan wst-opt-del get-user-addr">[<a
+                                            onclick="javascript:delAddress({$address['addressId']});">删除此地址</a>]</span><br />
+<!--                                    <span class="optionspan wst-opt-upd get-user-addr">[<a
+                                            onclick="javascript:editAddress({$address['addressId']});">修改</a>]</span>-->
+
+                                    收货人姓名：<span style="font-weight: bold; display: inline-block; float: right;" id="radusername_{$address['addressId']}">{$address["userName"]}</span><br />
+                                    <if condition="$address['userPhone'] neq ''">
+                                        联系电话： <span class="get-user-addr">{$address["userPhone"]}</span><br />
+                                        <else/>
+                                        联系电话： <span class="get-user-addr">{$address["userTel"]}</span><br />
+                                    </if>
+                                    <div id="radaddress_{$address['addressId']}">
+                                        收货地址：<span class="get-user-addr">{$address["areaName1"]} {$address["areaName2"]} {$address["address"]}</span></div><br />
+                                </div>
+                            </volist>
+                        </div>
+
+                        <!-- 新地址 -->
+                        <div>
+                            <label>
+                                <input id="seladdress_0" name="seladdress" type="radio" value="0"
+                                       onclick="changeAddress(0);"
+                                <if condition="count($addressList) eq 0">checked="checked"</if>
+                                /> 使用新地址
+                            </label>
+                        </div>
+                    </div>
+                    <div id="address_form" style="">
+                        <input type='hidden' id='consignee_add_cityId' name='consignee_add_cityId'
+                               value="{$currArea['areaId']}"/>
+                        <input type='hidden' id='consignee_add_cityName' name='consignee_add_cityName'/>
+
+                        <div class="wst-chkod-line35">
+                            <div class="wst-chkod-cg-pp" style="float: left;">收货人：</div>
+                            <div style="float: right;">
+                                <input type="text" class="addr-input" style="width: 100%;" maxlength="50"
+                                       name="consignee_add_userName" id="consignee_add_userName"/>
+                            </div>
+                            <div style="clear: both;"></div>
+                        </div>
+                        <div class="wst-chkod-line35">
+                            <div class="wst-chkod-cg-ads">收货地址：</div>
+                            <div class="wst-chkod-area-box">
+                                <select name="consignee_add_countyId" id="consignee_add_countyId" class="adsipt"
+                                        onchange="loadCommunitys(this);" hidden>
+                                    <option value="430408" selected="selected">蒸湘区</option>
+                                </select>
+                                <select name="consignee_add_CommunityId" id="consignee_add_CommunityId" class="adsipt"
+                                        onchange="checkArea();" hidden>
+                                    <option value="27" selected="selected">默认</option>
+                                </select>
+                                <textarea type="text" class="addr-textarea" placeholder="请填写详细地址"
+                                       name="consignee_add_address" id="consignee_add_address"></textarea>
+                            </div>
+                            <div style="clear: both;"></div>
+                        </div>
+                        <div class="wst-chkod-line35">
+                            <div class="wst-chkod-cg-pno" style="display: inline-block;">手机号码：</div>
+                            <div class="wst-chkod-cg-pno-box" style="display: inline-block; float: right;">
+                                <input type="number" class="addr-input" maxlength="11" style="width: 100%;"
+                                       name="consignee_add_userPhone" id="consignee_add_userPhone"
+                                       onkeyup="javascript:WST.isChinese(this,1)"
+                                       onkeypress="return WST.isNumberdoteKey(event)"/>
+                               <!-- &nbsp;或&nbsp;&nbsp;&nbsp;&nbsp;
+                                固定电话:<input type="text" class="input adsipt" style="width: 150px;" maxlength="15"
+                                            name="consignee_add_userTel" id="consignee_add_userTel"/>(例：020-88888888)&nbsp;-->
+                            </div>
+                            <div style="clear: both;"></div>
+                        </div>
+                        <div class="wst-chkod-line35">
+                            <div class="wst-chkod-cg-pno">是否默认地址：</div>
+                            <div class="wst-chkod-cg-pno-box">
+                                <label>
+                                    <input type='radio' name='consignee_add_isDefault' id='consignee_add_isDefault_1'
+                                           vallue='1'>是
+                                </label>
+                                <label>
+                                    <input type='radio' name='consignee_add_isDefault' id='consignee_add_isDefault_0'
+                                           vallue='0'>否
+                                </label>
+                            </div>
+                            <div style="clear: both;"></div>
+                        </div>
+                    </div>
+
+                    <div class="wst-checkout wst-chkod-sbx" id="checkout">
+                        <ul>
+                            <li onclick="saveAddress()">
+                                <span class="button button-fill" id="saveConsigneeTitleDiv">保存地址</span>
+                            </li>
+                        </ul>
+                        <div style="clear: both;"></div>
+                    </div>
+
+
+                </div>
+            </div>
+
+            <div class="card facebook-card">
+                <div class="card-content">
+
+                    <div class="coffee-message">
+                        <div class="item-title">
+                            附加留言
+                        </div>
+                        <div class="item-input">
+                            <textarea id="remarks" placeholder="想说什么尽情倾诉吧！"></textarea>
+                        </div>
+                    </div>
+            <div class="line-bg"></div>
+            <div class="coffee-money">
+                <div class="list-block list-num">
+                    <ul>
+                        <li class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title">
+                                    <span>订单金额</span>
+                                </div>
+                                <foreach name="catgoods" item="vo1" key="k1">
+                                    <div class="item-after coffee-price">￥ {$vo1['totalMoney']}</div>
+                                </foreach>
+                            </div>
+                        </li>
+                        <li class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title">
+                                </div>
+                                <div class="item-after coffee-price">
+                                    <span class="jine">应付金额</span>
+                                    <foreach name="catgoods" item="vo1" key="k1">
+                                        <span id="money">￥ {$vo1['totalMoney']}</span>
+                                    </foreach>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="line-bg"></div>
+            <div class="coffee-check">
+                <div class="list-block media-list list-num">
+                    <ul>
+                        <li class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title">
+                                    <span>支付方式</span>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <label class="label-checkbox item-content">
+                                <input type="radio" name="my-radio" data-index="1" checked="checked" id="wxPayWay">
+                                <div class="item-media"><i class="icon icon-form-checkbox"></i></div>
+                                <div class="item-inner">
+                                    <div class="item-title-row">
+                                        <div class="item-title">微信支付</div>
+                                        <!--<div class="item-after">logo</div>-->
+                                    </div>
+                                    <div class="item-subtitle">精选促销安装5.0以上的版本</div>
+                                </div>
+                                <div class="pay wechatpay">
+                                </div>
+                            </label>
+                        </li>
+                        <li>
+                            <label class="label-checkbox item-content">
+                                <input type="radio" name="my-radio" data-index="2" id="blPayWay">
+                                <div class="item-media"><i class="icon icon-form-checkbox"></i></div>
+                                <div class="item-inner">
+                                    <div class="item-title-row">
+                                        <div class="item-title">余额支付</div>
+                                    </div>
+                                    <div class="item-subtitle">可用余额￥<span>{$data['money']}</span></div>
+                                </div>
+                                <div class="pay wepay"></div>
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p class="check_btn">
+        <a class="button button-big button-fill button-verifer" data-transition='fade' id="getVer">生成订单</a>
+    </p>
+</div>
+</div>
+</div>
+<script>
+    $(function() {
+        setTimeout(function() {
+            $('#getVer').click(function() {
+                if($('#consignee2').css('display') == 'block') {
+                    $.alert('请先保存地址');
+                }else {
+                    submitOrder();
+                }
+            });
+        }, 50);
+    });
+    jQuery.noConflict();
+</script>
+<!-- 默认必须要执行$.init(),实际业务里一般不会在HTML文档里执行，通常是在业务页面代码的最后执行 -->
+<script type='text/javascript' src='__ROOT__/Apps/Home/View/default/js/zepto.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
+<script type="text/javascript" src="__ROOT__/Apps/Home/View/default/js/app.js"></script>
+
+
+<script type="text/javascript">
+    $.init();
+
+    $(".pickseat ul li").click(function () {
+        $(this).addClass('on').siblings().removeClass("on");
+        $('.coffee-send').css('display', 'inline-block');
+        var n = $(this).index() + 1;
+        $(".coffee-send em").html(n);
+    });
+
+    jQuery('.label-checkbox').click(function() {
+        jQuery(this).find('input').attr('checked', 'checked');
+        jQuery(this).parent().siblings().find('input').removeAttr('checked');
+
+        setTimeout(function() {
+            if($('#wxPayWay').attr('checked') == 'checked') {
+                $('#getVer').css('background', '#0894ec').removeAttr('onclick').html('生成订单')
+                .click(function() {
+                    if ($('#consignee2').css('display') == 'block') {
+                        $.alert('请先保存地址');
+                    } else {
+                        submitOrder();
+                    }
+                });
+            }else if($('#blPayWay').attr('checked') == 'checked') {
+                if($('#no-more-1').length == 0 || $('#no-more-1').attr('index') == '999') {
+                    $('#getVer').attr('onclick', 'checkSms()').unbind('click');
+                }
+            }
+        }, 10);
+        if($('#blPayWay').attr('checked') == 'checked') {
+            if($('#no-more-1').length != 0 && $('#no-more-1').attr('index') != '999') {
+                $('#getVer').css('background', '#bbb')
+                        .removeAttr('onclick').html($('#no-more-1').val() + ' 秒后可重新发送');
+            }
+        }
+    });
+
+    function subCheckArea() {
+        var communityId = $("#consignee_add_CommunityId").val();
+        <volist name="shopColleges" key="key" id="shopCollege">
+            var shopCollege = ',{$shopCollege},';
+            var idx = shopCollege.indexOf(","+communityId+",");
+            if(idx==-1){
+                $("#areaOk").val("0");
+                WST.msg("店铺“"+$("#sp_{$key-1}").html()+"”中的商品不在配送区域内！");
+                return false;
+            }else{
+                $("#areaOk").val("1");
+            }
+        </volist>
+        return true;
+    }
+
+    function timeCalter() {
+        var second = 60;
+        var text = $('#phone-text').length, btn = $('#getVer');
+        setTimeout(function() {
+            var f = setInterval(function() {
+
+                if($('#no-more-1').length == 0) {
+                    $('body').append('<input type="hidden" id="no-more-1" index="0"/>');
+                }
+                $('#no-more-1').attr('index', '0');
+
+                if(second >= 0) {
+                    if(text == 0) {
+                        $('#phone-text').append('<span id="content"></span>');
+                        text = $('#phone-text').length;
+                    }
+
+                    if($('#no-more-1').attr('index') == '0' && $('#blPayWay').attr('checked') == 'checked') {
+                        btn.css('background', '#bbb')
+                                .removeAttr('onclick').html(second+' 秒后可重新发送');
+                    }else {
+                        btn.css('background', '#0894ec').attr('onclick', 'submitOrder()').html('生成订单');
+                    }
+                    $('#content').html('('+second+'秒后可重新发送)');
+                    $('#no-more-1').val(second);
+                    second -= 1;
+
+                }else {
+                    $('#phone-text').html('已向您手机号{$Phone}发送支付验证码');
+                    btn.css({
+                        'background': '#0894ec',
+                    }).attr('onclick', 'checkSms()').html('生成订单');
+                    $('#no-more-1').attr('index', '999');
+                    window.clearInterval(f);
+                }
+            }, 1000);
+        }, 10);
+    }
+
+    function sendMsgAction(value, count) {
+        if(value == '') {
+
+            $.prompt('<p id="phone-text">已向您手机号{$Phone}发送支付验证码</p>',
+                    function (value) {
+                        reViewCode(value, count);
+                    },
+                    function (value) {
+                        return false;
+                    }
+            );
+        }else {
+            $.prompt('请重新输入验证码',
+                    function (value) {
+                        reViewCode(value, count);
+                        console.info(count);
+
+                    },
+                    function (value) {
+                        return false;
+                    }
+            );
+        }
+    }
+
+    function reViewCode(value, count) {
+        if (count < 2) {
+            $.ajax({
+                url: '{:U("Home/Users/true_sms")}',
+                type: 'post',
+                data: {
+                    tel: "{$rs['userPhone']}",
+                    code: value,
+                    id: "{$rs['userId']}",
+                },
+                success: function (json) {
+                    if (json.code == 1) {
+                        submitOrder();
+                    } else {
+                        $.alert(json.msg);
+                        count += 1;
+                        sendMsgAction(value, count);
+                    }
+                },
+                error: function (json) {
+                    alert(json.msg);
+                }
+            });
+        } else {
+            $.alert('您已输错超过三次，请重新获取验证码！');
+            return false;
+        }
+    }
+
+    function checkSms() {
+        if($('#consignee2').css('display') == 'none') {
+            var payway = 1;
+            var input = jQuery('input:radio');
+            input.each(function() {
+                if(jQuery(this).attr('checked') == 'checked') {
+                    payway = jQuery(this).attr('data-index');
+                }
+            });
+            if(payway == 1){
+                submitOrder();
+                return;
+            }
+            var phone = "{$rs['userPhone']}";
+            $.confirm('会员请先进行短信验证,更加安全',
+                    function () {
+                        timeCalter();
+                        $.ajax({
+                            url:'{:U("Home/Users/sms")}',
+                            type:'post',
+                            data:{
+                                tel:phone
+                            },
+                            success:function(json){
+                                console.log(json);
+                                if(json.code == 0){
+                                    $.alert(json.msg);
+                                    return;
+                                }
+                                sendMsgAction('', 0);
+                            },
+                            error:function(json){
+                                console.log(json);
+                            }
+                        });
+                    },
+                    function () {
+                        return false;
+                    }
+            );
+        }else {
+            $.alert('请先保存地址');
+        }
+    }
+
+</script>
+</body>
+
+</html>

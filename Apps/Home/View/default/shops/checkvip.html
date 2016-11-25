@@ -1,0 +1,80 @@
+<extend name="./Apps/Home/View/default/shops/layout.html" />
+<block name="content">
+    <script>
+        var phoneNum;
+        $(function () {
+            $(".check-vip-phone").click(function (){
+                var cardnum = $("#vipNum").val();
+                WST.msg("您输入的号码是:"+cardnum);
+                $.post(Think.U('Home/Users/getUserNum'),{cardId:cardnum},function(data,textStatus){
+                    var json = WST.toJson(data);
+                    if(json.userPhone == null){
+                        WST.msg('没有该会员信息!', {icon: 5}, function(){
+                            location.reload();
+                        });
+                    }else{
+                        phoneNum = json.userPhone;
+                        $.ajax({
+                            url:'{:U("Home/Users/sms")}',
+                            type:'post',
+                            data:{
+                                tel:json.userPhone
+                            },
+                            success:function(jsons){
+                                WST.msg('短信'+jsons.msg);
+                            },
+                            error:function(jsons){
+                                WST.msg(jsons.msg);
+                            }
+                        });
+                    }
+                });
+            })
+            $(".check-vip-num").click(function (){
+                var code = $("#phoneNum").val();
+                $.ajax({
+                    url:'{:U("Home/Users/true_sms_code")}',
+                    type:'post',
+                    data:{
+                        tel:phoneNum,
+                        code:code,
+                    },
+                    success:function(json){
+                        WST.msg("会员身份验验证通过");
+                    },
+                    error:function(json){
+                        WST.msg(json.msg);
+                    }
+                });
+            })
+        });
+    </script>
+    <div class="wst-body">
+        <div class='wst-page-header'>卖家中心 > 会员短信验证</div>
+        <div class='wst-page-content'>
+            <form name="myform" method="post" id="myform" autocomplete="off">
+                <table class="table table-hover table-striped table-bordered wst-form">
+                    <tr>
+                        <th align='right'>请输入会员卡号 <font color='red'>*</font>：</th>
+                        <td>
+                            <input type='text' id='vipNum' name='vipNum' value="NO." style='width:250px;' maxLength='16'/>
+                            <span class='check-vip-phone' style="display:inline-block ;height: 30px;background-color: #0894ec;color: #ffffff;cursor: pointer;padding:0 .5rem;" >
+                                给绑定手机发送短信
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th align='right'>请输入验证码 <font color='red'>*</font>：</th>
+                        <td>
+                            <input type='number' id='phoneNum' name='phoneNum' placeholder="请输入收到的验证码" style='width:250px;' maxLength='16'/>
+                            <span class='check-vip-num' style="display:inline-block ;height: 30px;background-color: #0894ec;color: #ffffff;cursor: pointer;padding:0 .5rem;" >
+                                立即验证
+                            </span>
+                        </td>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</block>

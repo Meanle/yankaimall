@@ -1,0 +1,72 @@
+<layout name="layout"/>
+<script src="__PUBLIC__/js/jquery.min.js"></script>
+<script src="__ROOT__/Apps/Home/View/default/js/goods.js"></script>
+<script>
+    var ThinkPHP = window.Think = {
+        "ROOT": "__ROOT__",
+        "APP": "__APP__",
+        "PUBLIC": "__PUBLIC__",
+        "DEEP": "{:C('URL_PATHINFO_DEPR')}",
+        "MODEL": ["{:C('URL_MODEL')}", "{:C('URL_CASE_INSENSITIVE')}", "{:C('URL_HTML_SUFFIX')}"],
+        "VAR": ["{:C('VAR_MODULE')}", "{:C('VAR_CONTROLLER')}", "{:C('VAR_ACTION')}"],
+        "DOMAIN": "{:WSTDomain()}",
+        "CITY_ID": "{$currArea['areaId']}",
+        "CITY_NAME": "{$currArea['areaName']}",
+        "DEFAULT_IMG": "{:WSTDomain()}/{$CONF['goodsImg']}",
+        "MALL_NAME": "{$CONF['mallName']}",
+        "SMS_VERFY": "{$CONF['smsVerfy']}",
+        "PHONE_VERFY": "{$CONF['phoneVerfy']}",
+        "IS_LOGIN": "{$WST_IS_LOGIN}"
+    };
+</script>
+<script src="__PUBLIC__/js/think.js"></script>
+<script src="__PUBLIC__/js/common.js"></script>
+<script src="__PUBLIC__/plugins/layer/layer.min.js"></script>
+<script>
+    jQuery.noConflict();
+</script>
+<link rel="stylesheet" href="__ROOT__/Apps/Home/View/default/css/favorites.css">
+<div class="page">
+
+    <div class="content page-home infinite-scroll" id='list-page'>
+        <!-- 这里是页面内容区 -->
+        <empty name="rs['data'][root]">
+            <!--这里是当没有收藏商品显示的内容-->
+            <div class="content-padded" style="height: 100%;margin: 0;">
+                <div class="develop" style="width: 100%; height: 100%; padding: 40% 0;">
+                    <p class="icon iconfont"
+                       style="width: 100%;text-align: center; font-size: 6rem;    color: #929292;">&#xe622;</p>
+                    <p style="width: 100%;text-align: center;color: #929292;">您还没有收藏商品哦</p>
+                    <a class="col-50 button button-fill" style="margin: 1rem auto; width: 50%;"
+                       href="__ROOT__/index.php?m=Home&c=Index&a=index">去逛逛</a>
+                </div>
+            </div>
+            <else/>
+            <!--这里是有商品时候显示的内容-->
+            <div class="list">
+                <ul class="list_sort_list collect_list">
+                    <volist name="rs['data']['root']" id="vo1">
+                        <li>
+                            <div>
+                                <a class="" href="{:U('Home/Goods/getGoodsDetails/',array('goodsId'=>$vo1[goodsId]))}">
+                                    <img alt="" src="__ROOT__/{$vo1['goodsThums']}">
+                                </a>
+                                <p class="txt">
+                                    <a href="#">{$vo1['goodsName']}</a>
+                                </p>
+                                <div class="price">
+									<span class="pri">
+			                        <em>￥{$vo1['shopPrice']}</em>
+			                    </span>
+
+                                </div>
+                                <p class="pl"><em>销量:</em><em>{$vo1['saleCount']}</em></p>
+                                <a onclick="javascript:removeFavorite({$vo1['favoriteId']},0,this)">取消收藏</a>
+                            </div>
+                        </li>
+                    </volist>
+                </ul>
+            </div>
+        </empty>
+    </div>
+</div>

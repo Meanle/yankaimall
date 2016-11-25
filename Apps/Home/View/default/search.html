@@ -1,0 +1,36 @@
+<script src="__PUBLIC__/js/jquery.min.js"></script>
+<script>
+    var ThinkPHP = window.Think = {
+        "ROOT": "__ROOT__",
+        "APP": "__APP__",
+        "PUBLIC": "__PUBLIC__",
+        "DEEP": "{:C('URL_PATHINFO_DEPR')}",
+        "MODEL": ["{:C('URL_MODEL')}", "{:C('URL_CASE_INSENSITIVE')}", "{:C('URL_HTML_SUFFIX')}"],
+        "VAR": ["{:C('VAR_MODULE')}", "{:C('VAR_CONTROLLER')}", "{:C('VAR_ACTION')}"],
+        "DOMAIN": "{:WSTDomain()}",
+        "CITY_ID": "{$currArea['areaId']}",
+        "CITY_NAME": "{$currArea['areaName']}",
+        "DEFAULT_IMG": "{:WSTDomain()}/{$CONF['goodsImg']}",
+        "MALL_NAME": "{$CONF['mallName']}",
+        "SMS_VERFY": "{$CONF['smsVerfy']}",
+        "PHONE_VERFY": "{$CONF['phoneVerfy']}",
+        "IS_LOGIN": "{$WST_IS_LOGIN}"
+    };
+</script>
+<script src="__PUBLIC__/js/think.js"></script>
+<script src="__PUBLIC__/js/common.js"></script>
+<script src="__PUBLIC__/plugins/layer/layer.min.js"></script>
+<script>
+    jQuery.noConflict();
+</script>
+<div class="bar bar-header-secondary">
+    <form action="{:U('Home/goods/searchGoodsList','searchType=1')}" method="post" enctype="multipart/form-data">
+        <div class="searchbar">
+            <a class="searchbar-cancel">取消</a>
+            <div class="search-input">
+                <label class="icon icon-search" for="search"></label>
+                <input type="search" name="keyWords" id='search' placeholder='输入您想要的商品...'/>
+            </div>
+        </div>
+    </form>
+</div>

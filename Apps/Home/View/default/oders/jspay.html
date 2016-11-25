@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>微信支付请求</title>
+</head>
+<body>
+
+</body>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.1.0.js"></script>
+<script>
+    window.onload = function () {
+        function onBridgeReady() {
+            WeixinJSBridge.invoke(
+                    'getBrandWCPayRequest',<?php echo $jsApiParameters;?>,
+                    function (res) {
+                        if (res.err_msg == "get_brand_wcpay_request:ok") {
+                            location.href = '/index.php/home/WxPay/paySuccess';
+                        }
+                    });
+        }
+
+        if (typeof WeixinJSBridge == "undefined") {
+            if (document.addEventListener) {
+                document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+            }
+            else if (document.attachEvent) {
+                document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+                document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+            }
+        } else {
+            onBridgeReady();
+        };
+    }
+
+</script>
+</html>
