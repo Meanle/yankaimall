@@ -33,12 +33,13 @@
 	   params.parentId = $('#parentId').val();
 	   params.catName = $('#catName').val();
 	   params.priceSection = $('#priceSection').val();
-     params.isShow = $('input[name="isShow"]:checked').val();
+       params.isShow = $('input[name="isShow"]:checked').val();
 
 	   params.isFloor = $('input[name="isFloor"]:checked').val();
      
 	   params.catSort = $('#catSort').val();
        params.discount = $('#discount').val();
+       params.rate = $('#rate').val();
 	   Plugins.waitTips({title:'信息提示',content:'正在提交数据，请稍后...'});
 	   $.post("{:U('Admin/GoodsCats/edit')}",params,function(data,textStatus){
 			var json = WST.toJson(data);
@@ -96,7 +97,11 @@
                 <th align='right'>会员折扣：</th>
                 <td><input type='text' id='discount' class="form-control wst-ipt" value='{$object.discount}' style='width:80px' onkeypress="return WST.isNumberdoteKey(event)" onkeyup="javascript:WST.isChinese(this,1)" maxLength='8'/></td>
             </tr>
-           <tr>
+            <tr>
+                <th align='right'>税率：</th>
+                <td><input type='text' id='rate' name="rate" class="form-control wst-ipt" value='{$object.rate}' style='width:80px' onkeypress="return WST.isNumberdoteKey(event)" onkeyup="javascript:WST.isChinese(this,1)" maxLength='8'/></td>
+            </tr>
+            <tr>
              <td colspan='2' style='padding-left:250px;'>
                  <button type="submit" class="btn btn-success">保&nbsp;存</button>
                   <a class="btn btn-primary" href='{:U("Admin/GoodsCats/index")}'>返&nbsp;回</button>
