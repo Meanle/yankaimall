@@ -1,0 +1,55 @@
+<layout name="layout"/>
+<div class="page">
+    <div class="content native-scroll">
+        <volist name="List" id="vo" key="i">
+            <div class="card facebook-card <if condition="$vo['isDefault'] == 1">add-red</if>">
+                <div class="card-content">
+                    <div class="card-content-inner">
+                        <p class="color-gray">
+                            <span class="add-name">{$vo['userName']}</span>
+                            <span class="add-phone">{$vo['userPhone']}</span>
+                        </p>
+                        <p style="padding-top: .5rem;">
+                            <span class="add-address">
+                            {$vo['areaName1']}{$vo['areaName2']}{$vo['areaName3']}{$vo['communityName']}{$vo['address']}
+                            </span>
+                        </p>
+                    </div>
+                </div>
+                <div class="card-footer no-border">
+                    <a href="javascript:delAddress({$vo['addressId']})" class="link"><span class="icon icon-remove"></span>删除</a>
+                    <a href="javascript:toEditAddress({$vo['addressId']})" class="link"><span class="icon icon-edit"></span>修改</a>
+                </div>
+            </div>
+        </volist>
+        <nav class="bar bar-tab bottom-bar detail-tabbar">
+            <p><a href="{:U('Home/UserAddress/toEdit','id=0')}" class="button button-fill" style="height: 1.8rem;line-height: 1.8rem">新增地址</a></p>
+        </nav>
+    </div>
+</div>
+<script>
+    function toEditAddress(id){
+        location.href = "{:U('Home/UserAddress/toEdit')}" + "&id=" + id;
+    }
+    function delAddress(id){
+        $.confirm('您确定要删除该地址吗？', function () {
+            $.ajax({
+                url:'{:U("Home/UserAddress/del")}',
+                type:'post',
+                data:{id:id},
+                timeout: 3000,
+                success:function(json){
+                    if(json.status=='1'){
+                        $.toast('操作成功!');
+                        location.reload();
+                    }else{
+                        $.toast('操作失败!');
+                    }
+                },
+                error: function(xhr, type, textStatus) {
+                    $.toast('网络超时请刷新重载!');
+                }
+            });
+        });
+    }
+</script>

@@ -2676,3 +2676,9 @@ padding-left: 0;
 p.check_btn .button-dark:active{
 	background: #6E727B;
 }
+.add-name{
+	margin-right: 1rem;
+}
+.add-red{
+	border:1px solid #0894ec;
+}

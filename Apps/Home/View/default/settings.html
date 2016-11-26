@@ -102,10 +102,10 @@
                             <div class="item-title">个人资料</div>
                         </div>
                     </li>
-                    <li class="item-content item-link" onclick="goEditAddress">
+                    <li class="item-content item-link" onclick="goEditAddress()">
                         <div class="item-media"><i class="icon iconfont">&#xe63d;</i></div>
                         <div class="item-inner">
-                            <div class="item-title">收货地址管理</div>
+                            <div class="item-title">收货地址</div>
                         </div>
                     </li>
                     <!-- <li class="item-content item-link">
@@ -167,7 +167,7 @@
         location.href = "{:U('Home/Users/toEdit')}";
     }
     function goEditAddress() {
-        location.href = "{:U('Home/UserAddress/queryByPage')}"
+        location.href = "{:U('Home/UserAddress/queryByPage')}";
     }
     function goEditPhone() {
         location.href = "{:U('Home/Users/phonelogins')}";
