@@ -23,10 +23,17 @@
 </script>
 <script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
-<!--<script type='text/javascript' src="__ROOT__/Apps/Home/View/default/js/back.js" charset='utf-8'></script>-->
+<script type="text/javascript" src="//g.alicdn.com/msui/sm/0.6.2/js/sm-city-picker.min.js" charset="utf-8"></script>
 <!-- 默认必须要执行$.init(),实际业务里一般不会在HTML文档里执行，通常是在业务页面代码的最后执行 -->
 <script type="text/javascript">
     $.init();
+    $("#city-picker").cityPicker({
+        toolbarTemplate: '<header class="bar bar-nav">\
+        <button class="button button-link pull-right close-picker">确定</button>\
+        <h1 class="title">选择收货地址</h1>\
+        </header>'
+    });
+
 //    给当前页面div.page加上page-current以显示
     $(function (){
         var page1st = $(".page").eq(0);

@@ -133,5 +133,19 @@
 			sessionStorage.setItem("top4",tops4);
 			sessionStorage.setItem("size4",c);
 		}
-	})
+	});
+
+	$(function(){
+		pushHistory();
+		window.addEventListener("popstate", function(e) {
+			window.location.href = '{:U("Home/Index/index")}';
+		}, false);
+		function pushHistory() {
+			var state = {
+				title: "title",
+				url: "#"
+			};
+			window.history.pushState(state, "title", "#");
+		}
+	});
 </script>

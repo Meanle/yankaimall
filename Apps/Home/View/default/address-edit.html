@@ -1,0 +1,133 @@
+<layout name="layout"/>
+<div class="page">
+    <div class="content native-scroll">
+        <div class="content-block">
+            <div class="list-block" style="margin:.75rem 0">
+                <ul>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title label">省市区</div>
+                                <div class="item-input">
+                                    <input type="text" placeholder="" id="city-picker" value="湖南 衡阳 雁峰区" readonly="">
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title label">详细地址</div>
+                                <div class="item-input">
+                                    <input type="text" placeholder="请填写详细地址" id="" value="">
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title label">收货人</div>
+                                <div class="item-input">
+                                    <input type="text" placeholder="请填写收货人姓名" id="" value="">
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title label">联系电话</div>
+                                <div class="item-input">
+                                    <input type="text" placeholder="请填写联系电话" id="" value="">
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title label">是否设为默认</div>
+                                <div class="item-input">
+                                    <label class="label-switch">
+                                        <input type="checkbox" checked="checked">
+                                        <div class="checkbox"></div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+                <div class="row">
+                    <div class="col-50"><a href="#" class="button button-big button-fill button-danger">重置</a></div>
+                    <div class="col-50"><a href="#" class="button button-big button-fill">保存</a></div>
+                </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    function editAddress(){
+        var params = {};
+        params.id = $('#id').val();
+        params.areaId1 = $('#areaId1').val();
+        params.areaId2 = $('#areaId2').val();
+        params.areaId3 = $('#areaId3').val();
+        params.communityId = $('#communityId').val();
+        params.address = $('#address').val();
+        params.userName = $('#userName').val();
+        params.userPhone = $('#userPhone').val();
+        params.userTel = $('#userTel').val();
+        params.isDefault = $("input[name='isDefault']:checked").val();
+
+
+        if(!WST.checkMinLength(params.userName,2)){
+            WST.msg("收货人姓名长度必须大于1个汉字", {icon: 5});
+            return ;
+        }
+        if(params.areaId1<1){
+            WST.msg("请选择省", {icon: 5});
+            return ;
+        }
+        if(params.areaId2<1){
+            WST.msg("请选择市", {icon: 5});
+            return ;
+        }
+        if(params.areaId3<1){
+            WST.msg("请选择区县", {icon: 5,shade: [0.3, '#000'],time: 2000});
+            return ;
+        }
+        if(params.communityId<1){
+            WST.msg("请选择社区", {icon: 5});
+            return ;
+        }
+        if(params.address==""){
+            WST.msg("请输入详细地址", {icon: 5});
+            return ;
+        }
+        if(params.userPhone=="" && params.userTel==""){
+            WST.msg("请输入手机号码或固定电话", {icon: 5});
+            return ;
+        }
+        if(params.userPhone!="" && !WST.isPhone(params.userPhone)){
+            WST.msg("手机号码格式错误", {icon: 5});
+            return ;
+        }
+        if(params.userTel!="" && !WST.isTel(params.userTel)){
+            WST.msg("固定电话格式错误", {icon: 5});
+            return ;
+        }
+
+        $.post(Think.U('Home/UserAddress/edit'),params,function(data,textStatus){
+            var json = WST.toJson(data);
+            if(json.status>0){
+                WST.msg('操作成功!', {icon: 1}, function(){
+                    location.href = Think.U('Home/UserAddress/queryByPage');
+                });
+            }else{
+                WST.msg(' 操作失败!',{icon: 5});
+            }
+        });
+    }
+</script>

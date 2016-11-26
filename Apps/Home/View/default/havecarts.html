@@ -57,11 +57,7 @@
                                             <em>选择该店铺:{$shopgoods["shopgoods"][0][shopName]}</em>
                                         </dt>
                                         <volist name="shopgoods['shopgoods']" key="key2" id="goods">
-                                            <dd class="clx" id="qty-51879-124614" jqstock="468" jqtmprcredit="130"
-                                                jqtmprcash=""
-                                                jqtmpprice="130.00" jqshopprice="130.00" jqtmpid="51879"
-                                                jqtmpspec="124614"
-                                                jqimportprice="15.47" jqtype="1" activeid="0">
+                                            <dd class="clx" id="qty-51879-124614" jqstock="468" jqtmprcredit="130" jqtmprcash="" jqtmpprice="130.00" jqshopprice="130.00" jqtmpid="51879" jqtmpspec="124614" jqimportprice="15.47" jqtype="1" activeid="0">
                                                 <if condition="$isvip eq 1">
                                                     <input type='hidden' id='price_{$goods["goodsId"]}_{$goods["goodsAttrId"]}' value='{$goods["vipPrice"]}'/>
                                                     <else />
@@ -77,11 +73,19 @@
                                                          style="display: block;">
                                                 </a>
                                                 <p class="txt">
-                                                    <a href="{:U('Home/Goods/getGoodsDetails/',array('goodsId'=>$goods['goodsId']))}">{$goods["goodsName"]}</a>
+                                                    <a class="txt-good-name" href="{:U('Home/Goods/getGoodsDetails/',array('goodsId'=>$goods['goodsId']))}">{$goods["goodsName"]}</a>
                                                     <a onclick="removeCartGoods(this,'{$goods["goodsId"]}','{$goods["goodsAttrId"]}')" spId="{$goods['shopId']}" style="float: right;margin-right:5px; font-size: 1rem" class="iconfont">&#xe610;</a>
                                                     <if condition="$goods['attrVal'] neq ''">
                                                         【{$goods['attrName']}:{$goods['attrVal']}】
                                                     </if>
+                                                </p>
+
+                                                <p class="set clx edit-number" style="display: block;">
+                                                    <span class="the_numbar left">
+                                                        <a id="numl_{$goods['goodsId']}_{$goods['goodsAttrId']}" onclick="changeCatGoodsnum(1,{$goods['shopId']},{$goods['goodsId']},{$goods['goodsAttrId']},{$goods['isBook']})" class="btn-addtocart-jian m1"></a>
+                                                        <input id="buy-num_{$goods['goodsId']}_{$goods['goodsAttrId']}" dataId="{$goods['goodsAttrId']}" type="text" maxlength="3" value="{$goods['cnt']}" onkeypress="return WST.isNumberKey(event);" onkeyup="changeCatGoodsnum(0,{$goods['shopId']},{$goods['goodsId']},{$goods['goodsAttrId']},{$goods['isBook']});" class="input-item-qty">
+                                                        <a id="numr_{$goods['goodsId']}_{$goods['goodsAttrId']}" onclick="changeCatGoodsnum(2,{$goods['shopId']},{$goods['goodsId']},{$goods['goodsAttrId']},{$goods['isBook']})" class="btn-addtocart-jia m2"></a>
+                                                    </span>
                                                 </p>
 
                                                 <p class="price clx">
