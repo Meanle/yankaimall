@@ -463,7 +463,10 @@ function changeCatGoodsnum(flag,shopId,goodsId,priceAttrId,isBook){
 		num = Math.abs(num);
 		$("#buy-num_"+goodsId+"_"+priceAttrId).val(num);
 	}
-	
+	if(!num){
+		num = 1;
+		$("#buy-num_"+goodsId+"_"+priceAttrId).val(1);
+	}
 	if(flag==1){
 		if(num>1)num = num-1;		
 	}else if(flag==2){
@@ -473,7 +476,7 @@ function changeCatGoodsnum(flag,shopId,goodsId,priceAttrId,isBook){
 		num = 1;
 		$("#buy-num_"+goodsId+"_"+priceAttrId).val(1);
 	}
-	
+	$(".item-count").html(num);
 	if($("#chk_goods_"+goodsId+"_"+priceAttrId).is(":checked")){
 		checkCartPay(shopId,goodsId,num,1,isBook,priceAttrId);
 	}else{

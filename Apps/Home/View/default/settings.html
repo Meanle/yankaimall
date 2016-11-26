@@ -102,18 +102,18 @@
                             <div class="item-title">个人资料</div>
                         </div>
                     </li>
-                    <!--							<li class="item-content item-link">
-                                                    <div class="item-media"><i class="icon icon-message"></i></div>
-                                                    <div class="item-inner">
-                                                        <div class="item-title">消息通知</div>
-                                                    </div>
-                                                </li>
-                                                <li class="item-content item-link">
-                                                    <div class="item-media"><i class="icon icon-friends"></i></div>
-                                                    <div class="item-inner">
-                                                        <div class="item-title">帮助中心</div>
-                                                    </div>
-                                                </li>-->
+                    <li class="item-content item-link" onclick="goEditAddress">
+                        <div class="item-media"><i class="icon iconfont">&#xe63d;</i></div>
+                        <div class="item-inner">
+                            <div class="item-title">收货地址管理</div>
+                        </div>
+                    </li>
+                    <!-- <li class="item-content item-link">
+                         <div class="item-media"><i class="icon icon-friends"></i></div>
+                         <div class="item-inner">
+                             <div class="item-title">帮助中心</div>
+                         </div>
+                     </li>-->
                 </ul>
             </div>
 <!--            <div class="content-block">
@@ -166,7 +166,9 @@
     function goEditInfo() {
         location.href = "{:U('Home/Users/toEdit')}";
     }
-
+    function goEditAddress() {
+        location.href = "{:U('Home/UserAddress/queryByPage')}"
+    }
     function goEditPhone() {
         location.href = "{:U('Home/Users/phonelogins')}";
     }

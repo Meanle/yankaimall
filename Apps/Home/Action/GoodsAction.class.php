@@ -11,7 +11,7 @@ namespace Home\Action;
 class GoodsAction extends BaseAction
 {
 
-    public function __construct(){
+/*    public function __construct(){
         parent::__construct();
         //初始化系统信息
         $USER = session('WST_USER');
@@ -19,7 +19,7 @@ class GoodsAction extends BaseAction
             session("local",$_SERVER["REQUEST_URI"]);
             redirect(U('Entrepreneurs/login_request'));
         }
-    }
+    }*/
 
     /**
      * 商品列表
