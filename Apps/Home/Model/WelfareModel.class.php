@@ -17,7 +17,7 @@ class WelfareModel extends BaseModel
     function activate()
     {
         $data = I();//获得会员卡卡号密码
-        $datacardId = "NO.".$data['cardId'];
+        $datacardId = "NO." . $data['cardId'];
         if (!session('WST_USER.userId')) {
             return -1;//没有传用户id过来
         }
@@ -89,5 +89,13 @@ class WelfareModel extends BaseModel
 
         $sql = "UPDATE __PREFIX__users SET balance = balance - $money WHERE userId = $userId";
         $this->execute($sql);
+    }
+
+
+    function getCard()
+    {
+        $sql = "SELECT * FROM wst_vip_card WHERE cardId > 'NO.000098884' AND cardId < 'NO.000098886' AND userId = '' ";
+        $card = $this->queryRow($sql);
+        return $card;
     }
 }

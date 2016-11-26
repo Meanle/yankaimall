@@ -129,7 +129,9 @@ class WelfareAction extends BaseAction
         }
 
         //分配一张会员卡给她
-        $card = M('vip_card')->where(array('userId' => ''))->find();
+//        $card = M('vip_card')->where(array('userId' => '','cartId'>'NO.000098288'))->find();
+        $card = $m->getCard();
+
         M('vip_card')->where(array('cardId' => $card['cardId']))->save(array(
             'userId' => session('WST_USER.userId'),
             'cardYear' => $cardYear,
