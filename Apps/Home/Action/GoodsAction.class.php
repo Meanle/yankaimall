@@ -108,6 +108,96 @@ class GoodsAction extends BaseAction
         $this->assign('districts', $districts);
         $this->display('default/special/classspecail');
     }
+    /**
+     * 商品大分类列表
+     */
+    public function getGoodsBigList()
+    {
+        $mgoods = D('Home/Goods');
+        $mareas = D('Home/Areas');
+        $mcommunitys = D('Home/Communitys');
+        $catName = I("catName");
+        $this->meta_title = $catName . ' | 雁凯跨境馆';
+        //获取默认城市及县区
+        $areaId2 = $this->getDefaultCity();
+        $districts = $mareas->getDistricts($areaId2);
+        //获取社区
+        $areaId3 = (int)I("areaId3");
+        $communitys = array();
+        if ($areaId3 > 0) {
+            $communitys = $mcommunitys->getByDistrict($areaId3);
+        }
+        $this->assign('communitys', $communitys);
+        //获取分类
+        $gcm = D('Home/GoodsCats');
+        $catList = $gcm->getGoodsCatsAndGoodsForIndex($areaId2);
+        $this->assign('catList', $catList);
+        //获取商品列表
+        $obj["areaId2"] = $areaId2;
+        $obj["areaId3"] = $areaId3;
+        $rslist = $mgoods->getGoodsList($obj);
+        $brands = $rslist["brands"];
+        $pages = $rslist["pages"];
+        $goodsNav = $rslist["goodsNav"];
+        $this->assign('goodsList', $rslist);
+        //动态划分价格区间
+        $maxPrice = $rslist["maxPrice"];
+        $minPrice = 0;
+        $pavg5 = ($maxPrice / 5);
+        $prices = array();
+        $price_grade = 0.0001;
+        for ($i = -2; $i <= log10($maxPrice); $i++) {
+            $price_grade *= 10;
+        }
+        //区间跨度
+        $span = ceil(($maxPrice - $minPrice) / 8 / $price_grade) * $price_grade;
+        if ($span == 0) {
+            $span = $price_grade;
+        }
+        for ($i = 1; $i <= 8; $i++) {
+            $prices[($i - 1) * $span . "_" . ($span * $i)] = ($i - 1) * $span . "-" . ($span * $i);
+            if (($span * $i) > $maxPrice) break;
+        }
+        if (count($prices) < 5) {
+            $prices = array();
+            $prices["0_100"] = "0-100";
+            $prices["100_200"] = "100-200";
+            $prices["200_300"] = "200-300";
+            $prices["300_400"] = "300-400";
+            $prices["400_500"] = "400-500";
+        }
+        $this->assign('c1Id', (int)I("c1Id"));
+        $this->assign('c2Id', (int)I("c2Id"));
+        $this->assign('c3Id', (int)I("c3Id"));
+        $this->assign('catName', I("catName"));
+        $this->assign('class', (int)I("class"));
+
+        $m = D('Home/Users');
+        $rs = $m->phoneOfUser($_SESSION['WSTMALL']['WST_USER']['userId']);
+        $this->assign('rs', $rs);
+
+        $this->assign('msort', (int)I("msort", 0));
+        $this->assign('mark', (int)I("mark", 0));
+        $this->assign('stime', I("stime"));//上架开始时间
+        $this->assign('etime', I("etime"));//上架结束时间
+
+        $this->assign('areaId3', (int)I("areaId3", 0));
+        $this->assign('communityId', (int)I("communityId", 0));
+
+        $pricelist = explode("_", I("prices"));
+        $this->assign('sprice', (int)$pricelist[0]);
+        $this->assign('eprice', (int)$pricelist[1]);
+        $this->assign('brandId', (int)I("brandId", 0));
+        $this->assign('keyWords', urldecode(I("keyWords")));
+        $this->assign('brands', $brands);
+        $this->assign('goodsNav', $goodsNav);
+        $this->assign('pages', $pages);
+        $this->assign('prices', $prices);
+        $priceId = $prices[I("prices")];
+        $this->assign('priceId', (strlen($priceId) > 1) ? I("prices") : '');
+        $this->assign('districts', $districts);
+        $this->display('default/classify/classifyone');
+    }
 //首页分类列表
     public function getClassGoodslist(){
         $sum = (int)I("sum");
