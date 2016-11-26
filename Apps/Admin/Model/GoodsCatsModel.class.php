@@ -21,6 +21,7 @@ class GoodsCatsModel extends BaseModel {
 		    $data["isShow"] = (int)I("isShow",0);
 			$data["catSort"] = (int)I("catSort",0);
             $data["discount"] = (float)I("discount",0.00);
+            $data["rate"] = (float)I("rate",0.000);
 			$data["catFlag"] = 1;;
 			$rs = $this->add($data);
 			if($rs){
@@ -44,6 +45,7 @@ class GoodsCatsModel extends BaseModel {
 	    	$data["isFloor"] = (int)I("isFloor",0);
 	    	$data["catSort"] = (int)I("catSort",0);
             $data["discount"] = I("discount",0.00);
+            $data["rate"] = I("rate",0.000);
 			$rs = $this->where("catFlag=1 and catId=".$id)->save($data);
 			if(false !== $rs){
 				if ($data['isShow'] == 0) {//修改子栏目是否隐藏
