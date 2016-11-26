@@ -376,7 +376,7 @@ class GoodsAction extends BaseAction
         $goodsId = (int)I("goodsId");
         $this->assign('goodsId', $goodsId);
         $obj["goodsId"] = $goodsId;
-        $goodsDetails = $goods->getGoodsDetails($obj);
+        $goodsDetails = $goods->getCoffeeGoodsDetails($obj);
         if ($kcode == $scrictCode || ($goodsDetails["isSale"] == 1 && $goodsDetails["goodsStatus"] == 1)) {
             if ($kcode == $scrictCode) {//来自后台管理员
                 $this->assign('comefrom', 1);

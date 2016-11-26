@@ -98,7 +98,7 @@ class CartModel extends BaseModel
 					WHERE g.goodsId = $goodsId AND gc.catId = g.goodsCatId2";
             $catName = $goods = $this->queryRow($sql);
             if ($catName['catName'] != '咖啡馆') {
-                $sql = "SELECT  g.goodsThums,g.goodsId,g.shopPrice,g.isBook,g.goodsName,g.shopId,g.goodsStock,g.shopPrice,g.attrCatId,shop.shopName,shop.qqNo,shop.deliveryType,shop.shopAtive,
+                $sql = "SELECT  g.goodsThums,g.goodsId,g.shopPrice,g.isBook,g.goodsName,g.shopId,g.goodsStock,g.shopPrice,g.activePrice,g.isNew,g.isBest,g.isHot,g.isRecomm,g.attrCatId,shop.shopName,shop.qqNo,shop.deliveryType,shop.shopAtive,
 					shop.shopTel,shop.shopAddress,shop.deliveryTime,shop.isInvoice, shop.deliveryStartMoney,
 					shop.deliveryFreeMoney,shop.deliveryMoney ,g.goodsSn,shop.serviceStartTime,shop.serviceEndTime,cast((g.shopPrice * if(gc.discount=0,1,gc.discount)) as decimal(10,2)) as vipPrice 
 					FROM __PREFIX__goods g left join __PREFIX__goods_cats gc on gc.catId=g.goodsCatId3, __PREFIX__shops shop
@@ -120,6 +120,13 @@ class CartModel extends BaseModel
                         $goods['goodsStock'] = $priceAttrs['attrStock'];
                     }
                 }
+                //如果new，recommen，best，hot=0
+                if($goods ['isNew']==1 || $goods ['isBest']==1 || $goods['isHot']==1 || $goods['isRecomm']==1) {
+                    $goods ['shopPrice'] = $goods ['activePrice'];
+                    $goods ['vipPrice'] = $goods ['activePrice'];
+                }
+
+
                 $goods['goodsAttrId'] = (int)$goods['goodsAttrId'];
 
                 if ($goods["isBook"] == 1) {
@@ -283,8 +290,14 @@ class CartModel extends BaseModel
             $goods["vipPrice"] = $cgoods["vipPrice"];
             $totalCnt += $cgoods["goodsCnt"];
 
-                $totalMoney += $goods["cnt"] * $goods["shopPrice"];
-                $gtotalMoney += $goods["cnt"] * $goods["shopPrice"];
+            //如果new，recommen，best，hot=0
+            if($goods['isNew']==1 || $goods['isBest']==1 || $goods['isHot']==1 || $goods['isRecomm']==1) {
+                $goods['shopPrice'] = $goods['activePrice'];
+                $goods['vipPrice'] = $goods['activePrice'];
+            }
+
+            $totalMoney += $goods["cnt"] * $goods["shopPrice"];
+            $gtotalMoney += $goods["cnt"] * $goods["shopPrice"];
 
             $ommunitysId = $maddress->getShopCommunitysId($goods["shopId"]);
             $shopColleges[$goods["shopId"]] = $ommunitysId;
@@ -322,6 +335,7 @@ class CartModel extends BaseModel
         $rdata["shopColleges"] = $shopColleges;
         $rdata["startTime"] = $startTime;
         $rdata["endTime"] = $endTime;
+//        dump($totalMoney);die;
         return $rdata;
     }
 

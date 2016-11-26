@@ -49,7 +49,7 @@ class GoodsModel extends BaseModel {
 		if($brandId>0){
 			$sql .=" , __PREFIX__brands bd ";
 		}
-		$where = " WHERE p.areaId2 = $areaId2 AND g.shopId = p.shopId AND  g.goodsStatus=1 AND g.goodsFlag = 1 and g.isSale=1 ";
+		$where = " WHERE p.areaId2 = $areaId2 AND g.shopId = p.shopId AND  g.goodsStatus=1 AND g.goodsFlag = 1 and g.isSale=1 and g.isNew=0 and g.isBest=0 and g.isHot=0 and g.isRecomm=0";
 		if($areaId3>0 || $communityId>0){
 			$where .= " AND sc.shopId=p.shopId ";
 			if($areaId3>0){
@@ -135,8 +135,30 @@ class GoodsModel extends BaseModel {
 			$rs[0]['shopPrice'] = $rs[0]['attrPrice'];
 			$rs[0]['goodsStock'] = $rs[0]['attrStock'];
 		}
+        if($rs[0]['isNew']==1 || $rs[0]['isBest']==1 || $rs[0]['isHot']==1 || $rs[0]['isRecomm']==1){
+            $rs[0]['shopPrice'] = $rs[0]['activePrice'];
+            $rs[0]['vipPrice'] = $rs[0]['activePrice'];
+
+        }
 		return $rs[0];
 	}
+
+    public function getCoffeeGoodsDetails($obj){
+        $goodsId = $obj["goodsId"];
+        $sql = "SELECT sc.catName,sc2.catName as pCatName, g.*,shop.shopName,shop.deliveryType,ga.id goodsAttrId,ga.attrPrice,ga.attrStock,
+				shop.shopAtive,shop.shopTel,shop.shopAddress,shop.deliveryTime,shop.isInvoice, shop.deliveryStartMoney,g.goodsStock,shop.deliveryFreeMoney,shop.qqNo,
+				shop.deliveryMoney ,g.goodsSn,shop.serviceStartTime,shop.serviceEndTime,cast((g.shopPrice * if(gc.discount=0,1,gc.discount)) as decimal(10,2)) as vipPrice 
+				FROM __PREFIX__goods g left join __PREFIX__goods_cats gc on gc.catId=g.goodsCatId3 left join __PREFIX__goods_attributes ga on g.goodsId=ga.goodsId and ga.isRecomm=1, __PREFIX__shops shop, __PREFIX__shops_cats sc 
+				LEFT JOIN __PREFIX__shops_cats sc2 ON sc.parentId = sc2.catId
+				WHERE g.goodsId = $goodsId AND shop.shopId=sc.shopId AND sc.catId=g.shopCatId1 AND g.shopId = shop.shopId AND g.goodsFlag = 1 ";
+        $rs = $this->query($sql);
+
+        if(!empty($rs) && $rs[0]['goodsAttrId']>0){
+            $rs[0]['shopPrice'] = $rs[0]['attrPrice'];
+            $rs[0]['goodsStock'] = $rs[0]['attrStock'];
+        }
+        return $rs[0];
+    }
 	
 	/**
 	 * 获取商品信息-购物车/核对订单用
@@ -144,7 +166,7 @@ class GoodsModel extends BaseModel {
     public function getGoodsForCheck($obj){		
 		$goodsId = (int)$obj["goodsId"];
 		$goodsAttrId = (int)$obj["goodsAttrId"];
-		$sql = "SELECT sc.catName,sc2.catName as pCatName, g.attrCatId,g.goodsThums,g.goodsId,g.goodsName,g.shopPrice,g.goodsStock
+		$sql = "SELECT sc.catName,sc2.catName as pCatName, g.attrCatId,g.goodsThums,g.goodsId,g.goodsName,g.shopPrice,g.activePrice,g.isNew,g.isBest,g.isRecomm,g.isHot,g.goodsStock
 				,g.shopId,shop.shopName,shop.qqNo,shop.deliveryType,shop.shopAtive,shop.shopTel,shop.shopAddress,shop.deliveryTime,shop.isInvoice, 
 				shop.deliveryStartMoney,g.goodsStock,shop.deliveryFreeMoney,shop.deliveryMoney ,g.goodsSn,shop.serviceStartTime startTime,shop.serviceEndTime endTime
 				FROM __PREFIX__goods g, __PREFIX__shops shop, __PREFIX__shops_cats sc 
@@ -289,6 +311,7 @@ class GoodsModel extends BaseModel {
 		 array('goodsThums','require','请上传商品缩略图!',1),
 		 array('marketPrice','double','请输入市场价格!',1),
 		 array('shopPrice','double','请输入店铺价格!',1),
+         array('activePrice','double','请输入活动价格!',1),
 		 array('goodsStock','integer','请输入商品库存!',1),
 		 array('goodsUnit','require','请输入商品单位!',1),
 		 array('goodsCatId1','integer','请选择商城一级分类!',1),

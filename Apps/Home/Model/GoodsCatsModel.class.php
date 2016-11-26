@@ -118,22 +118,22 @@ class GoodsCatsModel extends BaseModel {
 
                     //查询二级分类下的商品
                     if ($sum == 1){
-                        $sql = "SELECT sp.shopName, g.saleCount , sp.shopId , g.goodsId , g.goodsName,g.goodsImg, g.goodsCatId3, g.goodsThums,g.shopPrice, g.marketPrice, g.goodsSn,ga.id goodsAttrId,ga.attrPrice,cast((g.shopPrice * if(gc.discount=0,1,gc.discount)) as decimal(10,2)) as vipPrice 
+                        $sql = "SELECT sp.shopName, g.saleCount , sp.shopId , g.goodsId , g.goodsName,g.goodsImg, g.goodsCatId3, g.goodsThums,g.shopPrice, g.marketPrice,g.activePrice, g.goodsSn,ga.id goodsAttrId,ga.attrPrice,cast((g.shopPrice * if(gc.discount=0,1,gc.discount)) as decimal(10,2)) as vipPrice 
 							FROM __PREFIX__goods g left join __PREFIX__goods_cats gc on gc.catId=g.goodsCatId3 left join __PREFIX__goods_attributes ga on g.goodsId=ga.goodsId and ga.isRecomm=1, __PREFIX__shops sp
 							WHERE  g.isBest = 1 AND g.shopId = sp.shopId AND sp.shopStatus = 1 AND g.goodsFlag = 1 AND g.isSale = 1 AND g.goodsStatus = 1 AND g.goodsCatId2 = $cat2Id AND sp.areaId2=$areaId2
 							ORDER BY gc.catSort desc limit 100";
                     }elseif ($sum == 2){
-                        $sql = "SELECT sp.shopName, g.saleCount , sp.shopId , g.goodsId , g.goodsName,g.goodsImg, g.goodsCatId3, g.goodsThums,g.shopPrice, g.marketPrice, g.goodsSn,ga.id goodsAttrId,ga.attrPrice,cast((g.shopPrice * if(gc.discount=0,1,gc.discount)) as decimal(10,2)) as vipPrice 
+                        $sql = "SELECT sp.shopName, g.saleCount , sp.shopId , g.goodsId , g.goodsName,g.goodsImg, g.goodsCatId3, g.goodsThums,g.shopPrice, g.marketPrice,g.activePrice, g.goodsSn,ga.id goodsAttrId,ga.attrPrice,cast((g.shopPrice * if(gc.discount=0,1,gc.discount)) as decimal(10,2)) as vipPrice 
 							FROM __PREFIX__goods g left join __PREFIX__goods_cats gc on gc.catId=g.goodsCatId3 left join __PREFIX__goods_attributes ga on g.goodsId=ga.goodsId and ga.isRecomm=1, __PREFIX__shops sp
 							WHERE g.isHot = 1 AND g.shopId = sp.shopId AND sp.shopStatus = 1 AND g.goodsFlag = 1 AND g.isSale = 1 AND g.goodsStatus = 1 AND g.goodsCatId2 = $cat2Id AND sp.areaId2=$areaId2
 							ORDER BY gc.catSort desc limit 100";
                     }elseif ($sum == 3){
-                        $sql = "SELECT sp.shopName, g.saleCount , sp.shopId , g.goodsId , g.goodsName,g.goodsImg, g.goodsCatId3, g.goodsThums,g.shopPrice, g.marketPrice, g.goodsSn,ga.id goodsAttrId,ga.attrPrice,cast((g.shopPrice * if(gc.discount=0,1,gc.discount)) as decimal(10,2)) as vipPrice 
+                        $sql = "SELECT sp.shopName, g.saleCount , sp.shopId , g.goodsId , g.goodsName,g.goodsImg, g.goodsCatId3, g.goodsThums,g.shopPrice, g.marketPrice, g.activePrice,g.goodsSn,ga.id goodsAttrId,ga.attrPrice,cast((g.shopPrice * if(gc.discount=0,1,gc.discount)) as decimal(10,2)) as vipPrice 
 							FROM __PREFIX__goods g left join __PREFIX__goods_cats gc on gc.catId=g.goodsCatId3 left join __PREFIX__goods_attributes ga on g.goodsId=ga.goodsId and ga.isRecomm=1, __PREFIX__shops sp
 							WHERE g.isRecomm = 1 AND g.shopId = sp.shopId AND sp.shopStatus = 1 AND g.goodsFlag = 1 AND g.isSale = 1 AND g.goodsStatus = 1 AND g.goodsCatId2 = $cat2Id AND sp.areaId2=$areaId2
 							ORDER BY gc.catSort desc limit 100";
                     }else{
-                        $sql = "SELECT sp.shopName, g.saleCount , sp.shopId , g.goodsId , g.goodsName,g.goodsImg, g.goodsCatId3, g.goodsThums,g.shopPrice, g.marketPrice, g.goodsSn,ga.id goodsAttrId,ga.attrPrice,cast((g.shopPrice * if(gc.discount=0,1,gc.discount)) as decimal(10,2)) as vipPrice 
+                        $sql = "SELECT sp.shopName, g.saleCount , sp.shopId , g.goodsId , g.goodsName,g.goodsImg, g.goodsCatId3, g.goodsThums,g.shopPrice, g.marketPrice,g.activePrice ,g.goodsSn,ga.id goodsAttrId,ga.attrPrice,cast((g.shopPrice * if(gc.discount=0,1,gc.discount)) as decimal(10,2)) as vipPrice 
 							FROM __PREFIX__goods g left join __PREFIX__goods_cats gc on gc.catId=g.goodsCatId3 left join __PREFIX__goods_attributes ga on g.goodsId=ga.goodsId and ga.isRecomm=1, __PREFIX__shops sp
 							WHERE g.isNew = 1 AND g.shopId = sp.shopId AND sp.shopStatus = 1 AND g.goodsFlag = 1 AND g.isSale = 1 AND g.goodsStatus = 1 AND g.goodsCatId2 = $cat2Id AND sp.areaId2=$areaId2
 							ORDER BY gc.catSort desc limit 100";
@@ -141,6 +141,7 @@ class GoodsCatsModel extends BaseModel {
                     $grs = $this->query($sql);
                     foreach ($grs as $gkey => $v){
                         if(intval($v['goodsAttrId'])>0)$grs[$gkey]['shopPrice'] = $v['attrPrice'];
+                        $grs[$gkey]['shopPrice'] = $v['activePrice'];
                     }
                     $rs2[$j]["goods"] = $grs;
                     $cats2[] = $rs2[$j];
@@ -148,22 +149,22 @@ class GoodsCatsModel extends BaseModel {
 
                 //查询二级分类下的商品
                 if ($sum == 1){
-                    $sql = "SELECT sp.shopName, g.saleCount , sp.shopId , g.goodsId , g.goodsName,g.goodsImg, g.goodsCatId3, g.goodsThums,g.shopPrice, g.marketPrice, g.goodsSn,ga.id goodsAttrId,ga.attrPrice,(g.shopPrice * if(gc.discount=0,1,gc.discount))as decimal(10,2)) as vipPrice
+                    $sql = "SELECT sp.shopName, g.saleCount , sp.shopId , g.goodsId , g.goodsName,g.goodsImg, g.goodsCatId3, g.goodsThums,g.shopPrice,g.activePrice, g.marketPrice, g.goodsSn,ga.id goodsAttrId,ga.attrPrice,(g.shopPrice * if(gc.discount=0,1,gc.discount))as decimal(10,2)) as vipPrice
 						FROM __PREFIX__goods g left join __PREFIX__goods_cats gc on gc.catId=g.goodsCatId3 left join __PREFIX__goods_attributes ga on g.goodsId=ga.goodsId and ga.isRecomm=1, __PREFIX__shops sp
 						WHERE g.isBest = 1 AND g.shopId = sp.shopId AND sp.shopStatus = 1 AND g.goodsFlag = 1 AND g.isAdminBest = 1 AND g.isSale = 1 AND g.goodsStatus = 1 AND g.goodsCatId1 = $cat1Id AND sp.areaId2=$areaId2
 						ORDER BY gc.catSort desc limit 100";
                 }elseif ($sum == 2){
-                    $sql = "SELECT sp.shopName, g.saleCount , sp.shopId , g.goodsId , g.goodsName,g.goodsImg, g.goodsCatId3, g.goodsThums,g.shopPrice, g.marketPrice, g.goodsSn,ga.id goodsAttrId,ga.attrPrice,(g.shopPrice * if(gc.discount=0,1,gc.discount))as decimal(10,2)) as vipPrice
+                    $sql = "SELECT sp.shopName, g.saleCount , sp.shopId , g.goodsId , g.goodsName,g.goodsImg, g.goodsCatId3, g.goodsThums,g.shopPrice,g.activePrice, g.marketPrice, g.goodsSn,ga.id goodsAttrId,ga.attrPrice,(g.shopPrice * if(gc.discount=0,1,gc.discount))as decimal(10,2)) as vipPrice
 						FROM __PREFIX__goods g left join __PREFIX__goods_cats gc on gc.catId=g.goodsCatId3 left join __PREFIX__goods_attributes ga on g.goodsId=ga.goodsId and ga.isRecomm=1, __PREFIX__shops sp
 						WHERE  g.isHot = 1 AND g.shopId = sp.shopId AND sp.shopStatus = 1 AND g.goodsFlag = 1 AND g.isAdminBest = 1 AND g.isSale = 1 AND g.goodsStatus = 1 AND g.goodsCatId1 = $cat1Id AND sp.areaId2=$areaId2
 						ORDER BY gc.catSort desc limit 100";
                 }elseif ($sum == 3){
-                    $sql = "SELECT sp.shopName, g.saleCount , sp.shopId , g.goodsId , g.goodsName,g.goodsImg, g.goodsCatId3, g.goodsThums,g.shopPrice, g.marketPrice, g.goodsSn,ga.id goodsAttrId,ga.attrPrice,(g.shopPrice * if(gc.discount=0,1,gc.discount))as decimal(10,2)) as vipPrice
+                    $sql = "SELECT sp.shopName, g.saleCount , sp.shopId , g.goodsId , g.goodsName,g.goodsImg, g.goodsCatId3, g.goodsThums,g.shopPrice,g.activePrice,g.marketPrice, g.goodsSn,ga.id goodsAttrId,ga.attrPrice,(g.shopPrice * if(gc.discount=0,1,gc.discount))as decimal(10,2)) as vipPrice
 						FROM __PREFIX__goods g left join __PREFIX__goods_cats gc on gc.catId=g.goodsCatId3 left join __PREFIX__goods_attributes ga on g.goodsId=ga.goodsId and ga.isRecomm=1, __PREFIX__shops sp
 						WHERE g.isRecomm = 1 AND g.shopId = sp.shopId AND sp.shopStatus = 1 AND g.goodsFlag = 1 AND g.isAdminBest = 1 AND g.isSale = 1 AND g.goodsStatus = 1 AND g.goodsCatId1 = $cat1Id AND sp.areaId2=$areaId2
 						ORDER BY gc.catSort desc limit 100";
                 }else{
-                    $sql = "SELECT sp.shopName, g.saleCount , sp.shopId , g.goodsId , g.goodsName,g.goodsImg, g.goodsCatId3, g.goodsThums,g.shopPrice, g.marketPrice, g.goodsSn,ga.id goodsAttrId,ga.attrPrice,(g.shopPrice * if(gc.discount=0,1,gc.discount))as decimal(10,2)) as vipPrice
+                    $sql = "SELECT sp.shopName, g.saleCount , sp.shopId , g.goodsId , g.goodsName,g.goodsImg, g.goodsCatId3, g.goodsThums,g.shopPrice,g.activePrice,g.marketPrice, g.goodsSn,ga.id goodsAttrId,ga.attrPrice,(g.shopPrice * if(gc.discount=0,1,gc.discount))as decimal(10,2)) as vipPrice
 						FROM __PREFIX__goods g left join __PREFIX__goods_cats gc on gc.catId=g.goodsCatId3 left join __PREFIX__goods_attributes ga on g.goodsId=ga.goodsId and ga.isRecomm=1, __PREFIX__shops sp
 						WHERE g.isNew = 1 AND g.shopId = sp.shopId AND sp.shopStatus = 1 AND g.goodsFlag = 1 AND g.isAdminBest = 1 AND g.isSale = 1 AND g.goodsStatus = 1 AND g.goodsCatId1 = $cat1Id AND sp.areaId2=$areaId2
 						ORDER BY gc.catSort desc limit 100";
@@ -171,6 +172,7 @@ class GoodsCatsModel extends BaseModel {
                 $jgrs = $this->query($sql);
                 foreach ($jgrs as $gkey => $v){
                     if(intval($v['goodsAttrId'])>0)$jgrs[$gkey]['shopPrice'] = $v['attrPrice'];
+                    $grs[$gkey]['shopPrice'] = $v['activePrice'];
                 }
                 $rs1[$i]["jpgoods"] = $jgrs;
                 $rs1[$i]["catChildren"] = $cats2;
