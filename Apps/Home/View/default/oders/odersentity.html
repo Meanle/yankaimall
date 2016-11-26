@@ -203,22 +203,27 @@
         if(type==1){
             $.confirm('您确定收货吗?',
                     function () {
-                        $.toast('数据处理中，请稍候...');
-                        $.ajax({
-                            url: '{:U("Home/Orders/orderConfirm")}',
-                            type: 'post',
-                            data: {orderId:id,type:type},
-                            success: function (data) {
-                                if(data.status>0){
-                                    $.toast('确认收货成功');
-                                    location.reload();
-                                }else if(data.status==-1){
-                                    $.toast('操作失败，订单状态已发生改变，请刷新后再重试 !');
-                                }else{
-                                    $.toast('操作失败，请与商城管理员联系 !');
+                        $.showIndicator();
+                        setTimeout(function () {
+                            $.hideIndicator();
+                            $.ajax({
+                                url: '{:U("Home/Orders/orderConfirm")}',
+                                type: 'post',
+                                data: {orderId:id,type:type},
+                                success: function (data) {
+                                    if(data.status>0){
+                                        $.toast('☺确认收货成功');
+                                        setTimeout(function () {
+                                            location.reload();
+                                        },2000)
+                                    }else if(data.status==-1){
+                                        $.toast('操作失败，订单状态已发生改变，请刷新后再重试 !');
+                                    }else{
+                                        $.toast('操作失败，请与商城管理员联系 !');
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        }, 1200);
                     }
             );
         }
@@ -238,22 +243,27 @@ function orderCancel(id,type){
     if(type==3){
         $.confirm('您确定取消该订单吗?',
                 function () {
-                    $.toast('数据处理中，请稍候...');
-                    $.ajax({
-                        url: '{:U("Home/Orders/orderCancel")}',
-                        type: 'post',
-                        data: {orderId:id},
-                        success: function (data) {
-                            if(data.status>0){
-                                $.toast('取消订单成功');
-                                location.reload();
-                            }else if(data.status==-1){
-                                $.toast('操作失败，请刷新后再重试 !');
-                            }else{
-                                $.toast('操作失败，请与商城管理员联系 !');
+                    $.showIndicator();
+                    setTimeout(function () {
+                        $.hideIndicator();
+                        $.ajax({
+                            url: '{:U("Home/Orders/orderCancel")}',
+                            type: 'post',
+                            data: {orderId:id},
+                            success: function (data) {
+                                if(data.status>0){
+                                    $.toast('☺取消订单成功');
+                                    setTimeout(function () {
+                                        location.reload();
+                                    },2000);
+                                }else if(data.status==-1){
+                                    $.toast('操作失败，请刷新后再重试 !');
+                                }else{
+                                    $.toast('操作失败，请与商城管理员联系 !');
+                                }
                             }
-                        }
-                    });
+                        });
+                    }, 2000);
                 }
         );
     }else {

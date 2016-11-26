@@ -1,6 +1,6 @@
 <layout name="layout"/>
 <div class="page">
-    <div class="content native-scroll">
+    <div class="content native-scroll" style="margin-bottom: 2.4rem;">
         <volist name="List" id="vo" key="i">
             <div class="card facebook-card <if condition="$vo['isDefault'] == 1">add-red</if>">
                 <div class="card-content">
@@ -11,7 +11,8 @@
                         </p>
                         <p style="padding-top: .5rem;">
                             <span class="add-address">
-                            {$vo['areaName1']}{$vo['areaName2']}{$vo['areaName3']}{$vo['communityName']}{$vo['address']}
+                            {$vo['areaName1']}{$vo['areaName2']}{$vo['areaName3']}{$vo['address']}
+                                <if condition="$vo['isDefault'] == 1"><span style="color:#ccc;">(默认地址)</span></if>
                             </span>
                         </p>
                     </div>
@@ -22,10 +23,10 @@
                 </div>
             </div>
         </volist>
-        <nav class="bar bar-tab bottom-bar detail-tabbar">
-            <p><a href="{:U('Home/UserAddress/toEdit','id=0')}" class="button button-fill" style="height: 1.8rem;line-height: 1.8rem">新增地址</a></p>
-        </nav>
     </div>
+    <nav class="bar bar-tab bottom-bar detail-tabbar">
+        <p><a href="{:U('Home/UserAddress/toEdit','id=0')}" class="button button-fill" style="height: 1.8rem;line-height: 1.8rem">新增地址</a></p>
+    </nav>
 </div>
 <script>
     function toEditAddress(id){
@@ -52,4 +53,18 @@
             });
         });
     }
+//    点击总是返回我的界面
+    $(function(){
+        pushHistory();
+        window.addEventListener("popstate", function(e) {
+            window.location.href = '{:U("Home/Orders/queryByPage")}';
+        }, false);
+        function pushHistory() {
+            var state = {
+                title: "title",
+                url: "#"
+            };
+            window.history.pushState(state, "title", "#");
+        }
+    });
 </script>

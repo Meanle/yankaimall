@@ -12,7 +12,7 @@
                 <if condition="$vo1['catName'] eq 分类">
                     <volist name="vo1['catChildren']" key="k2" id="vo2">
                         <div id="section$k1" class="list-group">
-                            <a data-transition='slide-in' style="display: block">
+                            <a data-transition='slide-in' style="display: block" href="{:U('Home/Goods/getGoodsBigList/',array('c1Id'=>$vo1['catId'],'c2Id'=>$vo2['catId'],'catName'=>$vo2['catName'],'class'=>$k2))}">
                                 <div class="card color-default" style="margin: 0;">
                                     <div valign="bottom" class="card-header color-white no-border no-padding"
                                          style="height:auto;">
@@ -20,6 +20,7 @@
                                     </div>
                                 </div>
                             </a>
+                            <!--<?php dump($vo1['catChildren']);?>-->
                             <div class="row classify-goods">
                                 <volist name="vo2['catChildren']" key="k3" id="vo3">
                                     <div class="col-25">

@@ -13,21 +13,19 @@
             <nav class="nav-wrap" id="nav-wrap">
                 <ul class="clearfix scroll-fix sort-tab">
                     <volist name=":WSTGoodsCats()" key="k1" id="vo1">
+                        <if condition="$vo1['catName'] eq 分类">
                         <volist name="vo1['catChildren']" key="k2" id="vo2">
-                            <if condition="$vo2['catName'] eq 默认">
-                                <volist name="vo2['catChildren']" key="k3" id="vo3">
-                                    <if condition="$k3 eq 1">
+                                    <if condition="$k2 eq 1">
                                         <li>
-                                            <a class="active">{$vo3["catName"]}</a>
+                                            <a href="{:U('Home/Goods/getGoodsBigList/',array('c1Id'=>$vo1['catId'],'c2Id'=>$vo2['catId'],'catName'=>$vo2['catName'],'class'=>$k2))}">{$vo2["catName"]}</a>
                                         </li>
                                         <else/>
                                         <li>
-                                            <a>{$vo3["catName"]}</a>
+                                            <a href="{:U('Home/Goods/getGoodsBigList/',array('c1Id'=>$vo1['catId'],'c2Id'=>$vo2['catId'],'catName'=>$vo2['catName'],'class'=>$k2))}">{$vo2["catName"]}</a>
                                         </li>
                                     </if>
-                                </volist>
-                            </if>
                         </volist>
+                        </if>
                     </volist>
                 </ul>
             </nav>
@@ -58,9 +56,17 @@
             <div class="swiper-wrapper">
                 <volist name=":WSTAds(-1)" id="vo" key="k">
                     <div class="swiper-slide">
-                        <img class='card-cover'
-                             src="__ROOT__/{$vo['adFile']}"
-                             alt="">
+                        <empty name="vo['adURL']">
+                            <a href="javascript:;">
+                                <img class='card-cover' src="__ROOT__/{$vo['adFile']}" alt="">
+                            </a>
+                            <else />
+                            <a href="{$vo['adURL']}">
+                                <img class='card-cover' src="__ROOT__/{$vo['adFile']}" alt="">
+                            </a>
+                        </empty>
+
+
                     </div>
                 </volist>
             </div>
@@ -301,7 +307,7 @@
             clearInterval(interval,intervals);
         });
         //    定位锚点
-        var stop2 = $("#section2").offset().top;
+/*        var stop2 = $("#section2").offset().top;
         var stop3 = $("#section3").offset().top;
         var stop4 = $("#section4").offset().top;
         jQuery(".sort-tab li").click(function() {
@@ -315,7 +321,6 @@
                 $(".sort-tab li a").eq(t).addClass("active");
                 var tnum = t+1;
                 var section = "section" + tnum;
-                console.log(section);
                 if(section == "section2"){
                     jQuery(".content").stop().animate({scrollTop: stop2-90}, 500);
                 }else if(section == "section3"){
@@ -324,7 +329,7 @@
                     jQuery(".content").stop().animate({scrollTop: stop4-90}, 500);
                 }
             }
-        });
+        });*/
     });
 //    首页生日日和会员日动画
     function tiao(){
