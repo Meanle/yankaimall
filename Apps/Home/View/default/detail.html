@@ -44,6 +44,7 @@
             </div>
             <div class='content-block goods-card'>
                 <h3>{$goodsDetails["goodsName"]}</h3>
+                <p style="font-size: .6rem"><span style="font-size: .9rem;margin:0 .35rem;color: #3c3c3;" class="iconfont">&#xe665;</span>{$goodsDetails["goodsSn"]}</p>
                 <if condition="$isvip eq 1">
                     <p><strong>￥{$goodsDetails["vipPrice"]}</strong>
                         <del>￥{$goodsDetails["marketPrice"]}</del>

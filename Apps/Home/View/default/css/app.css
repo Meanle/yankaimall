@@ -185,20 +185,26 @@ em, i, var {
 }
 
 #home-page .list-more {
-	color: #333;
+	color: #f5f5f5;
 	text-align: center;
-	background-color: #fff;
-	margin-top: .4375rem;
-	padding: .60625rem 0;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0,0,0,0.3);
 }
 
 #home-page .list-more p {
 	font-size: .7rem;
 	line-height: 1.2rem;
 	font-family: "microsoft yahei";
-	border: 1px solid #333333;
+	border: 2px solid #fff;
 	width: 2.5rem;
-	margin: 0 auto;
+	position: absolute;
+	bottom: 1rem;
+	left:50%;
+	margin-left:-1.25rem;
 }
 
 #home-page .list-group-title span {
@@ -301,23 +307,26 @@ em, i, var {
 .list_sort_list li div.sell-goods .vip-price {
 	position: absolute;
 	background: url(../img/vpribg.png) no-repeat;
-	background-size: 100%;
+	background-size: 92%;
 	width: 3rem;
 	height: 2.5rem;
-	top: 0;
+	top: -0.3rem;
+	left: -0.2rem;
 }
 .list_sort_list li div.sell-goods .vip-price p{
-	font-size: .6rem;
-	text-align: center;
+	font-size: .5rem;
+	text-align: left;
 	color: #000;
-	margin-top:.8rem;
+	margin-top:1rem;
 	font-weight: bold;
 	height:auto;
 	line-height: normal;
 	font-style: italic;
+	padding-left: .15rem;
 }
 .list_sort_list li div.sell-goods .vip-price p em{
 	font-size: 0.55rem;
+	font-style: italic;
 }
 
 .list_sort_list li>div .txt a {
@@ -688,15 +697,69 @@ em, i, var {
 	font-family: "微软雅黑";
 	overflow: hidden;
 }
+#cart-page li dd .set {
+	color: #232323;
+	margin-bottom: 4px;
+	font-family: "微软雅黑";
+	overflow: hidden;
+}
+.the_numbar {
+	width: 110px;
+	height: 30px;
+	border: 1px solid #dcdcdc;
+	border-radius: 2px;
+	-webkit-border-radius: 2px;
+	float: left;
+	display: inline;
+}
+.the_numbar input {
+	float: left;
+	font-size: 12px;
+	height: 28px;
+	line-height: 26px;
+	color: #333333;
+	margin: 0;
+	border: 0;
+	width: 44px;
+	text-align: center;
+	border-radius: 3px;
+	outline: medium;
+}
+.the_numbar a {
+	float: left;
+	cursor: pointer;
+	width: 32px;
+	height: 28px;
+}
+.the_numbar a.m1 {
+	border-right: 1px solid #dcdcdc;
+	background: transparent url(../img/cartBG.png) no-repeat -31px -25px;
+	background-size: 183px;
+}
+.the_numbar a.m2 {
+	border-left: 1px solid #dcdcdc;
+	background: transparent url(../img/cartBG.png) no-repeat -61px -25px;
+	background-size: 183px;
+}
+p.txt .txt-good-name{
+	display: inline-block;
+	width: 10rem;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 36px;
+}
 
 #cart-page li dd .price {
 	height: 16px;
+	float: right;
 }
 
 #cart-page li dd .price em {
 	font-size: 13px;
 	padding-right: 15px;
 	color: #e4393c;
+	float: left;
 }
 
 #cart-page li dd .price i {
@@ -705,6 +768,7 @@ em, i, var {
 	margin-right: 10px;
 	font-style: normal;
 	color: #666;
+	float: left;
 }
 
 #cart-page li dd .price b {
