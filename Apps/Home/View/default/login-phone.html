@@ -42,7 +42,7 @@
     function changeNum() {
         var phoneNum = $("#phonenum").val().toString().length;
         if(phoneNum == 11){
-            var mobile = /^(13[0-9]{9}|17[0-9]{9}|15[012356789][0-9]{8}|18[0256789][0-9]{8}|147[0-9]{8}$)/;
+            var mobile = /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/;
             if(!mobile.test($("#phonenum").val())){
                 $.toast('请输入正确的手机号码！');
                 $("#phonenum").focus();
