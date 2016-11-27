@@ -71,6 +71,7 @@
         <!-- 这里是页面内容区 -->
         <div class="page-check" id="pagecheck">
             <foreach name="catgoods" item="vo1" key="k1">
+                <!--<?php dump($vo1)?>-->
                 <div class="list-block list-num">
                     <ul>
                         <li class="item-content">
@@ -301,7 +302,7 @@
                                 <div class="item-after coffee-price">
                                     <span class="jine">应付金额</span>
                                     <foreach name="catgoods" item="vo1" key="k1">
-                                        <span id="money">￥ {$vo1['totalMoney']}</span>
+                                        ￥ <span id="money">{$vo1['rateTotalMoney']}</span><if condition="$vo1['ratesMoney'] neq 0">(含税费<span id="needRate">{$vo1['ratesMoney']}</span>元)</if>
                                     </foreach>
                                 </div>
                             </div>

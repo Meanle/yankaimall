@@ -194,7 +194,7 @@ function checkCart(){
 					html.push("<div style='border-bottom:1px dotted #009237'>");
 					var url = Think.U('Home/Goods/getGoodsDetails','goodsId='+goods.goodsId);
 						html.push(  "<div style='float:left;'>" +
-										"<a href='"+url+"'><img src='"+WST.DOMAIN +"/"+goods.goodsThums+"' width='65' height='65'/></a>" +
+										"<a href='"+url+"'><img src='/' width='65' height='65'"+WST.DOMAIN +"/"+goods.goodsThums+"></a>" +
 										"</div>" +
 								"<div style='float:left;width:280px;padding:4px;overflow: hidden;font-size:12px;'>");
 					html.push(  "<a target='_blank' href='"+url+"' style='color:#707070;'>"+goods.goodsName+"</a><br/>");
@@ -456,7 +456,7 @@ function goBack(obj){
 }
 
 //修改购物车中的商品数量
-function changeCatGoodsnum(flag,shopId,goodsId,priceAttrId,isBook){
+function changeCatGoodsnum(flag,shopId,goodsId,priceAttrId,isBook, rate){
 	isBook = 0;
 	var num = parseInt($("#buy-num_"+goodsId+"_"+priceAttrId).val(),10);
 	if(num<0){
@@ -476,17 +476,17 @@ function changeCatGoodsnum(flag,shopId,goodsId,priceAttrId,isBook){
 		num = 1;
 		$("#buy-num_"+goodsId+"_"+priceAttrId).val(1);
 	}
-	$(".item-count").html(num);
+	$("#item-count_"+goodsId+"_"+priceAttrId).html(num);
 	if($("#chk_goods_"+goodsId+"_"+priceAttrId).is(":checked")){
-		checkCartPay(shopId,goodsId,num,1,isBook,priceAttrId);
+		checkCartPay(shopId,goodsId,num,1,isBook,priceAttrId, rate);
 	}else{
-		checkCartPay(shopId,goodsId,num,0,isBook,priceAttrId);
+		checkCartPay(shopId,goodsId,num,0,isBook,priceAttrId, rate);
 	}
 	
 }
 
 
-function checkCartPay(shopId,goodsId,num,ischk,isBook,goodsAttrId){
+function checkCartPay(shopId,goodsId,num,ischk,isBook,goodsAttrId, rate){
 	jQuery.post( Think.U('Home/Cart/changeCartGoodsNum') ,{goodsId:goodsId,num:num,ischk:ischk,goodsAttrId:goodsAttrId,isBook:isBook},function(data) {
 		var json = WST.toJson(data);
 		if(json.goodsStock==0){
@@ -523,7 +523,7 @@ function checkCartPay(shopId,goodsId,num,ischk,isBook,goodsAttrId){
 	
 		$("#shop_totalMoney_"+shopId).html(shopTotalMoney.toFixed(2));
 		//所有商品
-		var chkgoodsnum = 0;
+		var chkgoodsnum = 0, finalMoney = 0;
 		$(".cgoodsId").each(function(){
 			var goodsAttrId = $(this).attr('dataId');
 			var gid = $(this).val();
@@ -535,8 +535,10 @@ function checkCartPay(shopId,goodsId,num,ischk,isBook,goodsAttrId){
 			}
 		});
 		totalMoney = totalMoney.toFixed(2);
+
 		$(".cart_gnum_chk").html(chkgoodsnum);
 		$("#cart_handler_right_totalmoney, #wst_cart_totalmoney, .wst-nvg-cart-price, .em-item-amount").html(totalMoney);
+		$('#amount').html(finalMoney.toFixed(2));
 	});
 	
 }

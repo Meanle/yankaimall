@@ -144,6 +144,7 @@ class OrdersModel extends BaseModel
         $consigneeId = (int)I("consigneeId");           //收货人id
         $payway = (int)I("payway");                     //支付方式
         $isself = (int)I("isself");                     //
+        $rateMoney = I('rateMoney');
 
         $needreceipt = (int)I("needreceipt");           //需要发票
         $orderunique = WSTGetMillisecond() . $userId;
@@ -207,7 +208,9 @@ class OrdersModel extends BaseModel
                         } else {
                             $discount = 1;
                         }
+
                         $catgoods[$goods["shopId"]]["totalMoney"] = $catgoods[$goods["shopId"]]["totalMoney"] + ($goods["cnt"] * $goods["shopPrice"] * $discount);
+
                     } else {
                         $catgoods[$goods["shopId"]]["totalMoney"] = $catgoods[$goods["shopId"]]["totalMoney"] + ($goods["cnt"] * $goods["shopPrice"]);
                     }
@@ -231,7 +234,7 @@ class OrdersModel extends BaseModel
             $morders->startTrans();
             try {
                 $ordersInfo = $morders->addOrders($userId, $consigneeId, $payway,
-                    $needreceipt, $catgoods, $orderunique, $isself);
+                    $needreceipt, $catgoods, $orderunique, $isself, $rateMoney);
                 $morders->commit();
                 if (!empty($cartIds)) {
                     $sql = "delete from __PREFIX__cart where userId = $userId and cartId in (" . implode(",", $cartIds) . ")";
@@ -252,7 +255,7 @@ class OrdersModel extends BaseModel
      * 生成订单
      */
     public
-    function addOrders($userId, $consigneeId, $payway, $needreceipt, $catgoods, $orderunique, $isself)
+    function addOrders($userId, $consigneeId, $payway, $needreceipt, $catgoods, $orderunique, $isself, $rateMoney)
     {
 
         $orderInfos = array();      //订单详情 ?
@@ -278,7 +281,7 @@ class OrdersModel extends BaseModel
             $data["userId"] = $userId;
 
             $data["orderFlag"] = 1;
-            $data["totalMoney"] = $shopgoods["totalMoney"];
+            $data["totalMoney"] = $shopgoods["totalMoney"] + $rateMoney;
             if ($isself == 1) {//自提
                 $deliverMoney = 0;
             } else {
@@ -331,7 +334,7 @@ class OrdersModel extends BaseModel
                 $data["scoreMoney"] = $scoreMoney;
             }
             $data["realTotalMoney"] = $shopgoods["totalMoney"] + $deliverMoney - $scoreMoney;
-            $data["needPay"] = $shopgoods["totalMoney"] + $deliverMoney - $scoreMoney;
+            $data["needPay"] = $shopgoods["totalMoney"] + $rateMoney + $deliverMoney - $scoreMoney;
 
             $data["createTime"] = date("Y-m-d H:i:s");
             if ($payway == 1) {

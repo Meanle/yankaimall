@@ -497,6 +497,7 @@ function submitOrder(){
                  WST.msg("您选的商品不在配送区域内！", {icon: 5});
                  return ;
 			 }
+			 params.rateMoney = ($('#needRate').length == 0) ? 0 : parseFloat($('#needRate').html());
 
 			var ll = layer.msg('提交订单，请稍候...', {icon: 16,shade: [0.5, '#B3B3B3']});
             if (params.payFrom == 1){

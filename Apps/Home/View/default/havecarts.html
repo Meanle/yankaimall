@@ -47,8 +47,10 @@
                     <div class="page-cart-list">
                         <ul>
                             <li class="cartgoods-list" id="">
+
                                 <dl>
                                     <!--产品循环开始-->
+                                    <!--<?php dump($cartInfo['cartgoods'][1]['shopgoods'])?>-->
                                     <volist name="cartInfo['cartgoods']" id="shopgoods">
                                         <div id="wst_cart_shop_{$key}" data="{$key}" disabled="true"></div>
                                         <dt class="clx">
@@ -64,7 +66,7 @@
                                                     <input type='hidden' id='price_{$goods["goodsId"]}_{$goods["goodsAttrId"]}' value='{$goods["shopPrice"]}'/>
                                                 </if>
                                                 <!-- isBook='"+goods.isBook+"' "+(goods.ischk==1?"checked":"")+"-->
-                                                <input onclick='cartChkGoods(this)' isBook="{$goods['isBook']}" parent="{$goods['shopId']}" dataId="{$goods['goodsAttrId']}" type='checkbox' class='cus_chk cart-goods-check cgoodsId' id='chk_goods_{$goods["goodsId"]}_{$goods["goodsAttrId"]}' name='chk_goods_{$goods["shopId"]}' <if condition="$goods.ischk eq 1">checked</if> value='{$goods["goodsId"]}' />
+                                                <input onclick="cartChkGoods(this), checkGoods({$goods['goodsId']},{$goods['goodsAttrId']},{$goods['deliveryMoney']},this)" isBook="{$goods['isBook']}" parent="{$goods['shopId']}" dataId="{$goods['goodsAttrId']}" type='checkbox' class='cus_chk cart-goods-check cgoodsId' id='chk_goods_{$goods["goodsId"]}_{$goods["goodsAttrId"]}' name='chk_goods_{$goods["shopId"]}' <if condition="$goods.ischk eq 1">checked</if> value='{$goods["goodsId"]}' />
                                                 <input class="chb-slave" name="selected[124614]" type="checkbox"
                                                        checked="checked"
                                                        style="display:none;">
@@ -82,17 +84,20 @@
 
                                                 <p class="set clx edit-number" style="display: block;">
                                                     <span class="the_numbar left">
-                                                        <a id="numl_{$goods['goodsId']}_{$goods['goodsAttrId']}" onclick="changeCatGoodsnum(1,{$goods['shopId']},{$goods['goodsId']},{$goods['goodsAttrId']},{$goods['isBook']})" class="btn-addtocart-jian m1"></a>
-                                                        <input id="buy-num_{$goods['goodsId']}_{$goods['goodsAttrId']}" dataId="{$goods['goodsAttrId']}" type="text" maxlength="3" value="{$goods['cnt']}" onkeypress="return WST.isNumberKey(event);" onkeyup="changeCatGoodsnum(0,{$goods['shopId']},{$goods['goodsId']},{$goods['goodsAttrId']},{$goods['isBook']});" class="input-item-qty">
-                                                        <a id="numr_{$goods['goodsId']}_{$goods['goodsAttrId']}" onclick="changeCatGoodsnum(2,{$goods['shopId']},{$goods['goodsId']},{$goods['goodsAttrId']},{$goods['isBook']})" class="btn-addtocart-jia m2"></a>
+                                                        <a id="numl_{$goods['goodsId']}_{$goods['goodsAttrId']}" onclick="changeCatGoodsnum(1,{$goods['shopId']},{$goods['goodsId']},{$goods['goodsAttrId']},{$goods['isBook']}), wtf({$goods['goodsId']},{$goods['goodsAttrId']},{$goods['deliveryMoney']})" class="btn-addtocart-jian m1"></a>
+                                                        <input id="buy-num_{$goods['goodsId']}_{$goods['goodsAttrId']}" dataId="{$goods['goodsAttrId']}" type="text" maxlength="3" value="{$goods['cnt']}" onkeypress="return WST.isNumberKey(event);" onkeyup="changeCatGoodsnum(0,{$goods['shopId']},{$goods['goodsId']},{$goods['goodsAttrId']},{$goods['isBook']}), wtf({$goods['goodsId']},{$goods['goodsAttrId']},{$goods['deliveryMoney']});" class="input-item-qty">
+                                                        <a id="numr_{$goods['goodsId']}_{$goods['goodsAttrId']}" onclick="changeCatGoodsnum(2,{$goods['shopId']},{$goods['goodsId']},{$goods['goodsAttrId']},{$goods['isBook']}), wtf({$goods['goodsId']},{$goods['goodsAttrId']},{$goods['deliveryMoney']})" class="btn-addtocart-jia m2"></a>
                                                     </span>
                                                 </p>
-
+                                                <if condition="$goods['deliveryMoney'] neq 0">
+                                                    <input type="hidden" id="rate_{$goods['goodsId']}_{$goods['goodsAttrId']}" value="{$goods['deliveryMoney']}" />
+                                                    <input type="hidden" id="cnt_{$goods['goodsId']}_{$goods['goodsAttrId']}" value="{$goods['cnt']}" />
+                                                </if>
                                                 <p class="price clx">
                                                     <if condition="$isvip eq 1">
-                                                            <em>¥{$goods["vipPrice"]}元</em><i>x<b class="item-count">{$goods["cnt"]}</b><input type='hidden' id='buy-num_{$goods["goodsId"]}_{$goods["goodsAttrId"]}' value='{$goods["cnt"]}' style='width:40px;'/></i>
+                                                            <em>¥{$goods["vipPrice"]}元</em><i>x<b id="item-count_{$goods['goodsId']}_{$goods['goodsAttrId']}">{$goods["cnt"]}</b><input type='hidden' id='buy-num_{$goods["goodsId"]}_{$goods["goodsAttrId"]}' value='{$goods["cnt"]}' style='width:40px;'/></i>
                                                         <else />
-                                                        <em>¥{$goods["shopPrice"]}元</em><i>x<b class="item-count">{$goods["cnt"]}</b><input type='hidden' id='buy-num_{$goods["goodsId"]}_{$goods["goodsAttrId"]}' value='{$goods["cnt"]}' style='width:40px;'/></i>
+                                                        <em>¥{$goods["shopPrice"]}元</em><i>x<b id="item-count_{$goods['goodsId']}_{$goods['goodsAttrId']}">{$goods["cnt"]}</b><input type='hidden' id='buy-num_{$goods["goodsId"]}_{$goods["goodsAttrId"]}' value='{$goods["cnt"]}' style='width:40px;'/></i>
                                                     </if>
                                                 </p>
                                                 <p class="give">
@@ -102,6 +107,7 @@
                                     </volist>
                                 </dl>
                                 <dl>
+
                                     <!--产品循环结束-->
                                     <dd class="show_tips" style="display:none">
                                         <p class="thetips n1000" style="display:none"><i class="icon-warning"></i>根据海关规定购买多件的总价不能超过2000元，请您分多次购买。
@@ -115,8 +121,8 @@
                                                 <p>商品总额：<em>￥<span class="em-item-amount">{$cartInfo["gtotalMoney"]}</span></em></p>
                                                 <p>优惠：<em class="em-item-promotion-minus">-￥{$shopgoods["deliveryFreeMoney"]}</em>
                                                 </p>
-                                                <p>税费：<em class="em-item-import">￥{$shopgoods["deliveryMoney"]}</em></p>
-                                                <p class="p1">总计（不含运费）：<em>￥<span class="em-item-amount">{$cartInfo['totalMoney']}</span></em></p>
+                                                <p>税费：<em class="em-item-import">￥<span id="import">{$shopgoods["deliveryMoney"]}</span></em></p>
+                                                <p class="p1">总计（不含运费）：<em>￥<span class="em-item-amount" id="amount">{$cartInfo['totalMoney']}</span></em></p>
                                                 <a class="cus_btn1 submitBtn"
                                                    href="{:U('Home/Orders/checkOrderInfo')}">去结算</a>
                                             </div>
@@ -165,6 +171,49 @@
             $(".cart_gnum").html(goodsnum);
         });
     }
+
+    function wtf(gid, attrId, rate) {
+        setTimeout(function() {
+            var length = $('#rate_'+gid+"_"+attrId).length, finalMoney = 0, totalMoney = parseFloat($('.em-item-amount').html()),
+                    cnt = $("#buy-num_"+gid+"_"+attrId).val();
+            console.info(length);
+            switch (length) {
+                case 1:
+                    var rates = rate * cnt;
+                    $('#import').html(rates.toFixed(2));
+                    finalMoney = totalMoney + rates;
+                    $('#amount').html(finalMoney.toFixed(2));
+                    break;
+                case 0:
+                    var rates = $('#import').html();
+                    finalMoney = totalMoney + parseFloat(rates);
+                    $('#amount').html(finalMoney.toFixed(2));
+                    break;
+            }
+        }, 500)
+    }
+
+    /*function checkGoods(gid, attrId, rate, _this) {
+        setTimeout(function() {
+            var totalMoney = parseFloat($('.em-item-amount').html()), finalMoney = 0, rates = parseFloat($('#import').html());
+            if(rate == 0) {
+                finalMoney = totalMoney + rates;
+                $('#amount').html(finalMoney.toFixed(2));
+            }else {
+                if(!$('#chk_goods_'+gid+"_"+attrId).check){
+                    var SingleRate = parseFloat($('#rate_'+gid+"_"+attrId).val());   //当前商品单个税费
+                    var cnt = parseInt($('#item-count_'+gid+"_"+attrId).html());   //个数
+                    var finalRate = rates - SingleRate * cnt;
+                    finalMoney = totalMoney + finalRate;
+                    console.info(finalRate);
+                    $('#amount').html(finalMoney);
+                }else {
+                    console.info(1);
+                }
+
+            }
+        }, 500);
+    }*/
 </script>
 
 </body>

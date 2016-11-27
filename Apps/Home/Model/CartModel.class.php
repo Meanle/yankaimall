@@ -85,6 +85,8 @@ class CartModel extends BaseModel
         $mgoods = D('Home/Goods');
         $userId = (int)session('WST_USER.userId');
         $totalMoney = 0;
+        $gtotalMoney = 0;
+        $rateMoney = 0;
         $cartgoods = array();
         $sql = "select * from __PREFIX__cart where userId = $userId";
         $shopcart = $this->query($sql);
@@ -99,7 +101,7 @@ class CartModel extends BaseModel
             $catName = $goods = $this->queryRow($sql);
             if ($catName['catName'] != '咖啡馆') {
                 $sql = "SELECT  g.goodsThums,g.goodsId,g.shopPrice,g.isBook,g.goodsName,g.shopId,g.goodsStock,g.shopPrice,g.activePrice,g.isNew,g.isBest,g.isHot,g.isRecomm,g.attrCatId,shop.shopName,shop.qqNo,shop.deliveryType,shop.shopAtive,
-					shop.shopTel,shop.shopAddress,shop.deliveryTime,shop.isInvoice, shop.deliveryStartMoney,
+					shop.shopTel,shop.shopAddress,shop.deliveryTime,shop.isInvoice, shop.deliveryStartMoney, gc.rate,
 					shop.deliveryFreeMoney,shop.deliveryMoney ,g.goodsSn,shop.serviceStartTime,shop.serviceEndTime,cast((g.shopPrice * if(gc.discount=0,1,gc.discount)) as decimal(10,2)) as vipPrice 
 					FROM __PREFIX__goods g left join __PREFIX__goods_cats gc on gc.catId=g.goodsCatId3, __PREFIX__shops shop
 					WHERE g.goodsId = $goodsId AND g.shopId = shop.shopId AND g.goodsFlag = 1 and g.isSale=1 and g.goodsStatus=1 ";
@@ -136,16 +138,32 @@ class CartModel extends BaseModel
                 $goods["ischk"] = $cgoods["isCheck"];
                 if ($goods["ischk"] == 1) {
                     if(isValidVip() == 1){
-                        $totalMoney += $goods["cnt"] * $goods["vipPrice"];
+                        if($goods['rate'] != 0) {
+                            $rateMoney += $goods['rate'] * $goods['cnt'] * $goods["shopPrice"];
+                            $gtotalMoney += $goods["cnt"] * $goods["vipPrice"];
+                            $totalMoney = $gtotalMoney + round($rateMoney, 2);
+                            $goods['deliveryMoney'] = round($goods["shopPrice"] * $goods['rate'], 2);
+                        }else {
+                            $gtotalMoney = $totalMoney += $goods["cnt"] * $goods["vipPrice"];
+                            $goods['deliveryMoney'] = 0;
+                        }
                     }else{
-                        $totalMoney += $goods["cnt"] * $goods["shopPrice"];
+                        if($goods['rate'] != 0) {
+                            $rateMoney += $goods['rate'] * $goods['cnt'] * $goods["shopPrice"];
+                            $gtotalMoney += $goods["cnt"] * $goods["vipPrice"];
+                            $totalMoney = $gtotalMoney + round($rateMoney, 2);
+                            $goods['deliveryMoney'] = round($goods["shopPrice"] * $goods['rate'], 2);
+                        }else {
+                            $gtotalMoney = $totalMoney += $goods["cnt"] * $goods["shopPrice"];
+                            $goods['deliveryMoney'] = 0;
+                        }
                     }
                     $cartgoods[$goods["shopId"]]["ischk"] = 1;
                 }
 
                 $cartgoods[$goods["shopId"]]["shopgoods"][] = $goods;
                 $cartgoods[$goods["shopId"]]["deliveryFreeMoney"] = $goods["deliveryFreeMoney"];//店铺免运费最低金额
-                $cartgoods[$goods["shopId"]]["deliveryMoney"] = $goods["deliveryMoney"];//店铺配送费
+                $cartgoods[$goods["shopId"]]["deliveryMoney"] = round($rateMoney, 2);//税费
                 $cartgoods[$goods["shopId"]]["deliveryStartMoney"] = $goods["deliveryStartMoney"];//店铺配送费
                 $cartgoods[$goods["shopId"]]["totalCnt"] = $cartgoods[$goods["shopId"]]["totalCnt"] + $cgoods["goodsCnt"];
                 $cartgoods[$goods["shopId"]]["totalMoney"] = $cartgoods[$goods["shopId"]]["totalMoney"] + (($goods["ischk"] == 1) ? $goods["cnt"] * $goods["shopPrice"] : 0);
@@ -153,7 +171,7 @@ class CartModel extends BaseModel
         }
 
         $cartInfo = array();
-        $cartInfo["gtotalMoney"] = $totalMoney;
+        $cartInfo["gtotalMoney"] = $gtotalMoney;
 
         foreach ($cartgoods as $key => $cshop) {
             if ($cshop["totalMoney"] < $cshop["deliveryFreeMoney"] && $cshop["ischk"] == 1) {
@@ -163,6 +181,7 @@ class CartModel extends BaseModel
 
         $cartInfo["totalMoney"] = $totalMoney;
         $cartInfo["cartgoods"] = $cartgoods;
+        $cartInfo['rate'] = round($rateMoney, 2);
         return $cartInfo;
 
     }
@@ -256,7 +275,7 @@ class CartModel extends BaseModel
         $userId = (int)session('WST_USER.userId');
         $mgoods = D('Home/Goods');
         $maddress = D('Home/UserAddress');
-        $sql = "select * ,cast((g.shopPrice * if(gc.discount=0,1,gc.discount)) as decimal(10,2)) as vipPrice
+        $sql = "select * ,cast((g.shopPrice * if(gc.discount=0,1,gc.discount)) as decimal(10,2)) as vipPrice, cast((g.shopPrice * if(gc.rate=0,1,gc.rate)) as decimal(10,2)) as ratePrice
                 from __PREFIX__cart wstc left join __PREFIX__goods g on g.goodsId=wstc.goodsId left join __PREFIX__goods_cats gc on gc.catId=g.goodsCatId3
                 where userId = $userId and isCheck=1 and goodsCnt>0";
         $shopcart = $this->query($sql);
@@ -290,6 +309,11 @@ class CartModel extends BaseModel
             $goods["vipPrice"] = $cgoods["vipPrice"];
             $totalCnt += $cgoods["goodsCnt"];
 
+            if($cgoods['rate'] != 0) {
+                $goods['ratePrice'] = $cgoods['ratePrice'] * $cgoods['goodsCnt'];
+            }else
+                $goods['ratePrice'] = 0;
+
             //如果new，recommen，best，hot=0
             if($goods['isNew']==1 || $goods['isBest']==1 || $goods['isHot']==1 || $goods['isRecomm']==1) {
                 $goods['shopPrice'] = $goods['activePrice'];
@@ -312,12 +336,13 @@ class CartModel extends BaseModel
             $cartgoods[$goods["shopId"]]["deliveryMoney"] = $goods["deliveryMoney"];//店铺配送费
             $cartgoods[$goods["shopId"]]["deliveryStartMoney"] = $goods["deliveryStartMoney"];//店铺配送费
             $cartgoods[$goods["shopId"]]["totalCnt"] = $cartgoods[$goods["shopId"]]["totalCnt"] + $cgoods["goodsCnt"];
+            $cartgoods[$goods["shopId"]]["ratesMoney"] += $goods['ratePrice'];
             if(isValidVip()==1){
                 $cartgoods[$goods["shopId"]]["totalMoney"] = $cartgoods[$goods["shopId"]]["totalMoney"] + ($goods["cnt"] * $goods["vipPrice"]);
-
+                $cartgoods[$goods["shopId"]]["rateTotalMoney"] = $cartgoods[$goods["shopId"]]["totalMoney"] + $cartgoods[$goods["shopId"]]["ratesMoney"];
             }else{
                 $cartgoods[$goods["shopId"]]["totalMoney"] = $cartgoods[$goods["shopId"]]["totalMoney"] + ($goods["cnt"] * $goods["shopPrice"]);
-
+                $cartgoods[$goods["shopId"]]["rateTotalMoney"] = $cartgoods[$goods["shopId"]]["totalMoney"] + $cartgoods[$goods["shopId"]]["ratesMoney"];
             }
 
         }
@@ -335,7 +360,6 @@ class CartModel extends BaseModel
         $rdata["shopColleges"] = $shopColleges;
         $rdata["startTime"] = $startTime;
         $rdata["endTime"] = $endTime;
-//        dump($totalMoney);die;
         return $rdata;
     }
 
