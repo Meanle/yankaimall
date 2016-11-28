@@ -150,7 +150,7 @@ class CartModel extends BaseModel
                     }else{
                         if($goods['rate'] != 0) {
                             $rateMoney += $goods['rate'] * $goods['cnt'] * $goods["shopPrice"];
-                            $gtotalMoney += $goods["cnt"] * $goods["vipPrice"];
+                            $gtotalMoney += $goods["cnt"] * $goods["shopPrice"];
                             $totalMoney = $gtotalMoney + round($rateMoney, 2);
                             $goods['deliveryMoney'] = round($goods["shopPrice"] * $goods['rate'], 2);
                         }else {

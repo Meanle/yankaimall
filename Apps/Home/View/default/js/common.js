@@ -477,16 +477,18 @@ function changeCatGoodsnum(flag,shopId,goodsId,priceAttrId,isBook, rate){
 		$("#buy-num_"+goodsId+"_"+priceAttrId).val(1);
 	}
 	$("#item-count_"+goodsId+"_"+priceAttrId).html(num);
-	if($("#chk_goods_"+goodsId+"_"+priceAttrId).is(":checked")){
-		checkCartPay(shopId,goodsId,num,1,isBook,priceAttrId, rate);
-	}else{
-		checkCartPay(shopId,goodsId,num,0,isBook,priceAttrId, rate);
-	}
-	
+	setTimeout(function() {
+		var rate = $('#import').html();
+		if($("#chk_goods_"+goodsId+"_"+priceAttrId).is(":checked")){
+			checkCartPay(shopId,goodsId,num,1,isBook,priceAttrId);
+		}else{
+			checkCartPay(shopId,goodsId,num,0,isBook,priceAttrId);
+		}
+	}, 510);
 }
 
 
-function checkCartPay(shopId,goodsId,num,ischk,isBook,goodsAttrId, rate){
+function checkCartPay(shopId,goodsId,num,ischk,isBook,goodsAttrId){
 	jQuery.post( Think.U('Home/Cart/changeCartGoodsNum') ,{goodsId:goodsId,num:num,ischk:ischk,goodsAttrId:goodsAttrId,isBook:isBook},function(data) {
 		var json = WST.toJson(data);
 		if(json.goodsStock==0){
@@ -538,6 +540,8 @@ function checkCartPay(shopId,goodsId,num,ischk,isBook,goodsAttrId, rate){
 
 		$(".cart_gnum_chk").html(chkgoodsnum);
 		$("#cart_handler_right_totalmoney, #wst_cart_totalmoney, .wst-nvg-cart-price, .em-item-amount").html(totalMoney);
+		var rate = parseFloat($('#import').html());
+		finalMoney = totalMoney + rate;
 		$('#amount').html(finalMoney.toFixed(2));
 	});
 	
@@ -579,7 +583,6 @@ function cartChkAll(obj){
 
 
 function cartChkShop(obj){
-	var shopId = $(obj).val();
 	var priceAttrId = $(obj).attr("dataId");
 	if($(obj).prop("checked")){
 		$("input[name='chk_goods_"+shopId+"']").each(function(){
@@ -610,10 +613,10 @@ function cartChkGoods(obj){
 	var goodsId = $(obj).val();
 	var num = $("#buy-num_"+goodsId+"_"+priceAttrId).val();
 	var isBook = $(obj).attr("isBook");
+
 	if($(obj).is(":checked")){
 		checkCartPay(shopId,goodsId,num,1,isBook,priceAttrId);
 	}else{
 		checkCartPay(shopId,goodsId,num,0,isBook,priceAttrId);
 	}
-	
 }

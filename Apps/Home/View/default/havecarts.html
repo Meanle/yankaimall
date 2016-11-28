@@ -66,7 +66,7 @@
                                                     <input type='hidden' id='price_{$goods["goodsId"]}_{$goods["goodsAttrId"]}' value='{$goods["shopPrice"]}'/>
                                                 </if>
                                                 <!-- isBook='"+goods.isBook+"' "+(goods.ischk==1?"checked":"")+"-->
-                                                <input onclick="cartChkGoods(this), checkGoods({$goods['goodsId']},{$goods['goodsAttrId']},{$goods['deliveryMoney']},this)" isBook="{$goods['isBook']}" parent="{$goods['shopId']}" dataId="{$goods['goodsAttrId']}" type='checkbox' class='cus_chk cart-goods-check cgoodsId' id='chk_goods_{$goods["goodsId"]}_{$goods["goodsAttrId"]}' name='chk_goods_{$goods["shopId"]}' <if condition="$goods.ischk eq 1">checked</if> value='{$goods["goodsId"]}' />
+                                                <input onclick="cartChkGoods(this), checkGoods()" isBook="{$goods['isBook']}" parent="{$goods['shopId']}" dataId="{$goods['goodsAttrId']}" type='checkbox' class='cus_chk cart-goods-check cgoodsId' id='chk_goods_{$goods["goodsId"]}_{$goods["goodsAttrId"]}' name='chk_goods_{$goods["shopId"]}' <if condition="$goods.ischk eq 1">checked</if> value='{$goods["goodsId"]}' />
                                                 <input class="chb-slave" name="selected[124614]" type="checkbox"
                                                        checked="checked"
                                                        style="display:none;">
@@ -84,15 +84,13 @@
 
                                                 <p class="set clx edit-number" style="display: block;">
                                                     <span class="the_numbar left">
-                                                        <a id="numl_{$goods['goodsId']}_{$goods['goodsAttrId']}" onclick="changeCatGoodsnum(1,{$goods['shopId']},{$goods['goodsId']},{$goods['goodsAttrId']},{$goods['isBook']}), wtf({$goods['goodsId']},{$goods['goodsAttrId']},{$goods['deliveryMoney']})" class="btn-addtocart-jian m1"></a>
+                                                        <a id="numl_{$goods['goodsId']}_{$goods['goodsAttrId']}" onclick="changeCatGoodsnum(1,{$goods['shopId']},{$goods['goodsId']},{$goods['goodsAttrId']},{$goods['isBook']}), wtf(1,{$goods['goodsId']},{$goods['goodsAttrId']},{$goods['deliveryMoney']})" class="btn-addtocart-jian m1"></a>
                                                         <input id="buy-num_{$goods['goodsId']}_{$goods['goodsAttrId']}" dataId="{$goods['goodsAttrId']}" type="text" maxlength="3" value="{$goods['cnt']}" onkeypress="return WST.isNumberKey(event);" onkeyup="changeCatGoodsnum(0,{$goods['shopId']},{$goods['goodsId']},{$goods['goodsAttrId']},{$goods['isBook']}), wtf({$goods['goodsId']},{$goods['goodsAttrId']},{$goods['deliveryMoney']});" class="input-item-qty">
-                                                        <a id="numr_{$goods['goodsId']}_{$goods['goodsAttrId']}" onclick="changeCatGoodsnum(2,{$goods['shopId']},{$goods['goodsId']},{$goods['goodsAttrId']},{$goods['isBook']}), wtf({$goods['goodsId']},{$goods['goodsAttrId']},{$goods['deliveryMoney']})" class="btn-addtocart-jia m2"></a>
+                                                        <a id="numr_{$goods['goodsId']}_{$goods['goodsAttrId']}" onclick="changeCatGoodsnum(2,{$goods['shopId']},{$goods['goodsId']},{$goods['goodsAttrId']},{$goods['isBook']}), wtf(2,{$goods['goodsId']},{$goods['goodsAttrId']},{$goods['deliveryMoney']})" class="btn-addtocart-jia m2"></a>
                                                     </span>
                                                 </p>
-                                                <if condition="$goods['deliveryMoney'] neq 0">
                                                     <input type="hidden" id="rate_{$goods['goodsId']}_{$goods['goodsAttrId']}" value="{$goods['deliveryMoney']}" />
                                                     <input type="hidden" id="cnt_{$goods['goodsId']}_{$goods['goodsAttrId']}" value="{$goods['cnt']}" />
-                                                </if>
                                                 <p class="price clx">
                                                     <if condition="$isvip eq 1">
                                                             <em>¥{$goods["vipPrice"]}元</em><i>x<b id="item-count_{$goods['goodsId']}_{$goods['goodsAttrId']}">{$goods["cnt"]}</b><input type='hidden' id='buy-num_{$goods["goodsId"]}_{$goods["goodsAttrId"]}' value='{$goods["cnt"]}' style='width:40px;'/></i>
@@ -144,7 +142,7 @@
 <script type="text/javascript">
     function removeCartGoods(obj,goodsId,goodsAttrId){
         jQuery.post(Think.U('Home/Cart/delCartGoods') ,{goodsId:goodsId,goodsAttrId:goodsAttrId},function(data) {
-            var cart = WST.toJson(data);
+            /*var cart = WST.toJson(data);
             var spId = $(obj).attr("spId");
             $(obj).parent().parent().remove();
             if($("input[name='chk_goods_"+spId+"']").length==0){
@@ -168,52 +166,42 @@
             }
             $(".em-item-amount").html(totalmoney);
             $('.cart_num, .cart_gnum_chk').html(goodsnum);
-            $(".cart_gnum").html(goodsnum);
+            $(".cart_gnum").html(goodsnum);*/
+            location.reload(true);
         });
     }
 
-    function wtf(gid, attrId, rate) {
+    function wtf(type, gid, attrId, rate) {
         setTimeout(function() {
-            var length = $('#rate_'+gid+"_"+attrId).length, finalMoney = 0, totalMoney = parseFloat($('.em-item-amount').html()),
-                    cnt = $("#buy-num_"+gid+"_"+attrId).val();
-            console.info(length);
-            switch (length) {
-                case 1:
-                    var rates = rate * cnt;
-                    $('#import').html(rates.toFixed(2));
-                    finalMoney = totalMoney + rates;
+            var val = parseFloat($('#rate_'+gid+"_"+attrId).val()),     //获取对应商品的税费
+                    finalMoney = 0,                         //总计金额
+                    totalMoney = parseFloat($('.em-item-amount').html()),   //商品总额
+                    cnt = $("#buy-num_"+gid+"_"+attrId).val(),      //对应商品商品的数量
+                    showedRate = parseFloat($('#import').html());               //已显示的税费
+            switch (parseInt(val)) {
+                case 0:
+                    finalMoney = totalMoney + showedRate;
                     $('#amount').html(finalMoney.toFixed(2));
                     break;
-                case 0:
-                    var rates = $('#import').html();
-                    finalMoney = totalMoney + parseFloat(rates);
-                    $('#amount').html(finalMoney.toFixed(2));
+                default:
+                    var rates = 0;
+                    if(type == 1) {     //减商品
+                        rates = showedRate - val;       //计算后的税费
+                        $('#import').html(rates.toFixed(2));        //显示税费
+                    }else if(type == 2) {             //加商品
+                        rates = showedRate + val;
+                        $('#import').html(rates.toFixed(2));
+                    }
                     break;
             }
         }, 500)
     }
 
-    /*function checkGoods(gid, attrId, rate, _this) {
+    function checkGoods() {
         setTimeout(function() {
-            var totalMoney = parseFloat($('.em-item-amount').html()), finalMoney = 0, rates = parseFloat($('#import').html());
-            if(rate == 0) {
-                finalMoney = totalMoney + rates;
-                $('#amount').html(finalMoney.toFixed(2));
-            }else {
-                if(!$('#chk_goods_'+gid+"_"+attrId).check){
-                    var SingleRate = parseFloat($('#rate_'+gid+"_"+attrId).val());   //当前商品单个税费
-                    var cnt = parseInt($('#item-count_'+gid+"_"+attrId).html());   //个数
-                    var finalRate = rates - SingleRate * cnt;
-                    finalMoney = totalMoney + finalRate;
-                    console.info(finalRate);
-                    $('#amount').html(finalMoney);
-                }else {
-                    console.info(1);
-                }
-
-            }
+            location.reload(true);
         }, 500);
-    }*/
+    }
 </script>
 
 </body>

@@ -358,6 +358,7 @@
     <p class="check_btn">
         <a class="button button-big button-fill button-verifer" data-transition='fade' id="getVer">生成订单</a>
     </p>
+    <?php dump($shopCollege)?>
 </div>
 </div>
 </div>
@@ -428,7 +429,7 @@
             if(idx==-1){
                 $("#areaOk").val("0");
                 WST.msg("店铺“"+$("#sp_{$key-1}").html()+"”中的商品不在配送区域内！");
-                return false;
+                return true;
             }else{
                 $("#areaOk").val("1");
             }
