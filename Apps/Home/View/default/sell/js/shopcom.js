@@ -551,7 +551,7 @@ function getShopCatListForAppraises(v,id){
 }
 /******************订单列表**********************/
 //查看订单
-function showOrder(id){
+function 	showOrder(id){
 	layer.open({
 	    type: 2,
 	    title:"订单详情",

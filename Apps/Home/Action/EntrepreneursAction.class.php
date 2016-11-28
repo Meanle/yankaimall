@@ -46,13 +46,13 @@ class EntrepreneursAction extends BaseAction
         $url = "https://api.weixin.qq.com/sns/userinfo?access_token=$token&openid=$openid&lang=zh_CN";
         $user_info = JX_curl($url, null);
         $ret = json_decode($user_info);
+
+        $user = M('users')->where(array('wxOpenId' => $openid))->find();
+
         if ($ret->errcode) {
             echo $at_token_json . '1';
             return;
-        }
-        $user = M('users')->where(array('wxOpenId' => $openid))->find();
-
-        $m = D('Home/Users');
+        } $m = D('Home/Users');
         if ($user) {
             //注册了就登陆
             $user = $m->get($user['userId']);

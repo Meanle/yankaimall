@@ -140,7 +140,7 @@
                                         </if>
                                     </div>
                                     <div style="margin-bottom: .5rem;">
-                                        收货地址： <span class="get-user-addr">{$address["areaName1"]} {$address["areaName2"]} {$address["address"]}</span><!--{$address["areaName3"]}{$address["communityName"]}-->
+                                        收货地址： <span class="get-user-addr">{$address["areaName1"]} {$address["areaName2"]} {$address["areaName3"]} {$address["address"]}</span><!--{$address["areaName3"]}{$address["communityName"]}-->
                                     </div>
                                 </div>
                             </if>
@@ -184,7 +184,7 @@
                                         联系电话： <span class="get-user-addr">{$address["userTel"]}</span><br />
                                     </if>
                                     <div id="radaddress_{$address['addressId']}">
-                                        收货地址：<span class="get-user-addr">{$address["areaName1"]} {$address["areaName2"]} {$address["address"]}</span></div><br />
+                                        收货地址：<span class="get-user-addr">{$address["areaName1"]} {$address["areaName2"]} {$address["areaName3"]} {$address["address"]}</span></div><br />
                                 </div>
                             </volist>
                         </div>
@@ -195,7 +195,7 @@
                                 <input id="seladdress_0" name="seladdress" type="radio" value="0"
                                        onclick="changeAddress(0);"
                                 <if condition="count($addressList) eq 0">checked="checked"</if>
-                                /> 使用新地址
+                                /> 新增地址
                             </label>
                         </div>
                     </div>
@@ -213,16 +213,14 @@
                             <div style="clear: both;"></div>
                         </div>
                         <div class="wst-chkod-line35">
-                            <div class="wst-chkod-cg-ads">收货地址：</div>
-                            <div class="wst-chkod-area-box">
-                                <select name="consignee_add_countyId" id="consignee_add_countyId" class="adsipt"
-                                        onchange="loadCommunitys(this);" hidden>
+                            <div class="wst-chkod-cg-ads" style="margin-bottom:.5rem;">
+                                收货地址：
+                                <select name="consignee_add_countyId" id="consignee_add_countyId" class="adsipt" style="display: inline-block;" onchange="loadCommunitys(this);">
                                     <option value="430408" selected="selected">蒸湘区</option>
                                 </select>
-                                <select name="consignee_add_CommunityId" id="consignee_add_CommunityId" class="adsipt"
-                                        onchange="checkArea();" hidden>
-                                    <option value="27" selected="selected">默认</option>
-                                </select>
+                            </div>
+
+                            <div class="wst-chkod-area-box">
                                 <textarea type="text" class="addr-textarea" placeholder="请填写详细地址"
                                        name="consignee_add_address" id="consignee_add_address"></textarea>
                             </div>
@@ -358,7 +356,6 @@
     <p class="check_btn">
         <a class="button button-big button-fill button-verifer" data-transition='fade' id="getVer">生成订单</a>
     </p>
-    <?php dump($shopCollege)?>
 </div>
 </div>
 </div>

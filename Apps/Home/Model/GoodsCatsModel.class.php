@@ -24,13 +24,13 @@ class GoodsCatsModel extends BaseModel {
 		$cats = S("WST_CACHE_GOODS_CAT_GOODS_WEB_".$areaId2);
 		if(!$cats){
 			//取出前十个被精选促销的一级分类,上限10层,可通过修改排序来调整顺序
-			$sql = "select catId,catName from __PREFIX__goods_cats WHERE parentId = 0 AND isShow =1 AND isFloor = 1 AND catFlag = 1 order by catSort asc limit 10";
+			$sql = "select catId,catName from __PREFIX__goods_cats WHERE parentId = 0 AND isShow =1 AND isFloor = 1 AND catFlag = 1 order by catSort asc limit 20";
 			$rs1 = $this->query($sql);
 			$cats = array();
 			//取出所有一级分类下对应的被精选促销的二级分类,上限8个
 			for ($i = 0; $i < count($rs1); $i++) {
 				$cat1Id = $rs1[$i]["catId"];
-				$sql = "select catId,catName from __PREFIX__goods_cats WHERE parentId = $cat1Id AND isShow =1 AND isFloor = 1 AND catFlag = 1 order by catSort asc limit 8";
+				$sql = "select catId,catName from __PREFIX__goods_cats WHERE parentId = $cat1Id AND isShow =1 AND isFloor = 1 AND catFlag = 1 order by catSort asc limit 20";
 				$rs2 = $this->query($sql);
 				$cats2 = array();
 				for ($j = 0; $j < count($rs2); $j++) {
@@ -96,13 +96,13 @@ class GoodsCatsModel extends BaseModel {
     public function getGoodsCatsAndGoodsForIndexs($areaId2,$sum){
 
             //取出前十个被精选促销的一级分类,上限10层,可通过修改排序来调整顺序
-            $sql = "select catId,catName from __PREFIX__goods_cats WHERE parentId = 0 AND isShow =1 AND isFloor = 1 AND catFlag = 1 order by catSort asc limit 10";
+            $sql = "select catId,catName from __PREFIX__goods_cats WHERE parentId = 0 AND isShow =1 AND isFloor = 1 AND catFlag = 1 order by catSort asc limit 20";
             $rs1 = $this->query($sql);
             $cats = array();
             //取出所有一级分类下对应的被精选促销的二级分类,上限8个
             for ($i = 0; $i < count($rs1); $i++) {
                 $cat1Id = $rs1[$i]["catId"];
-                $sql = "select catId,catName from __PREFIX__goods_cats WHERE parentId = $cat1Id AND isShow =1 AND isFloor = 1 AND catFlag = 1 order by catSort asc limit 8";
+                $sql = "select catId,catName from __PREFIX__goods_cats WHERE parentId = $cat1Id AND isShow =1 AND isFloor = 1 AND catFlag = 1 order by catSort asc limit 20";
                 $rs2 = $this->query($sql);
                 $cats2 = array();
                 for ($j = 0; $j < count($rs2); $j++) {

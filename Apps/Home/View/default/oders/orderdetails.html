@@ -77,20 +77,22 @@
                                         <a class="item-content" href="javascript:;">
                                             <div class="item-inner">
                                                 <div class="item-title-row">
-                                                    <div class="item-title">收货地址:</div>
+                                                    <if condition="$orderInfo['catName'][0]['catName'] eq '咖啡馆'">
+                                                    <div class="item-title">咖啡座位号及留言:</div>
                                                     <div class="item-after">
-                                                        <if condition="$orderInfo['catName'][0]['catName'] eq '咖啡馆'">
-                                                            {$orderInfo["order"]["orderRemarks"]}
-                                                            <else/>
-                                                            <span id="user-address">{$orderInfo["order"]["userAddress"]}</span>
-                                                            <script>
-                                                                var span = document.getElementById('user-address');
-                                                                var address = span.innerHTML;
-                                                                var newAddr = address.split('蒸湘区 默认 ');
-                                                                span.innerHTML = newAddr[0]+newAddr[1];
-                                                            </script>
-                                                        </if>
+                                                        {$orderInfo["order"]["orderRemarks"]}
                                                     </div>
+
+                                                            <else/>
+                                                        <div class="item-title">收货地址:</div>
+                                                        <div class="item-after">
+                                                            <span id="user-address">{$orderInfo["order"]["userAddress"]}</span>
+
+                                                        </div>
+
+
+
+                                                    </if>
                                                 </div>
                                             </div>
                                         </a>
@@ -163,7 +165,7 @@
                                         </div>
                                         <div class="item-after coffee-price">
                                             <span class="jine">支付金额</span>
-                                            <span>￥{$orderInfo["order"]["realTotalMoney"]}</span>
+                                            <span>￥{$orderInfo["order"]["totalMoney"]}</span>
                                         </div>
                                     </div>
                                 </li>

@@ -54,8 +54,7 @@
                                     <volist name="cartInfo['cartgoods']" id="shopgoods">
                                         <div id="wst_cart_shop_{$key}" data="{$key}" disabled="true"></div>
                                         <dt class="clx">
-                                            <!--<div style="height: 600px;"><?php dump($cartInfo['cartgoods'][34]['shopgoods'][0]['shopId']); ?></div>-->
-                                            <input type="checkbox" onclick="cartChkShop(this)" id='chk_shop_{$shopgoods["shopgoods"][0][shopId]}' value="{$shopgoods["shopgoods"][0][shopId]}" class="cus_chk" name="chk_shop" />
+                                            <input type="checkbox" onclick="cartChkShop(this)" id='chk_shop_{$shopgoods["shopgoods"][0][shopId]}' dataMoney='{$shopgoods["shopgoods"][0][shopId]}' value="{$shopgoods["deliveryMoney"]}" class="cus_chk" name="chk_shop" />
                                             <em>选择该店铺:{$shopgoods["shopgoods"][0][shopName]}</em>
                                         </dt>
                                         <volist name="shopgoods['shopgoods']" key="key2" id="goods">
@@ -188,9 +187,11 @@
                     if(type == 1) {     //减商品
                         rates = showedRate - val;       //计算后的税费
                         $('#import').html(rates.toFixed(2));        //显示税费
+                        $("input[name='chk_shop']").val(rates.toFixed(2));
                     }else if(type == 2) {             //加商品
                         rates = showedRate + val;
                         $('#import').html(rates.toFixed(2));
+                        $("input[name='chk_shop']").val(rates.toFixed(2));
                     }
                     break;
             }

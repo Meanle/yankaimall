@@ -548,7 +548,7 @@ function showOrder(id){
 	    title:"订单详情",
 	    shade: [0.6, '#000'],
 	    border: [0],
-	    content: [Think.U('Home/Orders/getOrderDetails','orderId='+id)],
+	    content: [Think.U('Home/Orders/getOrderShopDetails','orderId='+id)],
 	    area: ['1020px', ($(window).height() - 50) +'px']
 	});
 }
@@ -796,7 +796,7 @@ function queryOrderPager(statusMark,pcurr){
 			if(json.root.length>0){
 				for(var i=0;i<json.root.length;i++){
 					var order = json.root[i],catName = json.catName[i][0].catName, remark = order.orderRemarks,
-						address = order.userAddress.split('蒸湘区 默认 ');
+						address = order.userAddress;
 
 					html.push("<tr style='color:"+((order.orderStatus==-6 || order.orderStatus==-3)?"red":"blue")+";'>");
 					if(orderMoney.length == 0){
@@ -816,7 +816,7 @@ function queryOrderPager(statusMark,pcurr){
 							html.push("<td width='200'>"+remark+"</td>");
 						}
 					}else {
-						html.push("<td width='200'>"+address[0]+address[1]+"</td>");
+						html.push("<td width='200'>"+address+"</td>");
 					}
 
 					html.push("<td width='100'>"+order.totalMoney+"</td>");

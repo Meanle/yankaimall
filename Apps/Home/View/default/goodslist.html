@@ -135,10 +135,20 @@
 		}
 	});
 
+//	监听微信返回按钮，永远重定向到主页
 	$(function(){
 		pushHistory();
+		var bool=false;
+		setTimeout(function(){
+			bool=true;
+		},10 	00);
 		window.addEventListener("popstate", function(e) {
-			window.location.href = '{:U("Home/Index/index")}';
+			if(bool)
+			{
+				window.location.href = '{:U("Home/Index/index")}';
+			}
+			pushHistory();
+
 		}, false);
 		function pushHistory() {
 			var state = {
@@ -147,5 +157,7 @@
 			};
 			window.history.pushState(state, "title", "#");
 		}
+
 	});
+
 </script>

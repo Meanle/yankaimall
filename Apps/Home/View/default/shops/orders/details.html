@@ -15,11 +15,10 @@
          	.wst-td-content{padding-left:6px;text-align:left;}
          	.wst-align-center{text-align:center;}
          </style>
-	     
+
     </head>
 
     <body style="background-color:#f5f5f5;">
-	<?php dump($orderInfo['catName'][0][catName])?>
         <div style="text-align:center;">
         	<div class="wst-odetal-box">
         	<table cellspacing="0" cellpadding="0" class="wst-tab" width="920" style="border:1px solid #eeeeee;margin:0 auto;">
@@ -72,8 +71,13 @@
 	        			</td>
 	        		</tr>
 	        		<tr>
-	        		    <td class="wst-td-title">买家留言：</td>
-	        		    <td class="wst-td-content">{$orderInfo["order"]["orderRemarks"]}</td>
+						<if condition="$orderInfo['catName'][0][catName] eq '咖啡馆'">
+							<td class="wst-td-title">座位号及留言：</td>
+							<td class="wst-td-content">{$orderInfo["order"]["orderRemarks"]}</td>
+							<else/>
+							<td class="wst-td-title">买家留言：</td>
+							<td class="wst-td-content" id="notCoffeeRem"></td>
+						</if>
 	        		</tr>
 	        		<tr>
 	        			<td class="wst-td-title">下单时间：</td>
@@ -87,22 +91,23 @@
         	<table cellspacing="0" cellpadding="0" class="wst-tab" width="920" style="border:1px solid #eeeeee;margin:0 auto;">
         		<caption class="wst-tab-cpt">收货人信息</caption>
         		<tbody>
-	        		
 	        		<tr>
 	        			<td class="wst-td-title">收货人姓名：</td>
 	        			<td class="wst-td-content">{$orderInfo["order"]["userName"]}</td>
 	        		</tr>
 	        		<tr>
-	        			<td class="wst-td-title">地址：</td>
-	        			<if condition="$orderInfo['catName'][0][catName] neq '咖啡馆'">
-							<td class="wst-td-content" id="address"></td>1
+
+	        			<if condition="$orderInfo['catName'][0][catName] eq '咖啡馆'">
+							<td class="wst-td-title">送至座位号：</td>
+							<td class="wst-td-content" id="address"></td>
 							<else/>
-							<td class="wst-td-content">{$orderInfo["order"]["orderRemarks"]}</td>
+							<td class="wst-td-title">收货地址：</td>
+							<td class="wst-td-content">{$orderInfo["order"]["userAddress"]}</td>
 						</if>
 	        		</tr>
 	        		<tr>
 	        			<td class="wst-td-title">联系电话：</td>
-	        			<td class="wst-td-content">{$orderInfo["order"]["userPhone"]} <if condition='$orderInfo["order"]["userTel"] neq ""'>| {$orderInfo["order"]["userTel"]}</if></td>
+	        			<td class="wst-td-content">{$orderInfo["order"]["userPhone"]}</td>
 	        		</tr>
 	        		<tr>
 	        			<td class="wst-td-title">期望送达时间：</td>
@@ -111,6 +116,24 @@
         		</tbody>
         	</table>
         	</div>
+			<notempty name='orderInfo["order"]["senderName"]'>
+				<br/><br/>
+				<div class="wst-odetal-box">
+					<table cellspacing="0" cellpadding="0" class="wst-tab" width="920" style="border:1px solid #eeeeee;margin:0 auto;">
+						<caption class="wst-tab-cpt">派送员信息</caption>
+						<tbody>
+						<tr>
+							<td class="wst-td-title">派送员姓名：</td>
+							<td class="wst-td-content">{$orderInfo["order"]["senderName"]}</td>
+						</tr>
+						<tr>
+							<td class="wst-td-title">派送员电话：</td>
+							<td class="wst-td-content">{$orderInfo["order"]["senderPhone"]}</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+			</notempty>
         	<br/><br/>
         	<notempty name='orderInfo["order"]["invoiceClient"]'>
         	<div class="wst-odetal-box">
@@ -123,8 +146,8 @@
 	        		</tr>
         		</tbody>
         	</table>
-        	</div> 
-        	</notempty>       	
+        	</div>
+        	</notempty>
         	<div class="wst-odetal-box" style='padding-bottom:5px;'>
         	<table cellspacing="0" cellpadding="0" class="wst-tab" width="920" style="margin:0 auto;">
         		<caption class="wst-tab-cpt">商品信息</caption>
@@ -160,20 +183,33 @@
         			<td colspan='4' style='border-left:0px;border-right:0px;border-bottom:0px;text-align:right;padding-right:5px;'>
         			商品总金额： ￥{$orderInfo["order"]["totalMoney"]}  <br/>
         		   	+ 运费：￥{$orderInfo["order"]["deliverMoney"]}<br/>
+						+税率：￥{$orderInfo["order"]["totalMoney"] - $orderInfo["order"]["realTotalMoney"]}<br/>
         		   	订单总金额：<span style='font-weight:bold;font-size:20px;color:red;'>￥{$orderInfo["order"]["totalMoney"]+$orderInfo["order"]["deliverMoney"]}</span><br/>
         			<if condition='$orderInfo["order"]["useScore"] gt 0'>
         			- 使用积分：{$orderInfo["order"]["useScore"]} 点（抵￥{$orderInfo["order"]["scoreMoney"]} ）<br/>
         			</if>
-        		   <span style='font-weight:bold;font-size:20px;'>实付总金额：</span><span style='font-weight:bold;font-size:20px;color:red;'>￥{$orderInfo["order"]["realTotalMoney"]}</span>
+        		   <span style='font-weight:bold;font-size:20px;'>实付总金额：</span><span style='font-weight:bold;font-size:20px;color:red;'>￥{$orderInfo["order"]["totalMoney"]}</span>
         		   </td>
         		</tr>
         	</table>
         	</div>
         </div>
+		<a id="aaa" ></a>
 		<script>
 			setTimeout(function() {
-				var addr = '{$orderInfo["order"]["userAddress"]}'.split(" 蒸湘区 默认");
-				document.getElementById('address').innerHTML = addr[0]+addr[1];
+				var rem = '{$orderInfo["order"]["orderRemarks"]}'.split('留言：');
+				var notcoffeerem = document.getElementById('notCoffeeRem');
+				if(notcoffeerem){
+					notcoffeerem.innerHTML = rem[1];
+				};
+
+//				var addr = '{$orderInfo["order"]["userAddress"]}'.split(" 蒸湘区 默认");
+				var addr = '{$orderInfo["order"]["orderRemarks"]}'.split('留言：');
+				var notcoffeeadd = document.getElementById('address');
+				if(notcoffeeadd){
+					notcoffeeadd.innerHTML = addr[0];
+				}
+				//document.getElementById('notcoffeeRem').innerHTML = rem[1];
 			}, 500);
 		</script>
     </body>

@@ -588,6 +588,26 @@ class OrdersAction extends BaseAction {
 //	    $this->ajaxReturn($rs);
         $this->display('default/oders/orderdetails');
 	}
+    /**
+     * 店铺查看订单詳情
+     */
+    public function getOrderShopDetails(){
+        $this->isUserLogin();
+        $this->meta_title = '订单详情';
+        $USER = session('WST_USER');
+        $morders = D('Home/Orders');
+        $m = D('Home/Cart');
+        $cartInfo = $m->getCartInfo();
+        $this->assign('cartInfo',$cartInfo);
+        $obj["userId"] = (int)$USER['userId'];
+        $obj["shopId"] = (int)$USER['shopId'];
+        $obj["orderId"] = (int)I("orderId");
+        $rs = $morders->getOrderDetails($obj);
+        $data["orderInfo"] = $rs;
+        $this->assign("orderInfo",$rs);
+//	    $this->ajaxReturn($rs);
+        $this->display('default/shops/orders/details');
+    }
 
     /**
      * coffee订单

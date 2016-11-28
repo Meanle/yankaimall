@@ -583,7 +583,10 @@ function cartChkAll(obj){
 
 
 function cartChkShop(obj){
+	var delmoney = $(obj).val();
+	var shopId = $(obj).attr("dataMoney");
 	var priceAttrId = $(obj).attr("dataId");
+	var shopId = 1;
 	if($(obj).prop("checked")){
 		$("input[name='chk_goods_"+shopId+"']").each(function(){
 			var priceAttrId = $(this).attr("dataId");
@@ -593,6 +596,7 @@ function cartChkShop(obj){
 			var num = $("#buy-num_"+goodsId+"_"+priceAttrId).val();
 			var isBook = $(this).attr("isBook");
 			checkCartPay(shopId,goodsId,num,1,isBook,priceAttrId);
+			$('#import').html(delmoney);
 		});
 	}else{
 		$("input[name='chk_goods_"+shopId+"']").each(function(){
@@ -602,6 +606,7 @@ function cartChkShop(obj){
 			var goodsId = $(this).val();
 			var num = $("#buy-num_"+goodsId+"_"+priceAttrId).val();
 			var isBook = $(this).attr("isBook");
+			$('#import').html("0.00");
 			checkCartPay(shopId,goodsId,num,0,isBook,priceAttrId);
 		});
 	}

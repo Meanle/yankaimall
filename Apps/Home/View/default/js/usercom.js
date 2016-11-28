@@ -39,10 +39,10 @@ function editAddress(){
 			WST.msg("请选择区县", {icon: 5,shade: [0.3, '#000'],time: 2000});
 			return ;		
 		}
-		if(params.communityId<1){
+/*		if(params.communityId<1){
 			WST.msg("请选择社区", {icon: 5});
 			return ;		
-		}
+		}*/
 		if(params.address==""){
 			WST.msg("请输入详细地址", {icon: 5});
 			return ;		

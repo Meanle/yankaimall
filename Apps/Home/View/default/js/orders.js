@@ -34,19 +34,19 @@ function loadCommunitys(obj){
 	if(districtId<1){
 		var html = new Array();
 		$("#consignee_add_CommunityId").empty();
-		html.push("<option value='27' selected>默认</option>");
+		html.push("<option value='0'>请选择</option>");
 		$("#consignee_add_CommunityId").html(html.join(""));
 		return;
 	}
-	
+
 	jQuery.post(Think.U('Home/Communitys/getByDistrict') ,{areaId3:districtId},function(rsp){
 		var json = WST.toJson(rsp);
 		var html = new Array();
 		$("#consignee_add_CommunityId").empty();
-		html.push("<option value='27' selected>默认</option>");
+		html.push("<option value='0'>请选择</option>");
 		if(json.list && json.list.length>0){
-			for(var i=0;i<json.list.length;i++){	    	
-				html.push("<option value='"+json.list[i].communityId+"'>"+json.list[i].communityName+"</option>");    	
+			for(var i=0;i<json.list.length;i++){
+				html.push("<option value='"+json.list[i].communityId+"'>"+json.list[i].communityName+"</option>");
 			}
 		}
 		$("#consignee_add_CommunityId").html(html.join(""));
@@ -54,9 +54,8 @@ function loadCommunitys(obj){
 }
 
 function loadAddress(addressId){
-	$("#address_form").show();	
+	$("#address_form").show();
 	jQuery.post(Think.U('Home/UserAddress/getUserAddress') ,{addressId:addressId},function(rsp) {
-		console.info(rsp);
 		var rs = WST.toJson(rsp);
 		if(rs.status>0){
 			var addressInfo = rs.address;
@@ -67,28 +66,28 @@ function loadAddress(addressId){
 			$("#consignee_add_userTel").val(addressInfo.userTel);
 			$("#consignee_add_countyId").val(addressInfo.areaId1);
 			if(addressInfo.isDefault==1){
-			    $("#consignee_add_isDefault_1")[0].checked = true;
+				$("#consignee_add_isDefault_1")[0].checked = true;
 			}else{
 				$("#consignee_add_isDefault_0")[0].checked = true;
 			}
 			var countys = addressInfo.area3List;
 			var areaList = new Array();
-			areaList.push("<option value='430408' selected='selected'>蒸湘区</option>");
+			areaList.push("<option value='0'>请选择</option>");
 			for(var i=0;i<countys.length;i++){
-				var county = countys[i];				
+				var county = countys[i];
 				if(county.areaId == addressInfo.areaId3){
-					areaList.push("<option value="+county.areaId+" >"+county.areaName+"</option>");
+					areaList.push("<option value="+county.areaId+" selected='selected'>"+county.areaName+"</option>");
 				}else{
 					areaList.push("<option value="+county.areaId+" >"+county.areaName+"</option>");
 				}
 			}
 			$("#consignee_add_countyId").html(areaList.join(""));
-			
+
 			var communitys = addressInfo.communitysList;
 			var areaList = new Array();
-			areaList.push("<option value='27' selected>默认</option>");
+			areaList.push("<option value='0'>请选择</option>");
 			for(var i=0;i<communitys.length;i++){
-				var community = communitys[i];				
+				var community = communitys[i];
 				if(community.communityId == addressInfo.communityId){
 					areaList.push("<option value="+community.communityId+" selected='selected'>"+community.communityName+"</option>");
 				}else{
@@ -144,10 +143,10 @@ function saveCoffeeAddress(){
 		WST.msg("请选择区县", {icon: 5});
 		return ;
 	}
-	if(params.communityId<1){
+/*	if(params.communityId<1){
 		WST.msg("请选择社区", {icon: 5});
 		return ;
-	}
+	}*/
 	if(params.address==""){
 		WST.msg("请输入详细地址", {icon: 5});
 		return ;
