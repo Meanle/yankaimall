@@ -789,13 +789,22 @@ function queryOrderPager(statusMark,pcurr){
 	$.post(Think.U('Home/Orders/queryShopOrders'),param,function(data,textStatus){
 			var json = WST.toJson(data);
 		    var orderMoney = param.orderMoney;
-			console.info(json);
+			console.info(json.root.length);
 			var html = new Array();
 			$("#otbody"+statusMark).empty();
 			var tmpMsg = '';
 			if(json.root.length>0){
-				for(var i=0;i<json.root.length;i++){
-					var order = json.root[i],catName = json.catName[i][0].catName, remark = order.orderRemarks,
+				var array = json.root;
+					var newJosn = [];
+					for(var i = 0, l = array.length; i < l; i++) {
+						for(var j = i + 1; j < l; j++)
+							if (array[i].orderId === array[j].orderId) j = ++i;
+						newJosn.push(array[i]);
+					}
+					console.log(newJosn);
+
+				for(var i=0;i<newJosn.length;i++){
+					var order = newJosn[i],catName = json.catName[i][0].catName, remark = order.orderRemarks,
 						address = order.userAddress;
 
 					html.push("<tr style='color:"+((order.orderStatus==-6 || order.orderStatus==-3)?"red":"blue")+";'>");
