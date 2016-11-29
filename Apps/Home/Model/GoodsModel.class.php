@@ -35,7 +35,7 @@ class GoodsModel extends BaseModel {
 			$words = explode(" ",$keyWords);
 		}
 		
-		$sqla = "SELECT  g.goodsId,goodsSn,goodsName,goodsThums,goodsStock,g.saleCount,p.shopId,marketPrice,shopPrice,ga.id goodsAttrId,cast((shopPrice * if(gc.discount=0,1,gc.discount)) as decimal(10,2)) as vipPrice ";
+		$sqla = "SELECT  g.goodsId,goodsSn,goodsName,goodsCountry,goodsCountryImg,goodsThums,goodsStock,g.saleCount,p.shopId,marketPrice,shopPrice,ga.id goodsAttrId,cast((shopPrice * if(gc.discount=0,1,gc.discount)) as decimal(10,2)) as vipPrice ";
 		$sqlb = "SELECT max(shopPrice) maxShopPrice  ";
 		$sql = " FROM __PREFIX__goods g 
 				left join __PREFIX__goods_attributes ga on g.goodsId=ga.goodsId and ga.isRecomm=1

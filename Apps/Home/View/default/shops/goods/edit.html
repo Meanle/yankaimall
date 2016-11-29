@@ -74,6 +74,27 @@ $(function () {
 		    	  uploading = WST.msg('正在上传图片，请稍后...');
 		      }
 	   });
+
+	uploadFile({
+		server:Think.U('Home/Goods/uploadPic'),pick:'#goodsCountryImgPicker',
+		formData: {dir:'goods'},
+		accept: {
+			title: 'Images',
+			extensions: 'gif,jpg,jpeg,png',
+			mimeTypes: 'image/*'
+		},
+		callback:function(f){
+			layer.close(uploading);
+			var json = WST.toJson(f);
+			$('#goodsCountryImgPreview').attr('src',WST.DOMAIN+"/"+json.file.savepath+json.file.savethumbname);
+			$('#goodsCountryImg').val(json.file.savepath+json.file.savename);
+			$('#goodsCountryImgPreview').show();
+		},
+		progress:function(rate){
+			uploading = WST.msg('正在上传图片，请稍后...');
+		}
+	});
+
 });
 
 function imglimouseover(obj){
@@ -192,6 +213,22 @@ function delImg(obj){
 	             <textarea rows="2" style="width:788px" id='goodsSpec' class='wstipt' name='goodsSpec'>{$object.goodsSpec}</textarea>
 	             </td>
 	           </tr>
+				<tr>
+					<th width='120'>商品国家来源：</th>
+					<td><input type='text' id='goodsCountry' name='goodsCountry' class="wstipt wst-ipt" value='{$object.goodsCountry}'  maxLength='25' placeholder="只在国家馆分类填写"/></td>
+				</tr>
+				<tr style="height:40px">
+					<th width='120'>来源国家国旗：</th>
+					<td rowspan='' valign='top'>
+						<div style="float: left">
+							<img style="height: 39px;width: 60px;" id='goodsCountryImgPreview' class='lazyImg' data-original='<if condition="$object['goodsCountryImg'] =='' ">__ROOT__/{$CONF['goodsCountryImg']}<else/>__ROOT__/{$object['goodsCountryImg']}</if>' height='152'/><br/>
+						</div>
+						<input type='hidden' id='goodsCountryImg' class='wstipt' value='{$object.goodsCountryImg}'/>
+						<div id="goodsCountryImgPicker" style='margin-left:5px;margin-top:5px;height:30px;overflow:hidden;width:90px;float: left'>上传商品图片</div>
+						<div style="margin-left:0px;margin-top:5px;height:30px;overflow:hidden;width:115px;float: left">(图片大小:60x40px)</div>
+					</td>
+				</tr>
+				<br>
 	           <tr>
 	             <th width='120'>商品状态<font color='red'>*</font>：</th>
 	             <td colspan='3'>
@@ -204,7 +241,8 @@ function delImg(obj){
 	             </td>
 	           </tr>
 	           <tr>
-	             <th width='120'>商品属性：</th>
+	             <th width='120'>商品属性：<?php dump($object['isRecomm']); ?> </th>
+
 	             <td colspan='3'>
 	             <label>
 	             <input type='checkbox' id='isRecomm' name='isRecomm' class='wstipt' <if condition="$object['isRecomm'] ==1 ">checked</if> value='1'/>精选促销

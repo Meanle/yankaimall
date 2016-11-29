@@ -1,3 +1,4 @@
+<!--三级分类展示页面-->
 <layout name="layout"/>
 <div class="page">
     <!--    <header class="bar bar-nav">
@@ -26,7 +27,10 @@
                                 <img alt="" src="__ROOT__/{$goods['goodsThums']}">
                             </a>
                             <p class="txt">
-                                <a href="#">{$goods['goodsName']}</a>
+                                <a href="#">
+                                    <notempty name="goods['goodsCountry']"><img style="height: 13.33px;width: 20px;margin-right:.2rem;vertical-align: middle;" src="__ROOT__/{$goods['goodsCountryImg']}"></notempty>
+                                    {$goods['goodsName']}
+                                </a>
                             </p>
                             <div class="price">
 									<span class="pri">

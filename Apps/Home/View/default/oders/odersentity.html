@@ -38,6 +38,98 @@
         </div>
     </div>
 </div>
+<!-- About Popup -->
+<div class="popup popup-feedback">
+    <nav class="bar bar-nav">
+        <h1 class="title">商品评价</h1>
+        <a id="close-popup" class="icon icon-down color-gray pull-right"></a>
+    </nav>
+        <div class="content page-home infinite-scroll" id='feedback-page'>
+            <!--写具体商品的评价-->
+            <form>
+                <div class="list singlefeed">
+                </div>
+            </form>
+            <!--总评价-->
+            <div class="list multifeed">
+                <dl class="list">
+                    <dd>
+                        <label class="react">
+                            <div class="kv-line-r">
+                                <ul>
+                                    <li><img src=""></li>
+                                </ul>
+                                <h6>店铺评分</h6>
+                            </div>
+                        </label>
+                    </dd>
+                    <dd>
+                        <dl>
+                            <dd class="dd-padding">
+                                <h6>时效评分</h6>
+                                <div class="score score-face score-time">
+                                    <input type="hidden" name="subkey1" value="3">
+                                    <label>
+                                        <input type="radio" class="score_1" value="1" name="subscore1">
+                                        <span>很不满意</span>
+                                    </label>
+                                    <label>
+                                        <input type="radio" class="score_2" value="2" name="subscore1">
+                                        <span>不满意</span>
+                                    </label>
+                                    <label>
+                                        <input type="radio" class="score_3" value="3" name="subscore1">
+                                        <span>一般</span>
+                                    </label>
+                                    <label>
+                                        <input type="radio" class="score_4" value="4" name="subscore1">
+                                        <span>满意</span>
+                                    </label>
+                                    <label>
+                                        <input type="radio" class="score_5" value="5" name="subscore1">
+                                        <span>非常满意</span>
+                                    </label>
+                                </div>
+                            </dd>
+                            <dd class="dd-padding">
+                                <h6>服务评分</h6>
+                                <div class="score score-face score-service">
+                                    <input type="hidden" name="subkey2" value="2">
+                                    <label>
+                                        <input type="radio" class="score_1" value="1" name="subscore2">
+                                        <span>很不满意</span>
+                                    </label>
+                                    <label>
+                                        <input type="radio" class="score_2" value="2" name="subscore2">
+                                        <span>不满意</span>
+                                    </label>
+                                    <label>
+                                        <input type="radio" class="score_3" value="3" name="subscore2">
+                                        <span>一般</span>
+                                    </label>
+                                    <label>
+                                        <input type="radio" class="score_4" value="4" name="subscore2">
+                                        <span>满意</span>
+                                    </label>
+                                    <label>
+                                        <input type="radio" class="score_5" value="5" name="subscore2">
+                                        <span>非常满意</span>
+                                    </label>
+                                </div>
+                            </dd>
+
+                        </dl>
+                    </dd>
+                </dl>
+                <div class="btn-wrapper">
+                    <div class="content-block">
+                        <p><a href="javascript:;" onclick="addGoodsAppraises()" class="button button-fill button-big">发布</a></p>
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>
+<!-- end -->
 <script>
 //    ajax获取对应数据并生成html
     function tabgetAjax(url,tnum){
@@ -65,9 +157,9 @@
                             html.push('<a href="{:U('Home/Goods/getGoodsDetails/')}&goodsId='+ total[i].goodslist[j].goodsId+'" class="item-content">');
                         }
                         html.push('<div class="item-media">' +
-                        '<img src="' + total[i].goodslist[j].goodsThums + '" width="80"></div><div class="item-inner"><div class="item-title-row"><div class="item-title">' +
-                        '</div><div class="item-after"><span class="coffee-price order-goods-name">' + total[i].goodslist[j].goodsName + '</span>' +
-                        '</div></div></div></a></li></ul></div>');
+                        '<img src="' + total[i].goodslist[j].goodsThums + '" width="70" height="70"></div>' +
+                                '<div class="item-inner" style="padding:.9rem .5rem"><div class="item-title-row button-dark"><div class="item-title">' + total[i].goodslist[j].goodsName + '</div></div>' +
+                                '<div class="item-subtitle color-gray"><span style="font-size: .8rem;margin:0 .15rem;color: #3c3c3;" class="iconfont">&#xe665;</span>' + total[i].goodslist[j].goodsSn + '</div></div></a></li></ul></div>');
                     }
                     html.push('<div class="list-block list-num"><ul><li class="item-content"><div class="item-media"><i class="icon icon-f7"></i></div>' +
                             '<div class="item-inner"><div class="item-title">');
@@ -199,6 +291,7 @@
         });
     }
 //  确认收货
+var postData= {};
     function orderConfirm(id,type){
         if(type==1){
             $.confirm('您确定收货吗?',
@@ -212,9 +305,57 @@
                                 data: {orderId:id,type:type},
                                 success: function (data) {
                                     if(data.status>0){
-                                        $.toast('☺确认收货成功');
+                                        $.toast('☺确认收货成功,评价一下吧');
                                         setTimeout(function () {
-                                            location.reload();
+                                            $.popup('.popup-feedback');
+//                                            确定收货成功后弹出评价
+                                            $(function (){
+                                                $.ajax({
+                                                    url:'{:U("Home/GoodsAppraises/writeAppraise")}'+'&orderId='+id,
+                                                    type:'get',
+                                                    timeout: 3000,
+                                                    success:function(json){
+                                                        var goodsList = json.goodsList;
+                                                        var order = json.order;
+                                                        var html = new Array();
+                                                        postData.orderId = order.orderId;
+                                                        postData.shopId = order.shopId;
+                                                        if(goodsList.length == 0){
+                                                            html.push('<div class="singlelist">没有需要评价的商品</div>')
+                                                        }
+                                                        postData.goodsId = [];
+                                                        postData.goodsAttrId = [];
+                                                        for(var i=0;i<goodsList.length;i++){
+                                                            postData.goodsId.push(goodsList[i].goodsId);
+                                                            postData.goodsAttrId.push(goodsList[i].goodsAttrId)
+                                                            html.push('<div class="singlelist"><div class="oc-info"><div class="oc-info-l">' +
+                                                                    '<img src="' + goodsList[i].goodsThums + '" width="40"></div>' +
+                                                                    '<div class="oc-info-r"><h2>'+ goodsList[i].goodsName +'</h2><div> ￥<strong class="red">'+ goodsList[i].ogoodsPrice +'</strong></div></div></div>' +
+                                                                    '<dl class="list"><dd class="dd-padding"><h6>商品评分</h6><div class="score score-goods"><label>' +
+                                                                    '<input type="radio" class="score_1" value="1" name="subscore_'+ i +'"><span>很不满意</span></label><label><input type="radio" class="score_2" value="2" name="subscore_'+ i +'">' +
+                                                                    '<span>不满意</span></label><label><input type="radio" class="score_3" value="3" name="subscore_'+ i +'"><span>一般</span></label><label><input type="radio" class="score_4" value="4" name="subscore_'+ i +'">' +
+                                                                    '<span>满意</span></label><label><input type="radio" class="score_5" value="5" name="subscore_'+ i +'"><span>非常满意</span></label></div></dd></dl><dl class="list">' +
+                                                                    '<dd><dl><dd class="dd-padding"><textarea class="content_'+ i +'" name="comment" value="999" class="input-weak" placeholder="说说对这个商品的描述吧！"></textarea></dd></dl></dd></dl></div>');
+
+                                                        }
+                                                        html = html.join("");
+                                                        $(".singlefeed").html(html);
+                                                    },
+                                                    error: function(xhr, type, errorThrown) {
+                                                        $.toast('网络超时请刷新重载!');
+                                                    }
+                                                });
+                                            });
+                                            setTimeout(function(){
+                                                $(".score label").click(function () {
+                                                    $(this).find('span').css('color', '#119cff');
+                                                    var vl = $(this).find('input').val();
+                                                    var t = $(this).index() + 1;
+                                                    console.log(vl);
+                                                    console.log(t);
+                                                });
+                                            },3000);
+
                                         },2000)
                                     }else if(data.status==-1){
                                         $.toast('操作失败，订单状态已发生改变，请刷新后再重试 !');
@@ -228,6 +369,77 @@
             );
         }
     }
+//暂不评价
+$("#close-popup").click(function () {
+    $.closeModal('.popup-feedback');
+    setTimeout(function (){
+        location.reload();
+    },500);
+})
+//保存评价
+function addGoodsAppraises(){
+    var formData = $("form").serialize();
+    //    字符串截取
+    var arr = formData.split('&'), arr1 = [], arr2 = [];
+    for(var i=0; i<arr.length; i++){
+        if(arr[i].substring(0, 8) == 'subscore') {
+            arr1.push(arr[i].substring(11, 12));
+        }
+    }
+    if(arr1.length == 0){
+        $.toast("您还有商品没选择评分!");
+        return false;
+    }
+    postData.goodsScore = arr1;
+    postData.content = [];
+    var textCon = $("textarea[name='comment']");
+    for(var i=0;i<textCon.length;i++){
+        if(textCon[i].value == ''){
+            $.toast("您还没有填写商品描述哦!");
+            return false;
+        }
+        postData.content.push(textCon[i].value);
+    }
+    var arrChk2=$("input[name='subscore1']:checked");
+    if(!arrChk2.val()){
+        $.toast("您还没有选择时效评分哦!");
+        return false;
+    }
+    $(arrChk2).each(function() {
+        var scoreTime = this.value;
+        postData.timeScore = scoreTime;
+    });
+    var arrChk3=$("input[name='subscore2']:checked");
+    if(!arrChk3.val()){
+        $.toast("您还没有选择服务评分哦!");
+        return false;
+    }
+    $(arrChk3).each(function() {
+        var scoreService = this.value;
+        postData.serviceScore = scoreService;
+    });
+    $.ajax({
+        url:'{:U("Home/GoodsAppraises/addGoodsAppraises_v1")}',
+        type:'post',
+        data:postData,
+        timeout: 30000,
+        success:function(json){
+            if(json.status==1){
+                $.toast('评价成功');
+                setTimeout(function (){
+                    location.reload();
+                },1000);
+            }else if(json.status==-1){
+                $.toast(json.msg);
+            }else{
+                $.toast('评价失败，请刷新后再重试 !');
+            }
+        },
+        error: function(xhr, type, errorThrown) {
+            $.toast('网络故障请刷新重载!');
+        }
+    });
+}
 //去评价页面跳转
 function appraiseOrder(id){
     var id = id;
@@ -270,5 +482,4 @@ function orderCancel(id,type){
         $.toast('该订单无法取消...');
     }
 }
-
 </script>

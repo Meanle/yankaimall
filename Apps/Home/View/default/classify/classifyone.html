@@ -1,3 +1,4 @@
+<!--二级分类显示页面-->
 <layout name="layout"/>
 <div class="page">
     <include file="./Apps/Home/View/default/public/tab-bar.html" classify="active"/>
@@ -17,8 +18,12 @@
                             <a class="" href="{:U('Home/Goods/getGoodsDetails/',array('goodsId'=>$goods['goodsId']))}">
                                 <img alt="" src="__ROOT__/{$goods['goodsThums']}">
                             </a>
+
                             <p class="txt">
-                                <a href="#">{$goods['goodsName']}</a>
+                                <a href="#">
+                                    <notempty name="goods['goodsCountry']"><img style="height: 13.33px;width: 20px;margin-right:.2rem;vertical-align: middle;" src="__ROOT__/{$goods['goodsCountryImg']}"></notempty>
+                                    {$goods['goodsName']}
+                                </a>
                             </p>
                             <div class="price">
 									<span class="pri">
@@ -31,7 +36,7 @@
                             <a class="hei_si"
                                href="{:U('Home/Goods/getGoodsDetails/',array('goodsId'=>$goods['goodsId']))}"
                                style="display: block;">查看详情</a>
-                            <!--<p class="pl"><em>5人评价</em>，<em>好评率100%</em></p>-->
+                                <!--<p class="pl"><em>{$goods['goodsCountry']}</em>，<em>好评率100%</em></p>-->
                         </div>
                     </li>
                 </foreach>

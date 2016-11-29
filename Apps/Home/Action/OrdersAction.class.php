@@ -136,10 +136,6 @@ class OrdersAction extends BaseAction {
         $this->display("default/mine/int-rules");
     }
 
-
-
-
-
     /**
      * 查询代付款订单
      */
@@ -596,9 +592,7 @@ class OrdersAction extends BaseAction {
         $this->meta_title = '订单详情';
         $USER = session('WST_USER');
         $morders = D('Home/Orders');
-        $m = D('Home/Cart');
-        $cartInfo = $m->getCartInfo();
-        $this->assign('cartInfo',$cartInfo);
+
         $obj["userId"] = (int)$USER['userId'];
         $obj["shopId"] = (int)$USER['shopId'];
         $obj["orderId"] = (int)I("orderId");

@@ -42,6 +42,10 @@
                                             <span>x{$goods["goodsNums"]}</span>
                                         </div>
                                     </div>
+                                    <div class="item-subtitle color-gray">
+                                        <span style="font-size: .8rem;margin:0 .15rem;color: #3c3c3;" class="iconfont">&#xe665;</span>
+                                        {$goods["goodsSn"]}
+                                    </div>
                                 </div>
                             </a>
                         </li>
@@ -82,16 +86,11 @@
                                                     <div class="item-after">
                                                         {$orderInfo["order"]["orderRemarks"]}
                                                     </div>
-
                                                             <else/>
                                                         <div class="item-title">收货地址:</div>
                                                         <div class="item-after">
                                                             <span id="user-address">{$orderInfo["order"]["userAddress"]}</span>
-
                                                         </div>
-
-
-
                                                     </if>
                                                 </div>
                                             </div>

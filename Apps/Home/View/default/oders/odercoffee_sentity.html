@@ -64,9 +64,9 @@
                                 html.push('<a href="{:U('Home/Goods/getGoodsDetails/')}&goodsId='+ total[i].goodslist[j].goodsId+'" class="item-content">');
                             }
                             html.push('<div class="item-media">' +
-                                    '<img src="' + total[i].goodslist[j].goodsThums + '" width="80"></div><div class="item-inner"><div class="item-title-row"><div class="item-title">' +
-                                    '</div><div class="item-after"><span class="coffee-price order-goods-name">' + total[i].goodslist[j].goodsName + '</span>' +
-                                    '</div></div></div></a></li></ul></div>');
+                                    '<img src="' + total[i].goodslist[j].goodsThums + '" width="70" height="70"></div>' +
+                                    '<div class="item-inner" style="padding:.9rem .5rem"><div class="item-title-row button-dark"><div class="item-title">' + total[i].goodslist[j].goodsName + '</div></div>' +
+                                    '<div class="item-subtitle color-gray"><span style="font-size: .8rem;margin:0 .15rem;color: #3c3c3;" class="iconfont">&#xe665;</span>' + total[i].goodslist[j].goodsSn + '</div></div></a></li></ul></div>');
                         }
                         html.push('<div class="list-block list-num"><ul><li class="item-content"><div class="item-media"><i class="icon icon-f7"></i></div>' +
                                 '<div class="item-inner"><div class="item-title">');

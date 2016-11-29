@@ -819,8 +819,8 @@ function queryOrderPager(statusMark,pcurr){
 						html.push("<td width='200'>"+address+"</td>");
 					}
 
-					html.push("<td width='100'>"+order.totalMoney+"</td>");
-					html.push("<td width='100' style='font-weight:bold;'>"+order.realTotalMoney+"</td>");
+					html.push("<td width='100' style='color: red;'>"+order.totalMoney+"</td>");
+					html.push("<td width='100' style='font-weight:bold;color: red;'>"+order.realTotalMoney+"</td>");
 					html.push("<td width='100'><div style='line-height:20px;'>"+order.createTime+"</div></td>");
 					html.push("<td width='100'>");
 					html.push("<a href='javascript:;' style='color:"+((order.orderStatus==-6 || order.orderStatus==-3)?"red":"blue")+"' onclick=showOrder('"+order.orderId+"')>查看</a>");

@@ -254,8 +254,7 @@ class OrdersModel extends BaseModel
     /**
      * 生成订单
      */
-    public
-    function addOrders($userId, $consigneeId, $payway, $needreceipt, $catgoods, $orderunique, $isself, $rateMoney)
+    public function addOrders($userId, $consigneeId, $payway, $needreceipt, $catgoods, $orderunique, $isself, $rateMoney)
     {
 
         $orderInfos = array();      //订单详情 ?
@@ -441,8 +440,7 @@ class OrdersModel extends BaseModel
     /**
      * 获取订单参数
      */
-    public
-    function getOrderListByIds()
+    public function getOrderListByIds()
     {
         $orderunique = session("WST_ORDER_UNIQUE");
         $orderInfos = array('totalMoney' => 0, 'isMoreOrder' => 0, 'list' => array());
@@ -468,8 +466,7 @@ class OrdersModel extends BaseModel
     /**
      * 获取待付款订单
      */
-    public
-    function queryByPage($obj)
+    public function queryByPage($obj)
     {
         $userId = $obj["userId"];
         $pcurr = (int)I("pcurr", 0);
@@ -507,8 +504,7 @@ class OrdersModel extends BaseModel
     /**
      * 获取待付款订单
      */
-    public
-    function queryPayByPage($obj)
+    public function queryPayByPage($obj)
     {
         $userId = (int)$obj["userId"];
         $orderNo = WSTAddslashes(I("orderNo"));
@@ -541,7 +537,7 @@ class OrdersModel extends BaseModel
                 $orderIds[] = $order["orderId"];
             }
             //获取涉及的商品
-            $sql = "SELECT og.goodsId,og.goodsName,og.goodsThums,og.orderId,gc.catName FROM __PREFIX__order_goods og,__PREFIX__goods_cats gc,__PREFIX__goods g
+            $sql = "SELECT og.goodsId,og.goodsName,og.goodsThums,og.orderId,gc.catName,g.goodsSn FROM __PREFIX__order_goods og,__PREFIX__goods_cats gc,__PREFIX__goods g
 					WHERE og.orderId in (" . implode(',', $orderIds) . ") AND g.goodsId = og.goodsId AND g.goodsCatId2=gc.catId";
             $glist = $this->query($sql);
             $goodslist = array();
@@ -563,8 +559,7 @@ class OrdersModel extends BaseModel
     /**
      * 获取待确认收货
      */
-    public
-    function queryReceiveByPage($obj)
+    public function queryReceiveByPage($obj)
     {
         $userId = (int)$obj["userId"];
         $orderNo = WSTAddslashes(I("orderNo"));
@@ -596,7 +591,7 @@ class OrdersModel extends BaseModel
                 $orderIds[] = $order["orderId"];
             }
             //获取涉及的商品
-            $sql = "SELECT og.goodsId,og.goodsName,og.goodsThums,og.orderId,gc.catName FROM __PREFIX__order_goods og,__PREFIX__goods_cats gc,__PREFIX__goods g
+            $sql = "SELECT og.goodsId,og.goodsName,og.goodsThums,og.orderId,gc.catName,g.goodsSn FROM __PREFIX__order_goods og,__PREFIX__goods_cats gc,__PREFIX__goods g
 					WHERE og.orderId in (" . implode(',', $orderIds) . ") AND g.goodsId = og.goodsId AND g.goodsCatId2=gc.catId";
             $glist = $this->query($sql);
             $goodslist = array();
@@ -617,8 +612,7 @@ class OrdersModel extends BaseModel
     /**
      * 获取待发货订单
      */
-    public
-    function queryDeliveryByPage($obj)
+    public function queryDeliveryByPage($obj)
     {
         $userId = (int)$obj["userId"];
         $orderNo = WSTAddslashes(I("orderNo"));
@@ -652,7 +646,7 @@ class OrdersModel extends BaseModel
                 $orderIds[] = $order["orderId"];
             }
             //获取涉及的商品
-            $sql = "SELECT og.goodsId,og.goodsName,og.goodsThums,og.orderId,gc.catName FROM __PREFIX__order_goods og,__PREFIX__goods_cats gc,__PREFIX__goods g
+            $sql = "SELECT og.goodsId,og.goodsName,og.goodsThums,og.orderId,gc.catName,g.goodsSn FROM __PREFIX__order_goods og,__PREFIX__goods_cats gc,__PREFIX__goods g
 					WHERE og.orderId in (" . implode(',', $orderIds) . ") AND g.goodsId = og.goodsId AND g.goodsCatId2=gc.catId";
             $glist = $this->query($sql);
             $goodslist = array();
@@ -673,8 +667,7 @@ class OrdersModel extends BaseModel
     /**
      * 获取退款
      */
-    public
-    function queryRefundByPage($obj)
+    public function queryRefundByPage($obj)
     {
         $userId = (int)$obj["userId"];
         $orderNo = WSTAddslashes(I("orderNo"));
@@ -731,8 +724,7 @@ class OrdersModel extends BaseModel
     /**
      * 获取取消的订单
      */
-    public
-    function queryCancelOrders($obj)
+    public function queryCancelOrders($obj)
     {
         $userId = (int)$obj["userId"];
         $orderNo = WSTAddslashes(I("orderNo"));
@@ -786,8 +778,7 @@ class OrdersModel extends BaseModel
     /**
      * 获取待评价交易
      */
-    public
-    function queryAppraiseByPage($obj)
+    public function queryAppraiseByPage($obj)
     {
         $userId = (int)$obj["userId"];
         $orderNo = WSTAddslashes(I("orderNo"));
@@ -818,7 +809,7 @@ class OrdersModel extends BaseModel
                 $orderIds[] = $order["orderId"];
             }
             //获取涉及的商品
-            $sql = "SELECT og.goodsId,og.goodsName,og.goodsThums,og.orderId,gc.catName FROM __PREFIX__order_goods og,__PREFIX__goods_cats gc,__PREFIX__goods g
+            $sql = "SELECT og.goodsId,og.goodsName,og.goodsThums,og.orderId,gc.catName,g.goodsSn FROM __PREFIX__order_goods og,__PREFIX__goods_cats gc,__PREFIX__goods g
 					WHERE og.orderId in (" . implode(',', $orderIds) . ") AND g.goodsId = og.goodsId AND g.goodsCatId2=gc.catId";
             $glist = $this->query($sql);
             $goodslist = array();
@@ -839,8 +830,7 @@ class OrdersModel extends BaseModel
     /**
      * 获取已完成交易
      */
-    public
-    function queryCompleteOrders($obj)
+    public function queryCompleteOrders($obj)
     {
         $userId = (int)$obj["userId"];
         $orderNo = WSTAddslashes(I("orderNo"));
@@ -871,7 +861,7 @@ class OrdersModel extends BaseModel
                 $orderIds[] = $order["orderId"];
             }
             //获取涉及的商品
-            $sql = "SELECT og.goodsId,og.goodsName,og.goodsThums,og.orderId,gc.catName FROM __PREFIX__order_goods og,__PREFIX__goods_cats gc,__PREFIX__goods g
+            $sql = "SELECT og.goodsId,og.goodsName,og.goodsThums,og.orderId,gc.catName,g.goodsSn FROM __PREFIX__order_goods og,__PREFIX__goods_cats gc,__PREFIX__goods g
 					WHERE og.orderId in (" . implode(',', $orderIds) . ") AND g.goodsId = og.goodsId AND g.goodsCatId2=gc.catId";
             $glist = $this->query($sql);
             $goodslist = array();
@@ -892,8 +882,7 @@ class OrdersModel extends BaseModel
     /**
      * 取消订单
      */
-    public
-    function orderCancel($obj)
+    public function orderCancel($obj)
     {
         $userId = (int)$obj["userId"];
         $orderId = (int)$obj["orderId"];
@@ -954,8 +943,7 @@ class OrdersModel extends BaseModel
     /**
      * 用户确认收货
      */
-    public
-    function orderConfirm($obj)
+    public function orderConfirm($obj)
     {
         $userId = (int)$obj["userId"];
         $orderId = (int)$obj["orderId"];
@@ -1048,8 +1036,7 @@ class OrdersModel extends BaseModel
     /**
      * 获取订单详情
      */
-    public
-    function getOrderDetails($obj)
+    public function getOrderDetails($obj)
     {
         $userId = (int)$obj["userId"];
         $shopId = (int)$obj["shopId"];
@@ -1059,7 +1046,7 @@ class OrdersModel extends BaseModel
         $order = $this->queryRow($sql);
         if (empty($order)) return $data;
         $data["order"] = $order;
-        $sql = "select og.orderId, og.goodsId ,g.goodsSn, og.goodsNums, og.goodsName , og.goodsPrice shopPrice,og.goodsThums,og.goodsAttrName,og.goodsAttrName 
+        $sql = "select og.orderId, og.goodsId ,g.goodsSn, og.goodsNums, og.goodsName , og.goodsPrice shopPrice,og.goodsThums,og.goodsAttrName,og.goodsAttrName,g.goodsSn 
 				from __PREFIX__goods g , __PREFIX__order_goods og 
 				WHERE g.goodsId = og.goodsId AND og.orderId = $orderId";
         $goods = $this->query($sql);
@@ -1078,8 +1065,7 @@ class OrdersModel extends BaseModel
     /**
      * 获取用户指定状态的订单数目
      */
-    public
-    function getUserOrderStatusCount($obj)
+    public function getUserOrderStatusCount($obj)
     {
         $userId = (int)$obj["userId"];
         $data = array();
@@ -1119,8 +1105,7 @@ class OrdersModel extends BaseModel
     /**
      * 获取用户指定状态的订单数目
      */
-    public
-    function getShopOrderStatusCount($obj)
+    public function getShopOrderStatusCount($obj)
     {
         $shopId = (int)$obj["shopId"];
         $rsdata = array();
@@ -1148,19 +1133,16 @@ class OrdersModel extends BaseModel
     /**
      * 获取商家订单列表
      */
-    public
-    function queryShopOrders($obj)
+    public function queryShopOrders($obj)
     {
         $userId = (int)$obj["userId"];
         $shopId = (int)$obj["shopId"];
         $pcurr = (int)I("pcurr", 0);
         $orderStatus = (int)I("statusMark");
         $m = M('goods_cats');
-
         $orderNo = WSTAddslashes(I("orderNo"));
         $userName = WSTAddslashes(I("userName"));
         $userAddress = WSTAddslashes(I("userAddress"));
-
         $sql = "SELECT o.orderNo, o.orderId, o.userId, o.userName, o.userAddress, 
             o.totalMoney, o.realTotalMoney, o.orderStatus, o.createTime, o.orderRemarks, g.goodsCatId2
                 FROM __PREFIX__orders o, __PREFIX__order_goods og, __PREFIX__goods g 
@@ -1209,8 +1191,7 @@ class OrdersModel extends BaseModel
     /**
      * 商家受理订单-只能受理【未受理】的订单
      */
-    public
-    function shopOrderAccept($obj)
+    public function shopOrderAccept($obj)
     {
         $userId = (int)$obj["userId"];
         $orderId = (int)$obj["orderId"];
@@ -1241,8 +1222,7 @@ class OrdersModel extends BaseModel
     /**
      * 商家批量受理订单-只能受理【未受理】的订单
      */
-    public
-    function batchShopOrderAccept()
+    public function batchShopOrderAccept()
     {
         $USER = session('WST_USER');
         $userId = (int)$USER["userId"];
@@ -1278,8 +1258,7 @@ class OrdersModel extends BaseModel
     /**
      * 商家打包订单-只能处理[受理]的订单
      */
-    public
-    function shopOrderProduce($obj)
+    public function shopOrderProduce($obj)
     {
         $userId = (int)$obj["userId"];
         $shopId = (int)$obj["shopId"];
@@ -1309,8 +1288,7 @@ class OrdersModel extends BaseModel
     /**
      * 商家批量打包订单-只能处理[受理]的订单
      */
-    public
-    function batchShopOrderProduce()
+    public function batchShopOrderProduce()
     {
         $USER = session('WST_USER');
         $userId = (int)$USER["userId"];
@@ -1346,8 +1324,7 @@ class OrdersModel extends BaseModel
     /**
      * 商家发货配送订单
      */
-    public
-    function shopOrderDelivery($obj)
+    public function shopOrderDelivery($obj)
     {
         $userId = (int)$obj["userId"];
         $orderId = (int)$obj["orderId"];
@@ -1384,8 +1361,7 @@ class OrdersModel extends BaseModel
     /**
      * 商家发货配送订单
      */
-    public
-    function batchShopOrderDelivery($obj)
+    public function batchShopOrderDelivery($obj)
     {
         $USER = session('WST_USER');
         $userId = (int)$USER["userId"];
@@ -1422,8 +1398,7 @@ class OrdersModel extends BaseModel
     /**
      * 商家确认收货
      */
-    public
-    function shopOrderReceipt($obj)
+    public function shopOrderReceipt($obj)
     {
         $userId = (int)$obj["userId"];
         $shopId = (int)$obj["shopId"];
@@ -1454,8 +1429,7 @@ class OrdersModel extends BaseModel
     /**
      * 商家确认拒收/不同意拒收
      */
-    public
-    function shopOrderRefund($obj)
+    public function shopOrderRefund($obj)
     {
         $userId = (int)$obj["userId"];
         $orderId = (int)$obj["orderId"];
@@ -1524,8 +1498,7 @@ class OrdersModel extends BaseModel
     /**
      * 检查订单是否已支付
      */
-    public
-    function checkOrderPay($obj)
+    public function checkOrderPay($obj)
     {
         $userId = (int)$obj["userId"];
         $orderId = (int)I("orderId");

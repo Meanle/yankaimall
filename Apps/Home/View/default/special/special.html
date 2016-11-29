@@ -29,7 +29,10 @@
                                             <img alt="" src="__ROOT__/{$vo6['goodsThums']}">
                                         </a>
                                         <p class="txt">
-                                            <a href="#">{$vo6['goodsName']}</a>
+                                            <a href="#">
+                                                <notempty name="vo6['goodsCountry']"><img style="height: 13.33px;width: 20px;margin-right:.2rem;vertical-align: middle;" src="__ROOT__/{$vo6['goodsCountryImg']}"></notempty>
+                                                {$vo6['goodsName']}
+                                            </a>
                                         </p>
                                         <div class="price">
                                             <span class="pri"><em>￥ {$vo6['shopPrice']}</em></span>

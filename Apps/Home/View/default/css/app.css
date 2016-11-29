@@ -330,12 +330,14 @@ em, i, var {
 }
 
 .list_sort_list li>div .txt a {
-	height: 2rem;
+	height: 1rem;
 	line-height: 1rem;
 	overflow: hidden;
 	display: block;
 	font-size: .7rem;
 	color: #404040;
+	white-space: nowrap;
+	text-overflow: ellipsis;
 }
 
 .list_sort_list li>div .price {

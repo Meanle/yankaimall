@@ -1,3 +1,4 @@
+<!--分类主页面-->
 <layout name="layout"/>
 <div class="page">
     <include file="./Apps/Home/View/default/public/tab-bar.html" classify="active"/>
@@ -8,6 +9,7 @@
         <!-- 这里是页面内容区 -->
         <!--slider-->
         <div class="list">
+
             <volist name="catList" key="k1" id="vo1">
                 <if condition="$vo1['catName'] eq 分类">
                     <volist name="vo1['catChildren']" key="k2" id="vo2">
