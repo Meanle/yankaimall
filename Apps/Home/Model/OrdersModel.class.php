@@ -1143,26 +1143,46 @@ class OrdersModel extends BaseModel
         $orderNo = WSTAddslashes(I("orderNo"));
         $userName = WSTAddslashes(I("userName"));
         $userAddress = WSTAddslashes(I("userAddress"));
+        $orderMoney = (int)(I("orderMoney"));
         $sql = "SELECT o.orderNo, o.orderId, o.userId, o.userName, o.userAddress, 
             o.totalMoney, o.realTotalMoney, o.orderStatus, o.createTime, o.orderRemarks, g.goodsCatId2
                 FROM __PREFIX__orders o, __PREFIX__order_goods og, __PREFIX__goods g 
                     WHERE o.orderId = og.orderId and og.goodsId = g.goodsId and 
                         o.orderFlag = 1 and o.shopId = $shopId ";
-        if ($orderStatus == 5) {
-            $sql .= " AND orderStatus in (-3,-4,-5,-6,-7)";
-        } else {
-            $sql .= " AND orderStatus = $orderStatus ";
+        if($orderMoney != ""){
+            $sql .= " AND orderStatus in (0,1,2,3,4)";
+            if ($orderNo != "") {
+                $sql .= " AND orderNo like '%$orderNo%'";
+            }
+            if ($userName != "") {
+                $sql .= " AND userName like '%$userName%'";
+            }
+            if ($userAddress != "") {
+                $sql .= " AND userAddress like '%$userAddress%'";
+            }
+            if ($orderMoney != "") {
+                $sql .= " AND realTotalMoney >= $orderMoney";
+            }
+            $sql .= " order by totalMoney asc ";
+        }else{
+            if ($orderStatus == 5) {
+                $sql .= " AND orderStatus in (-3,-4,-5,-6,-7)";
+            } elseif($orderStatus == 7){
+                $sql .= " AND orderStatus in (0,1,2,3,4,5,6,7)";
+            } else {
+                $sql .= " AND orderStatus = $orderStatus ";
+            }
+            if ($orderNo != "") {
+                $sql .= " AND orderNo like '%$orderNo%'";
+            }
+            if ($userName != "") {
+                $sql .= " AND userName like '%$userName%'";
+            }
+            if ($userAddress != "") {
+                $sql .= " AND userAddress like '%$userAddress%'";
+            }
+            $sql .= " order by orderId desc ";
         }
-        if ($orderNo != "") {
-            $sql .= " AND orderNo like '%$orderNo%'";
-        }
-        if ($userName != "") {
-            $sql .= " AND userName like '%$userName%'";
-        }
-        if ($userAddress != "") {
-            $sql .= " AND userAddress like '%$userAddress%'";
-        }
-        $sql .= " order by orderId desc ";
         $data = $this->pageQuery($sql, $pcurr);
         //$data['goodsCatId2'] = $this->query($sqls);
         //$data['orderNo'] = $orderNos;

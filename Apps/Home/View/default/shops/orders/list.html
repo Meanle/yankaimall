@@ -21,6 +21,7 @@
 				<li id="wst-msg-li-4">已到货订单<span style="display:none;" class="wst-order-tips-box"></span></li>
 				<li id="wst-msg-li-5">取消 / 拒收订单<span style="display:none;" class="wst-order-tips-box"></span></li>
                 <li id="wst-msg-li-6">价格查询<span style="display:none;" class="wst-order-tips-box"></span></li>
+				<li id="wst-msg-li-7">订单号查询<span style="display:none;" class="wst-order-tips-box"></span></li>
 			</ul>
 			<div class="wst-tab-content" style='width:98%;'>
 			    <!-- 待受理 -->
@@ -282,6 +283,41 @@
                     </div>
                     <div style='clear:both;'></div>
                 </div>
+				<!--订单号查询-->
+				<div class='wst-tab-item' style="display:none;">
+					<div>
+						<table class='wst-list' style="font-size:13px;">
+							<thead>
+							<tr>
+								<th colspan="8" class="wst-form">
+									订单号：<input type="text" id="orderNo_7" style='width:120px;' autocomplete="off"/>
+									<button class='wst-btn-query' onclick="queryOrderPager(7,0)">查询</button>
+								</th>
+							</tr>
+							<tr>
+								<th width='100'>订单号</th>
+								<th width='100'>收货人</th>
+								<th width='200'>收货地址</th>
+								<th width='70'>订单金额</th>
+								<th width='70'>实付金额</th>
+								<th width='130'>下单时间</th>
+								<th width='100'>操作</th>
+							</tr>
+							</thead>
+							<tbody id="otbody7">
+
+							</tbody>
+							<tfoot>
+							<tr>
+								<td colspan='8' align='center' id="opage_7">
+									<div id="wst-page-7" class='wst-page' style="float:right;padding-bottom:10px;"></div>
+								</td>
+							</tr>
+							</tfoot>
+						</table>
+					</div>
+					<div style='clear:both;'></div>
+				</div>
 			</div>
 			</div>
 		</div>
