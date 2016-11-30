@@ -179,12 +179,12 @@ $(document).ready(function(){
         </table>
         <div class='wst-tbar-group'>
            <span></span>
-           <a href='javascript:batchDel()'><span class='del btn'></span>删除</a>
-           <a href='javascript:sale(1)'><span class='onSale btn'></span>上架</a>
-           <a href='javascript:goodsSet("isRecomm","queryUnSaleByPage")'><span class='recomm btn'></span>精选促销</a>
-           <a href='javascript:goodsSet("isBest","queryUnSaleByPage")'><span class='hot btn'></span>今日疯抢</a>
-           <a href='javascript:goodsSet("isNew","queryUnSaleByPage")'><span class='new btn'></span>超值热卖</a>
-           <a href='javascript:goodsSet("isHot","queryUnSaleByPage")'><span class='hot btn'></span>热选品牌</a>
+            <a href='javascript:batchDel()'><span class='del btn'></span>删除</a>
+            <a href='javascript:sale(1)'><span class='unSale btn'></span>上架</a>
+            <a href='javascript:goodsSetcancel("isRecomm","queryUnSaleByPage")'><span class='recomm btn'></span>取消精选促销</a>
+            <a href='javascript:goodsSetcancel("isBest","queryUnSaleByPage")'><span class='best btn'></span>取消今日疯抢</a>
+            <a href='javascript:goodsSetcancel("isNew","queryUnSaleByPage")'><span class='new btn'></span>取消超值热卖</a>
+            <a href='javascript:goodsSetcancel("isHot","queryUnSaleByPage")'><span class='hot btn'></span>取消热选品牌</a>
            <a href='{:U("Home/Goods/toEdit",array("umark"=>"queryUnSaleByPage"))}'><span class='add btn'></span>新增</a>
         </div>
         </div>

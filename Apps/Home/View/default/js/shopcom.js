@@ -138,6 +138,28 @@ function goodsSet(type,umark){
 	    }
 	});
 }
+function goodsSetcancel(type,umark){
+	var ids = WST.getChks('.chk');
+	if(ids==''){
+		WST.msg('请先选择商品!', {icon: 5});
+		return;
+	}
+
+	layer.load('正在处理，请稍后...', 3);
+	var params = {};
+	params.ids = ids;
+	params.code= type;
+	$.post(Think.U('Home/Goods/goodsSetcancel'),params,function(data,textStatus){
+		var json = WST.toJson(data);
+		if(json.status=='1'){
+			WST.msg('操作成功！', {icon: 1},function(){
+				location.reload();
+			});
+		}else{
+			WST.msg('操作失败!', {icon: 5});
+		}
+	});
+}
 
 function getShopCatListForGoods(v,id){
 	   var params = {};

@@ -706,6 +706,23 @@ class GoodsModel extends BaseModel {
 	 	}
 		return $rd;
 	 }
+    public function goodsSetcancel(){
+        $rd = array('status'=>-1);
+        $code = WSTAddslashes(I('code'));
+        $codeArr = array('isBest','isNew','isHot','isRecomm');
+        if(in_array($code,$codeArr)){
+            $m = M('goods');
+            $shopId = (int)session('WST_USER.shopId');
+            $data = array();
+            $data[$code] = 0;
+            $ids = self::formatIn(",", I('ids'));
+            $rs = $m->where("shopId=".$shopId." and goodsId in(".$ids.")")->save($data);
+            if(false !== $rs){
+                $rd['status']= 1;
+            }
+        }
+        return $rd;
+    }
      /**
 	  * 批量上架/下架商品
 	  */

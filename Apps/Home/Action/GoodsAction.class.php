@@ -837,6 +837,13 @@ class GoodsAction extends BaseAction
         $rs = $m->goodsSet();
         $this->ajaxReturn($rs);
     }
+    public function goodsSetcancel()
+    {
+        $this->isShopLogin();
+        $m = D('Home/Goods');
+        $rs = $m->goodsSetcancel();
+        $this->ajaxReturn($rs);
+    }
 
     /**
      * 批量删除商品
