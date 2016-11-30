@@ -568,6 +568,128 @@ class GoodsAction extends BaseAction
         $serviceCommunitys = $areas->getShopCommunitys();
         echo json_encode($serviceCommunitys);
     }
+//导出excel公共调用方法
+    public function exportExcel($expTitle,$expCellName,$expTableData){
+        $xlsTitle = iconv('utf-8', 'gb2312', $expTitle);//文件名称
+        $fileName = $expTitle;//or $xlsTitle 文件名称可根据自己情况设定
+        header('pragma:public');
+        header('Content-type:application/vnd.ms-excel;charset=utf-8;name="'.$xlsTitle.'.xls"');
+        header("Content-Disposition:attachment;filename=$fileName.xls");//attachment新窗口打印inline本窗口打印
+        WSTWriteExcel($expCellName,$expTableData);
+    }
+
+    public function queryOnSaleByPageOutput(){
+        $this->isShopLogin();
+        $this->meta_title='出售中的商品';
+        $USER = session('WST_USER');
+        $m = D('Home/Goods');
+        $page = $m->queryOnSaleByPageOutput($USER['shopId']);
+        for($i=0;$i<count($page);$i++){
+            if($page[$i]['isRecomm'] == 1){
+                $page[$i]['isRecomm'] = "是";
+            }else{
+                $page[$i]['isRecomm'] = "否";
+            }
+            if($page[$i]['isHot'] == 1){
+                $page[$i]['isHot'] = "是";
+            }else{
+                $page[$i]['isHot'] = "否";
+            }
+            if($page[$i]['isBest'] == 1){
+                $page[$i]['isBest'] = "是";
+            }else{
+                $page[$i]['isBest'] = "否";
+            }
+            if($page[$i]['isNew'] == 1){
+                $page[$i]['isNew'] = "是";
+            }else{
+                $page[$i]['isNew'] = "否";
+            }
+        }
+        $xlsName  = "出售中的商品";
+        $xlsCell  = array(
+            array('goodsSn','商品编号'),
+            array('goodsName','商品名称'),
+            array('marketPrice','市场价格'),
+            array('shopPrice','店铺价格'),
+            array('goodsStock','库存'),
+            array('saleCount','销量'),
+            array('goodsUnit','单位'),
+            array('goodsKeywords','商品SEO关键字'),
+            array('goodsSpec','商品信息'),
+            array('isRecomm','精选促销'),
+            array('isHot','今日疯抢'),
+            array('isBest','超值热卖'),
+            array('isNew','热选品牌'),
+            array('catName','商城分类'),
+            array('shopCatName','本店分类'),
+            array('brandId','品牌'),
+            array('goodsDesc','商品描述'),
+
+        );
+        $xlsData  = $page;
+        $this->exportExcel($xlsName,$xlsCell,$xlsData);
+//        $this->ajaxReturn($page);
+    }
+//查询仓库中的商品不分类并导出excel
+    public function queryUnSaleByPageOutput()
+    {
+        $this->isShopLogin();
+        $this->meta_title='仓库中的商品';
+        $USER = session('WST_USER');
+        $m = D('Home/Goods');
+        $page = $m->queryUnSaleByPageOutput($USER['shopId']);
+        for($i=0;$i<count($page);$i++){
+            if($page[$i]['isRecomm'] == 1){
+                $page[$i]['isRecomm'] = "是";
+            }else{
+                $page[$i]['isRecomm'] = "否";
+            }
+            if($page[$i]['isHot'] == 1){
+                $page[$i]['isHot'] = "是";
+            }else{
+                $page[$i]['isHot'] = "否";
+            }
+            if($page[$i]['isBest'] == 1){
+                $page[$i]['isBest'] = "是";
+            }else{
+                $page[$i]['isBest'] = "否";
+            }
+            if($page[$i]['isNew'] == 1){
+                $page[$i]['isNew'] = "是";
+            }else{
+                $page[$i]['isNew'] = "否";
+            }
+        }
+        $xlsName  = "仓库中的商品";
+        $xlsCell  = array(
+            array('goodsSn','商品编号'),
+            array('goodsName','商品名称'),
+            array('marketPrice','市场价格'),
+            array('shopPrice','店铺价格'),
+            array('goodsStock','库存'),
+            array('saleCount','销量'),
+            array('goodsUnit','单位'),
+            array('goodsKeywords','商品SEO关键字'),
+            array('goodsSpec','商品信息'),
+            array('isRecomm','精选促销'),
+            array('isHot','今日疯抢'),
+            array('isBest','超值热卖'),
+            array('isNew','热选品牌'),
+            array('catName','商城分类'),
+            array('shopCatName','本店分类'),
+            array('brandId','品牌'),
+            array('goodsDesc','商品描述'),
+
+        );
+        $xlsData  = $page;
+        $this->exportExcel($xlsName,$xlsCell,$xlsData);
+
+
+    }
+
+
+
 
     /**
      * 分页查询-出售中的商品

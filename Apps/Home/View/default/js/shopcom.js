@@ -1,3 +1,22 @@
+function queryOnSaleOutput(){
+	var shopCatId1 = $('#shopCatId1').val();
+	var shopCatId2 = $('#shopCatId2').val();
+	var goodsName = $('#goodsName').val();
+	layer.confirm("您确定导出出售中的所有商品吗？",{icon: 3, title:'提示'},function(){
+		location.href= Think.U('Home/Goods/queryOnSaleByPageOutput');
+		WST.msg('正在导出！', {icon: 3});
+	});
+}
+function queryUnSaleOutput(){
+	var shopCatId1 = $('#shopCatId1').val();
+	var shopCatId2 = $('#shopCatId2').val();
+	var goodsName = $('#goodsName').val();
+	layer.confirm("您确定导出仓库中的所有商品吗？",{icon: 3, title:'提示'},function(){
+		location.href= Think.U('Home/Goods/queryUnSaleByPageOutput');
+		WST.msg('正在导出！', {icon: 3});
+	});
+}
+
 /****************************商品操作**************************/
 function queryUnSaleByPage(){
 	var shopCatId1 = $('#shopCatId1').val();

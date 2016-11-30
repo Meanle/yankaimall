@@ -335,6 +335,74 @@ function WSTReadExcel($file)
     return PHPExcel_IOFactory::load(WSTRootPath() . "/Upload/" . $file);
 }
 
+
+function WSTWriteExcel($expCellName,$expTableData)
+{
+    Vendor("PHPExcel.PHPExcel");
+    Vendor("PHPExcel.PHPExcel.IOFactory");
+    $cellNum = count($expCellName);
+    $dataNum = count($expTableData);
+    Vendor("PHPExcel.PHPExcel");
+    Vendor("PHPExcel.PHPExcel.IOFactory");
+    $objPHPExcel =  new PHPExcel();
+    $cellName = array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','AA','AB','AC','AD','AE','AF','AG','AH','AI','AJ','AK','AL','AM','AN','AO','AP','AQ','AR','AS','AT','AU','AV','AW','AX','AY','AZ');
+
+//    设置填充颜色
+
+//      设置行高
+    for($i=0;$i<$dataNum;$i++){
+        $objPHPExcel->getActiveSheet()->getRowDimension($i)->setRowHeight(25);
+    }
+//      设置居中
+    $objPHPExcel->getActiveSheet()->getStyle('A')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    $objPHPExcel->getActiveSheet()->getStyle('B')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    $objPHPExcel->getActiveSheet()->getStyle('C')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    $objPHPExcel->getActiveSheet()->getStyle('D')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    $objPHPExcel->getActiveSheet()->getStyle('E')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    $objPHPExcel->getActiveSheet()->getStyle('F')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    $objPHPExcel->getActiveSheet()->getStyle('G')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    $objPHPExcel->getActiveSheet()->getStyle('H')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    $objPHPExcel->getActiveSheet()->getStyle('I')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    $objPHPExcel->getActiveSheet()->getStyle('J')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    $objPHPExcel->getActiveSheet()->getStyle('K')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    $objPHPExcel->getActiveSheet()->getStyle('L')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    $objPHPExcel->getActiveSheet()->getStyle('M')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    $objPHPExcel->getActiveSheet()->getStyle('N')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    $objPHPExcel->getActiveSheet()->getStyle('O')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    $objPHPExcel->getActiveSheet()->getStyle('P')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    $objPHPExcel->getActiveSheet()->getStyle('Q')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+//    设置宽度
+    $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(20);
+    $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(30);
+    $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(10);
+    $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(10);
+    $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(10);
+    $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(10);
+    $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(10);
+    $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(30);
+    $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(30);
+    $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(10);
+    $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(10);
+    $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(10);
+    $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(10);
+    $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setWidth(10);
+    $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setWidth(10);
+    $objPHPExcel->getActiveSheet()->getColumnDimension('P')->setWidth(10);
+    $objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setWidth(50);
+
+    for($i=0;$i<$cellNum;$i++){
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue($cellName[$i].'1', $expCellName[$i][1]);
+    }
+    // Miscellaneous glyphs, UTF-8
+    for($i=0;$i<$dataNum;$i++){
+        for($j=0;$j<$cellNum;$j++){
+            $objPHPExcel->getActiveSheet(0)->setCellValue($cellName[$j].($i+2), $expTableData[$i][$expCellName[$j][0]]);
+        }
+    }
+    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+    $objWriter->save('php://output');
+}
+
 /**
  * 处理转义字符
  * @param $str 需要处理的字符串

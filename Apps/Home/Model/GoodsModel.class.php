@@ -247,7 +247,46 @@ class GoodsModel extends BaseModel {
 		return $rs;
 		
 	}
-	
+
+    /**
+     * 获取上架中的所有商品输出不分页
+     */
+    public function queryOnSaleByPageOutput(){
+        $shopId=(int)session('WST_USER.shopId');
+        $shopCatId1 = (int)I('shopCatId1',0);
+        $shopCatId2 = (int)I('shopCatId2',0);
+        $goodsName = WSTAddslashes(I('goodsName'));
+        $sql = "select g.goodsSn,g.goodsSn,g.goodsName,g.marketPrice,g.shopPrice,g.goodsStock,g.saleCount,g.goodsUnit,g.goodsKeywords,g.goodsSpec,g.isRecomm,g.isHot,g.isBest,g.isNew,gc.catName,sc.catName as shopCatName,g.brandId,g.goodsDesc,ga.isRecomm as attIsRecomm from __PREFIX__goods g
+				left join __PREFIX__shops_cats sc on g.shopCatId2 = sc.catId left join __PREFIX__goods_cats gc on g.goodsCatId3 = gc.catId 
+				left join __PREFIX__goods_attributes ga on g.goodsId = ga.goodsId and ga.isRecomm = 1
+				where g.goodsFlag=1 
+		     and g.shopId=".$shopId." and g.goodsStatus=1 and g.isSale=1 ";
+        if($shopCatId1>0)$sql.=" and g.shopCatId1=".$shopCatId1;
+        if($shopCatId2>0)$sql.=" and g.shopCatId2=".$shopCatId2;
+        if($goodsName!='')$sql.=" and (g.goodsName like '%".$goodsName."%' or g.goodsSn like '%".$goodsName."%') ";
+        $sql.=" order by g.goodsId desc";
+        return $this->query($sql);
+    }
+    /**
+     * 获取仓库中的所有商品输出不分页
+     */
+    public function queryUnSaleByPageOutput(){
+        $shopId=(int)session('WST_USER.shopId');
+        $shopCatId1 = (int)I('shopCatId1',0);
+        $shopCatId2 = (int)I('shopCatId2',0);
+        $goodsName = WSTAddslashes(I('goodsName'));
+        $sql = "select g.goodsSn,g.goodsSn,g.goodsName,g.marketPrice,g.shopPrice,g.goodsStock,g.saleCount,g.goodsUnit,g.goodsKeywords,g.goodsSpec,g.isRecomm,g.isHot,g.isBest,g.isNew,gc.catName,sc.catName as shopCatName,g.brandId,g.goodsDesc,ga.isRecomm as attIsRecomm from __PREFIX__goods g
+				left join __PREFIX__shops_cats sc on g.shopCatId2 = sc.catId left join __PREFIX__goods_cats gc on g.goodsCatId3 = gc.catId 
+				left join __PREFIX__goods_attributes ga on g.goodsId = ga.goodsId and ga.isRecomm = 1
+				where g.goodsFlag=1 
+		      and g.shopId=".$shopId." and g.isSale=0 ";
+        if($shopCatId1>0)$sql.=" and g.shopCatId1=".$shopCatId1;
+        if($shopCatId2>0)$sql.=" and g.shopCatId2=".$shopCatId2;
+        if($goodsName!='')$sql.=" and (g.goodsName like '%".$goodsName."%' or g.goodsSn like '%".$goodsName."%') ";
+        $sql.=" order by g.goodsId desc";
+        return $this->query($sql);
+    }
+
 	/**
 	 * 获取上架中的商品
 	 */
