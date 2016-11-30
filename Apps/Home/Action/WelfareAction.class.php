@@ -51,6 +51,9 @@ class WelfareAction extends BaseAction
             case 1://操作成功
                 $this->success('黑金卡激活成功', U('Home/Users/govipEntityByPages'));
                 break;
+            case 2://没绑定手机号码
+                $this->success('还没有绑定手机号码', U('Home/Users/govipEntityByPages'));
+                break;
         }
     }
 

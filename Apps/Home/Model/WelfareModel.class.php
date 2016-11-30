@@ -21,6 +21,9 @@ class WelfareModel extends BaseModel
         if (!session('WST_USER.userId')) {
             return -1;//没有传用户id过来
         }
+        if(!$data['userPhone']){
+            return 2;
+        }
         if ($datacardId) {
             //表示激活会员卡
             //判断会员卡号是不是已经被使用了
@@ -45,6 +48,12 @@ class WelfareModel extends BaseModel
                 'cardYear' => 1,
                 'endTime' => date('Y-m-d H:i:s', strtotime("+1 year")),
                 'isActivated' => 1,
+            ));
+
+            $userPhoneNum = M('users')->where(array(
+                'userId' => session('WST_USER.userId'),
+            ))->save(array(
+                'userPhone' => $data['userPhone']
             ));
             return 1;//添加成功
         }
