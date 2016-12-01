@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{$CONF['mallTitle']}后台管理中心</title>
+    <link href="__PUBLIC__/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="__ROOT__/Apps/Admin/View/css/AdminLTE.css" rel="stylesheet" type="text/css" />
+    <!--[if lt IE 9]>
+    <script src="__PUBLIC__/js/html5shiv.min.js"></script>
+    <script src="__PUBLIC__/js/respond.min.js"></script>
+    <![endif]-->
+    <script src="__PUBLIC__/js/jquery.min.js"></script>
+    <script src="__PUBLIC__/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script src="__PUBLIC__/js/common.js"></script>
+    <script src="__PUBLIC__/plugins/plugins/plugins.js"></script>
+</head>
+<script>
+    function del(id,type){
+        var msg = (type==1)?'该会员为商家会员，您确定要删除该商家信息吗？':'您确定要删除该会员信息吗?';
+        Plugins.confirm({title:'信息提示',content:msg,okText:'确定',cancelText:'取消',okFun:function(){
+            Plugins.closeWindow();
+            Plugins.waitTips({title:'信息提示',content:'正在操作，请稍后...'});
+            $.post("{:U('Admin/Users/del')}",{id:id},function(data,textStatus){
+                var json = WST.toJson(data);
+                if(json.status=='1'){
+                    Plugins.setWaitTipsMsg({content:'操作成功',timeout:1000,callback:function(){
+                        location.reload();
+                    }});
+                }else{
+                    Plugins.closeWindow();
+                    Plugins.Tips({title:'信息提示',icon:'error',content:'操作失败!',timeout:1000});
+                }
+            });
+        }});
+    }
+</script>
+<body class='wst-page'>
+<form method='post' action='{:U("Admin/Users/queryVipAccountByPage")}'>
+    <div class='wst-tbar'>
+        用户名：<input type='text' id='loginName' name='loginName' class='form-control wst-ipt-10' value='{$loginName}'/>
+        会员卡号：<input type='text' id='cardId' name='cardId' class='form-control wst-ipt-10' value='{$cardId}'/>
+        手机号码：<input type='text' id='userPhone' name='userPhone' class='form-control wst-ipt-10' value='{$userPhone}'/>
+        电子邮箱：<input type='text' id='userEmail' name='userEmail' class='form-control wst-ipt-10' value='{$userEmail}'/>
+    </select>
+        <button type="submit" class="btn btn-primary glyphicon glyphicon-search">查询</button>
+        <php>if(in_array('hylb_01',$WST_STAFF['grant'])){</php>
+        <php>}</php>
+    </div>
+</form>
+<div class="wst-body">
+    <table class="table table-hover table-striped table-bordered wst-list">
+        <thead>
+        <tr>
+            <th width='30'>&nbsp;</th>
+            <th width='70'>用户名</th>
+            <th width='80'>手机号码</th>
+            <th width='80'>电子邮箱</th>
+            <th width='80'>会员卡号</th>
+            <th width='60'>会员卡密码</th>
+            <th width='60'>会员卡年限</th>
+            <th width='80'>会员办理日期</th>
+            <th width='80'>会员结束日期</th>
+            <th width='40'>状态</th>
+            <th width='130'>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <volist name="Page['root']" id="vo" key='i'>
+            <tr>
+                <td>{$i}</td>
+                <td>{$vo['loginName']}</td>
+                <td>{$vo['userPhone']}</td>
+                <td>{$vo['userEmail']}</td>
+                <td>{$vo['cardId']}&nbsp;</td>
+                <td>{$vo['cardPassword']}&nbsp;</td>
+                <td>{$vo['cardYear']}&nbsp;</td>
+                <td>{$vo['startTime']}&nbsp;</td>
+                <td>{$vo['endTime']}&nbsp;</td>
+                <td>
+                    <if condition="$vo['isActivated']==0 ">
+                 <span class='label label-danger wst-label'>
+			               停用
+			     </span>
+                        <else/>
+                        <span class='label label-success wst-label'>
+			               启用
+			     </span>
+                    </if>
+                </td>
+
+
+                <td>
+                    <php>if(in_array('hylb_02',$WST_STAFF['grant'])){</php>
+                    <a class="btn btn-default glyphicon glyphicon-pencil" href="{:U('Admin/Users/toEditVip',array('id'=>$vo['userId']))}">修改</a>&nbsp;
+                    <php>}</php>
+                    <php>if(in_array('hylb_03',$WST_STAFF['grant'])){</php>
+                    <button type="button" class="btn btn-default glyphicon glyphicon-trash" onclick="javascript:del({$vo['userId']},{$vo['userType']})">刪除</buttona>
+                        <php>}</php>
+                </td>
+            </tr>
+        </volist>
+        <tr>
+            <td colspan='11' align='center'>{$Page['pager']}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

@@ -303,7 +303,7 @@
                 {
                     text: '余额支付',
                     onClick: function() {
-                        toBalancePay();
+                        checkSms(id);
                     }
                 }
             ]
@@ -502,7 +502,7 @@ function orderCancel(id,type){
     }
 }
 
-function checkSms() {
+function checkSms(id) {
     $.confirm('会员请先进行短信验证,更加安全',
         function () {
             var phone = "{:session('WST_USER.userPhone')}";
@@ -519,7 +519,7 @@ function checkSms() {
                         $.alert(json.msg);
                         return;
                     }
-                    sendMsgAction('', 0);
+                    sendMsgAction('', 0,id);
                 },
                 error:function(json){
                     console.log(json);
@@ -533,11 +533,11 @@ function checkSms() {
 }
 
 //发起短信验证
-function sendMsgAction(value, count) {
+function sendMsgAction(value, count,id) {
     if(value == '') {
         $.prompt('<p id="phone-text">已向您手机号{$Phone}发送支付验证码</p>',
             function (value) {
-                reViewCode(value, count);
+                reViewCode(value, count,id);
             },
             function (value) {
                 return false;
@@ -546,7 +546,7 @@ function sendMsgAction(value, count) {
     }else {
         $.prompt('请重新输入验证码',
             function (value) {
-                reViewCode(value, count);
+                reViewCode(value, count, id);
             },
             function (value) {
                 return false;
@@ -556,19 +556,19 @@ function sendMsgAction(value, count) {
 }
 
 //验证码真伪
-function reViewCode(value, count) {
+function reViewCode(value, count ,id) {
     if (count < 2) {
         $.ajax({
             url: '{:U("Home/Users/true_sms")}',
             type: 'post',
             data: {
-                tel: "{$rs['userPhone']}",
+                tel: "{:session('WST_USER.userPhone')}",
                 code: value,
-                id: "{$rs['userId']}"
+                id: "{:session('WST_USER.userId')}"
             },
             success: function (json) {
                 if (json.code == 1) {
-                    toBalancePay();
+                    toBalancePay(id);
                 } else {
                     $.alert(json.msg);
                     count += 1;
@@ -626,7 +626,7 @@ function timeCalter() {
 }
 
 //余额支付
-function toBalancePay() {
+function toBalancePay(id) {
     var params = {};
     params.orderId = id;
     $.ajax({

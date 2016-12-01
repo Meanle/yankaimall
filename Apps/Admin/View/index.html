@@ -276,17 +276,21 @@
                         <php>if(in_array('hygl_00',$WST_STAFF['grant'])){</php>
                         <li class="treeview">
                             <a href="#">
-                                <span>会员管理</span>
+                                <span>用户管理</span>
                             </a>
                             <ul class="treeview-menu">
                                 <php>if(in_array('hydj_00',$WST_STAFF['grant'])){</php>
-                                <li><a href="{:U('Admin/UserRanks/index')}" target='pageContent' >会员等级</a></li>
+                                <li><a href="{:U('Admin/Users/queryVipAccountByPage')}" target='pageContent' >会员管理</a></li>
+                                <php>}</php>
+
+                                <php>if(in_array('hydj_00',$WST_STAFF['grant'])){</php>
+                                <li><a href="{:U('Admin/UserRanks/index')}" target='pageContent' >用户等级</a></li>
                                 <php>}</php>
                                 <php>if(in_array('hylb_00',$WST_STAFF['grant'])){</php>
-					            <li><a href="{:U('Admin/Users/index')}" target='pageContent' >会员列表</a></li>
+					            <li><a href="{:U('Admin/Users/index')}" target='pageContent' >用户列表</a></li>
 					            <php>}</php>
                                 <php>if(in_array('hylb_01',$WST_STAFF['grant'])){</php>
-					            <li><a href="{:U('Admin/Users/toEdit/')}" target='pageContent'>添加会员</a></li>
+					            <li><a href="{:U('Admin/Users/toEdit/')}" target='pageContent'>添加用户</a></li>
 					            <php>}</php>
                                 <php>if(in_array('hyzh_00',$WST_STAFF['grant'])){</php>
 					            <li><a href="{:U('Admin/Users/queryAccountByPage')}" target='pageContent' >账号管理</a></li>

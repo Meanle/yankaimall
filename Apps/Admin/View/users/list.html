@@ -18,7 +18,7 @@
    </head>
    <script>
    function del(id,type){
-	   var msg = (type==1)?'该会员为商家会员，您确定要删除该商家信息吗？':'您确定要删除该会员信息吗?';
+	   var msg = (type==1)?'该会员为商家会员，您确定要删除该商家信息吗？':'您确定要删除该用户信息吗?';
 	   Plugins.confirm({title:'信息提示',content:msg,okText:'确定',cancelText:'取消',okFun:function(){
 		   Plugins.closeWindow();
 		   Plugins.waitTips({title:'信息提示',content:'正在操作，请稍后...'});
@@ -39,13 +39,13 @@
    <body class='wst-page'>
     <form method='post' action='{:U("Admin/Users/index")}'>
        <div class='wst-tbar'>
-       会员账号：<input type='text' id='loginName' name='loginName' class='form-control wst-ipt-10' value='{$loginName}'/>
+       用户账号：<input type='text' id='loginName' name='loginName' class='form-control wst-ipt-10' value='{$loginName}'/>
        手机号码：<input type='text' id='userPhone' name='userPhone' class='form-control wst-ipt-10' value='{$userPhone}'/>  
-       电子邮箱：<input type='text' id='userEmail' name='userEmail' class='form-control wst-ipt-10' value='{$userEmail}'/>  
-       会员类型：<select id='userType' name='userType' class="form-control wst-ipt-10">
+       电子邮箱：<input type='text' id='userEmail' name='userEmail' class='form-control wst-ipt-10' value='{$userEmail}'/>
+       用户类型：<select id='userType' name='userType' class="form-control wst-ipt-10">
            <option value='-1' <if condition=" $userType eq -1 ">selected</if>>全部</option>
-           <option value='0' <if condition=" $userType eq 0 ">selected</if>>普通会员</option>
-           <option value='1' <if condition=" $userType eq 1 ">selected</if>>店铺会员</option>
+           <option value='0' <if condition=" $userType eq 0 ">selected</if>>普通用户</option>
+           <option value='1' <if condition=" $userType eq 1 ">selected</if>>店铺用户</option>
        </select>  
   <button type="submit" class="btn btn-primary glyphicon glyphicon-search">查询</button> 
   <php>if(in_array('hylb_01',$WST_STAFF['grant'])){</php>

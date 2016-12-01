@@ -40,11 +40,11 @@
    <body class='wst-page'>
      <form method='post' action='{:U("Admin/Users/queryAccountByPage")}'>
        <div class='wst-tbar'>
-       会员账号：<input type='text' id='loginName' name='loginName' class='form-control wst-ipt-10' value='{$loginName}'/>
-       会员类型：<select id='userType' name='userType' class="form-control wst-ipt-10">
+       用户账号：<input type='text' id='loginName' name='loginName' class='form-control wst-ipt-10' value='{$loginName}'/>
+       用户类型：<select id='userType' name='userType' class="form-control wst-ipt-10">
            <option value='-1' <if condition=" $userType eq -1 ">selected</if>>全部</option>
-           <option value='0' <if condition=" $userType eq 0 ">selected</if>>普通会员</option>
-           <option value='1' <if condition=" $userType eq 1 ">selected</if>>商家会员</option>
+           <option value='0' <if condition=" $userType eq 0 ">selected</if>>普通用户</option>
+           <option value='1' <if condition=" $userType eq 1 ">selected</if>>商家用户</option>
        </select>  
          账号状态：<select id='userStatus' name='userStatus' class="form-control wst-ipt-10">
            <option value='-1' <if condition=" $userStatus eq -1 ">selected</if>>全部</option>

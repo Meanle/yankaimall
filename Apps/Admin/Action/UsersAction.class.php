@@ -29,6 +29,27 @@ class UsersAction extends BaseAction{
 		    $this->view->display('/users/add');
     	}    	
 	}
+
+    /**
+     * 跳到新增/编辑页面
+     */
+    public function toEditVip(){
+        $this->isLogin();
+        $m = D('Admin/Users');
+        $object = array();
+        if(I('id',0)>0){
+            $this->checkPrivelege('hylb_02');
+            $object = $m->get();
+            $this->assign('object',$object);
+            $this->view->display('users/editvip');
+        }else{
+            $this->checkPrivelege('hylb_01');
+            $object = $m->getModel();
+            $object['userStatus'] = 1;
+            $this->assign('object',$object);
+            $this->view->display('/users/add');
+        }
+    }
 	/**
 	 * 新增/修改操作
 	 */
@@ -128,6 +149,22 @@ class UsersAction extends BaseAction{
     	$this->assign('Page',$page);
         $this->display("/users/account_list");
 	}
+    /**
+     * 获取VIP账号分页列表
+     */
+    public function queryVipAccountByPage(){
+        $this->isLogin();
+        $m = D('Admin/Users');
+        $page = $m->queryVipByPage();
+        $pager = new \Think\Page($page['total'],$page['pageSize'],I());
+        $page['pager'] = $pager->show();
+        $this->assign('cardId',I('cardId'));
+        $this->assign('loginName',I('loginName'));
+        $this->assign('userPhone',I('userPhone'));
+        $this->assign('userEmail',I('userEmail'));
+        $this->assign('Page',$page);
+        $this->display("/users/viplist");
+    }
 	/**
 	 * 编辑账号状态
 	 */

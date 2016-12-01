@@ -91,6 +91,13 @@
         now += mydate.getDate() + "日";
         $(".last-time").html(now);
         $('#cardYear').val(year);
+        var phone = "{:session('WST_USER.userPhone')}";
+        if(phone){
+            $.alert('办会员卡需先绑定手机号码~', '亲', function () {
+                location.href = "{:U('Home/Users/phonelogins')}";
+            });
+        }
+
     });
     $(".vip-year .col-33").click(function () {
         var t = $(this).index() + 1;
@@ -127,7 +134,6 @@
             }
         }
     });
-
     function timeCalter() {
         var second = 60;
         var text = $('#phone-text').length, btn = $('#submit-form');
@@ -232,7 +238,6 @@
             alert("余额不足，请充值！");
             return;
         }
-
         if(phone.length == 0){
             location.href = "{:U('Home/Users/phonelogins')}";
             return;

@@ -134,6 +134,22 @@ class UsersModel extends BaseModel {
 		}
 		return $rs;
 	 }
+    /**
+     * 会员分页列表
+     */
+    public function queryVipByPage(){
+        $map = array();
+        $sql = "select vc.cardId,vc.cardPassword,vc.startTime,vc.cardYear,vc.endTime,vc.isActivated,vc.vipId,vc.userId,us.loginName,us.userPhone,us.userEmail from __PREFIX__users us 
+                right join __PREFIX__vip_card vc on vc.userId=us.userId where isActivated=1 and vc.userId<>0";
+        if(I('cardId')!='')$sql.=" and cardId LIKE '%".WSTAddslashes(I('cardId'))."%'";
+        if(I('loginName')!='')$sql.=" and loginName LIKE '%".WSTAddslashes(I('loginName'))."%'";
+        if(I('userPhone')!='')$sql.=" and userPhone LIKE '%".WSTAddslashes(I('userPhone'))."%'";
+        if(I('userEmail')!='')$sql.=" and userEmail LIKE '%".WSTAddslashes(I('userEmail'))."%'";
+        $sql.="  order by startTime desc";
+        $rs = $this->pageQuery($sql);
+        return $rs;
+    }
+
 	 /**
 	  * 获取列表
 	  */

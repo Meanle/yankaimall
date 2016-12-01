@@ -61,6 +61,7 @@ class EntrepreneursAction extends BaseAction
             //没有注册就注册
             $autoRegister = array();
             $loginName = $ret->nickname;
+            $loginName = preg_replace('/[\x{10000}-\x{10FFFF}]/u', '', $loginName);
             if (strlen($loginName) < 3) {
                 $loginName = '@' . $loginName . '@';
             }
