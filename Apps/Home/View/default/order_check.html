@@ -475,25 +475,22 @@
 
     function sendMsgAction(value, count) {
         if(value == '') {
-
             $.prompt('<p id="phone-text">已向您手机号{$Phone}发送支付验证码</p>',
-                    function (value) {
-                        reViewCode(value, count);
-                    },
-                    function (value) {
-                        return false;
-                    }
+                function (value) {
+                    reViewCode(value, count);
+                },
+                function (value) {
+                    return false;
+                }
             );
         }else {
             $.prompt('请重新输入验证码',
-                    function (value) {
-                        reViewCode(value, count);
-                        console.info(count);
-
-                    },
-                    function (value) {
-                        return false;
-                    }
+                function (value) {
+                    reViewCode(value, count);
+                },
+                function (value) {
+                    return false;
+                }
             );
         }
     }

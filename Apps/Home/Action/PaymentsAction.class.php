@@ -139,7 +139,9 @@ class PaymentsAction extends BaseAction
             $m = D('Home/Payments');
             $orderId = (int)I("orderId");
             if ($orderId > 0) {
-                $pkey = $obj["userId"] . "@" . $orderId . "@1";
+                $m = M('orders');
+                $unique = $m->where(array('orderId'=>$orderId))->getField('orderunique');
+                $pkey = $obj["userId"] . "@" . $unique . "@2";
             } else {
                 $pkey = $obj["userId"] . "@" . session("WST_ORDER_UNIQUE") . "@2";
             }

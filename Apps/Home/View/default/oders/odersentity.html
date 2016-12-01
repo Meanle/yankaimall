@@ -265,29 +265,48 @@
     });
 //去支付ajax请求
     function toPay(id){
-        var params = {};
-        params.orderId = id;
-        $.ajax({
-            url: '{:U("Home/Orders/checkOrderPay")}',
-            type: 'post',
-            data: params,
-            success: function (json) {
-                if(json.status==1){
-                   location.href= "{:U('Home/Payments/toPay')}"+'&orderId='+params.orderId;
-                }else if(json.status==-2){
-                    var rlist = json.rlist;
-                    var garr = new Array();
-                    for(var i=0;i<rlist.length;i++){
-                        garr.push(rlist[i].goodsName+rlist[i].goodsAttrName);
+
+        $.modal({
+            title:  '请选择支付方式',
+            text: '',
+            verticalButtons: true,
+            buttons: [
+                {
+                    text: '微信支付',
+                    onClick: function() {
+                        var params = {};
+                        params.orderId = id;
+                        $.ajax({
+                            url: '{:U("Home/Orders/checkOrderPay")}',
+                            type: 'post',
+                            data: params,
+                            success: function (json) {
+                                if(json.status==1){
+                                    location.href= "{:U('Home/Payments/toPay')}"+'&orderId='+params.orderId;
+                                }else if(json.status==-2){
+                                    var rlist = json.rlist;
+                                    var garr = new Array();
+                                    for(var i=0;i<rlist.length;i++){
+                                        garr.push(rlist[i].goodsName+rlist[i].goodsAttrName);
+                                    }
+                                    $.toast('订单中商品【'+garr.join("，")+'】库存不足，不能进行支付。', {icon: 5});
+                                }else{
+                                    $.toast('您的订单已支付!', {icon: 5});
+                                    setTimeout(function(){
+                                        location.href = '{:U("Home/Orders/queryDeliveryByPage")}';
+                                    },1500);
+                                }
+                            }
+                        });
                     }
-                    $.toast('订单中商品【'+garr.join("，")+'】库存不足，不能进行支付。', {icon: 5});
-                }else{
-                    $.toast('您的订单已支付!', {icon: 5});
-                    setTimeout(function(){
-                        location.href = '{:U("Home/Orders/queryDeliveryByPage")}';
-                    },1500);
+                },
+                {
+                    text: '余额支付',
+                    onClick: function() {
+                        toBalancePay();
+                    }
                 }
-            }
+            ]
         });
     }
 //  确认收货
@@ -481,5 +500,156 @@ function orderCancel(id,type){
     }else {
         $.toast('该订单无法取消...');
     }
+}
+
+function checkSms() {
+    $.confirm('会员请先进行短信验证,更加安全',
+        function () {
+            var phone = "{:session('WST_USER.userPhone')}";
+            timeCalter();
+            $.ajax({
+                url:'{:U("Home/Users/sms")}',
+                type:'post',
+                data:{
+                    tel:phone
+                },
+                success:function(json){
+                    console.log(json);
+                    if(json.code == 0){
+                        $.alert(json.msg);
+                        return;
+                    }
+                    sendMsgAction('', 0);
+                },
+                error:function(json){
+                    console.log(json);
+                }
+            });
+        },
+        function () {
+            return false;
+        }
+    );
+}
+
+//发起短信验证
+function sendMsgAction(value, count) {
+    if(value == '') {
+        $.prompt('<p id="phone-text">已向您手机号{$Phone}发送支付验证码</p>',
+            function (value) {
+                reViewCode(value, count);
+            },
+            function (value) {
+                return false;
+            }
+        );
+    }else {
+        $.prompt('请重新输入验证码',
+            function (value) {
+                reViewCode(value, count);
+            },
+            function (value) {
+                return false;
+            }
+        );
+    }
+}
+
+//验证码真伪
+function reViewCode(value, count) {
+    if (count < 2) {
+        $.ajax({
+            url: '{:U("Home/Users/true_sms")}',
+            type: 'post',
+            data: {
+                tel: "{$rs['userPhone']}",
+                code: value,
+                id: "{$rs['userId']}"
+            },
+            success: function (json) {
+                if (json.code == 1) {
+                    toBalancePay();
+                } else {
+                    $.alert(json.msg);
+                    count += 1;
+                    sendMsgAction(value, count);
+                }
+            },
+            error: function (json) {
+                alert(json.msg);
+            }
+        });
+    } else {
+        $.alert('您已输错超过三次，请重新获取验证码！');
+        return false;
+    }
+}
+
+//计时器
+function timeCalter() {
+    var second = 60;
+    var text = $('#phone-text').length, btn = $('#getVer');
+    setTimeout(function() {
+        var f = setInterval(function() {
+
+            if($('#no-more-1').length == 0) {
+                $('body').append('<input type="hidden" id="no-more-1" index="0"/>');
+            }
+            $('#no-more-1').attr('index', '0');
+
+            if(second >= 0) {
+                if(text == 0) {
+                    $('#phone-text').append('<span id="content"></span>');
+                    text = $('#phone-text').length;
+                }
+
+                if($('#no-more-1').attr('index') == '0' && $('#blPayWay').attr('checked') == 'checked') {
+                    btn.css('background', '#bbb')
+                            .removeAttr('onclick').html(second+' 秒后可重新发送');
+                }else {
+                    btn.css('background', '#0894ec').attr('onclick', 'submitOrder()').html('生成订单');
+                }
+                $('#content').html('('+second+'秒后可重新发送)');
+                $('#no-more-1').val(second);
+                second -= 1;
+
+            }else {
+                $('#phone-text').html('已向您手机号{$Phone}发送支付验证码');
+                btn.css({
+                    'background': '#0894ec',
+                }).attr('onclick', 'checkSms()').html('生成订单');
+                $('#no-more-1').attr('index', '999');
+                window.clearInterval(f);
+            }
+        }, 1000);
+    }, 10);
+}
+
+//余额支付
+function toBalancePay() {
+    var params = {};
+    params.orderId = id;
+    $.ajax({
+        url: '{:U("Home/Orders/checkOrderPay")}',
+        type: 'post',
+        data: params,
+        success: function (json) {
+            if(json.status==1){
+                location.href = "{:U('Home/Payments/directBalancePay')}"+'&orderId='+params.orderId;
+            }else if(json.status==-2){
+                var rlist = json.rlist;
+                var garr = new Array();
+                for(var i=0;i<rlist.length;i++){
+                    garr.push(rlist[i].goodsName+rlist[i].goodsAttrName);
+                }
+                $.toast('订单中商品【'+garr.join("，")+'】库存不足，不能进行支付。', {icon: 5});
+            }else{
+                $.toast('您的订单已支付!', {icon: 5});
+                setTimeout(function(){
+                    location.href = '{:U("Home/Orders/queryDeliveryByPage")}';
+                },1500);
+            }
+        }
+    });
 }
 </script>
