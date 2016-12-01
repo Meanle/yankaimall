@@ -11,15 +11,15 @@ namespace Home\Action;
 class IndexAction extends BaseAction
 {
 
-//    public function __construct(){
-//        parent::__construct();
-//        //初始化系统信息
-//        $USER = session('WST_USER');
-//        if (!$USER){
-//            session("local",$_SERVER["REQUEST_URI"]);
-//            redirect(U('Entrepreneurs/login_request'));
-//        }
-//	}
+/*    public function __construct(){
+        parent::__construct();
+        //初始化系统信息
+        $USER = session('WST_USER');
+        if (!$USER){
+            session("local",$_SERVER["REQUEST_URI"]);
+            redirect(U('Entrepreneurs/login_request'));
+        }
+	}*/
 
     /**
      * 获取首页信息
