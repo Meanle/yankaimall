@@ -103,7 +103,7 @@ class WelfareModel extends BaseModel
 
     function getCard()
     {
-        $sql = "SELECT * FROM wst_vip_card WHERE cardId > 'NO.000098884' AND cardId < 'NO.000098886' AND userId = '' ";
+        $sql = "SELECT * FROM wst_vip_card WHERE cardId > 'NO.000098288' AND cardId < 'NO.000098887' AND userId = '' ";
         $card = $this->queryRow($sql);
         return $card;
     }
