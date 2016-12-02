@@ -76,6 +76,16 @@ class UsersAction extends BaseAction{
     	$rs = $m->del();
     	$this->ajaxReturn($rs);
 	}
+    /**
+     * 删除会员卡操作
+     */
+    public function delvip(){
+        $this->isLogin();
+        $this->checkPrivelege('hylb_03');
+        $m = D('Admin/Users');
+        $rs = $m->delvip();
+        $this->ajaxReturn($rs);
+    }
    /**
 	 * 查看
 	 */

@@ -139,7 +139,7 @@ class UsersModel extends BaseModel {
      */
     public function queryVipByPage(){
         $map = array();
-        $sql = "select vc.cardId,vc.cardPassword,vc.startTime,vc.cardYear,vc.endTime,vc.isActivated,vc.vipId,vc.userId,us.loginName,us.userPhone,us.userEmail from __PREFIX__users us 
+        $sql = "select vc.vipId,vc.cardId,vc.cardPassword,vc.startTime,vc.cardYear,vc.endTime,vc.isActivated,vc.vipId,vc.userId,us.loginName,us.userPhone,us.userEmail from __PREFIX__users us 
                 right join __PREFIX__vip_card vc on vc.userId=us.userId where isActivated=1 and vc.userId<>0";
         if(I('cardId')!='')$sql.=" and cardId LIKE '%".WSTAddslashes(I('cardId'))."%'";
         if(I('loginName')!='')$sql.=" and loginName LIKE '%".WSTAddslashes(I('loginName'))."%'";
@@ -186,6 +186,23 @@ class UsersModel extends BaseModel {
 		
 		return $rd;
 	 }
+
+    /**
+     * 删除vip
+     */
+    public function delvip(){
+        $rd = array('status'=>-1);
+        $id = (int)I('id');
+        $m = M('users');
+        //获取用户类型
+        $userType = $m->where('userId='.$id)->getField('userType',1);
+        $sqls = "update __PREFIX__vip_card set userId=0,startTime=0,cardYear=0,endTime=0,isActivated=0 where vipId=".$id;
+        $rs = $this->execute($sqls);
+        if($rs){
+            $rd['status']= 1;
+        }
+        return $rd;
+    }
 	 /**
 	  * 查询登录关键字
 	  */

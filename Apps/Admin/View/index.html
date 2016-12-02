@@ -256,7 +256,7 @@
                         </li>
                         <php>}</php>
                         <php>if(in_array('wzgl_00',$WST_STAFF['grant'])){</php>
-                        <li class="treeview">
+<!--                        <li class="treeview">
                             <a href="pages/mailbox.html">
                                 <span> 文章管理</span>
                             </a>
@@ -271,7 +271,7 @@
 					           <li><a href="{:U('Admin/Articles/toEdit')}" target='pageContent' >添加文章</a></li>
 					           <php>}</php>
                             </ul>
-                        </li>
+                        </li>-->
                         <php>}</php>
                         <php>if(in_array('hygl_00',$WST_STAFF['grant'])){</php>
                         <li class="treeview">
@@ -282,7 +282,6 @@
                                 <php>if(in_array('hydj_00',$WST_STAFF['grant'])){</php>
                                 <li><a href="{:U('Admin/Users/queryVipAccountByPage')}" target='pageContent' >会员管理</a></li>
                                 <php>}</php>
-
                                 <php>if(in_array('hydj_00',$WST_STAFF['grant'])){</php>
                                 <li><a href="{:U('Admin/UserRanks/index')}" target='pageContent' >用户等级</a></li>
                                 <php>}</php>

@@ -22,9 +22,9 @@
         Plugins.confirm({title:'信息提示',content:msg,okText:'确定',cancelText:'取消',okFun:function(){
             Plugins.closeWindow();
             Plugins.waitTips({title:'信息提示',content:'正在操作，请稍后...'});
-            $.post("{:U('Admin/Users/del')}",{id:id},function(data,textStatus){
-                var json = WST.toJson(data);
-                if(json.status=='1'){
+            $.post("{:U('Admin/Users/delvip')}",{id:id},function(data,textStatus){
+                console.info(data);
+                if(data.status=='1'){
                     Plugins.setWaitTipsMsg({content:'操作成功',timeout:1000,callback:function(){
                         location.reload();
                     }});
@@ -96,7 +96,7 @@
                     <a class="btn btn-default glyphicon glyphicon-pencil" href="{:U('Admin/Users/toEditVip',array('id'=>$vo['userId']))}">修改</a>&nbsp;
                     <php>}</php>
                     <php>if(in_array('hylb_03',$WST_STAFF['grant'])){</php>
-                    <button type="button" class="btn btn-default glyphicon glyphicon-trash" onclick="javascript:del({$vo['userId']},{$vo['userType']})">刪除</buttona>
+                    <button type="button" class="btn btn-default glyphicon glyphicon-trash" onclick="javascript:del({$vo['vipId']},1)">刪除</buttona>
                         <php>}</php>
                 </td>
             </tr>
