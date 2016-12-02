@@ -46,6 +46,7 @@ class WelfareModel extends BaseModel
             ))->save(array(
                 'userId' => session('WST_USER.userId'),
                 'cardYear' => 1,
+                'startTime' => date('Y-m-d H:i:s'),
                 'endTime' => date('Y-m-d H:i:s', strtotime("+1 year")),
                 'isActivated' => 1,
             ));
@@ -76,6 +77,7 @@ class WelfareModel extends BaseModel
             'cardId' => $data['cardId'],
             'cardPassword' => $data['cardPassword'],
             'cardYear' => $data['cardYear'],
+            'startTime' => date('Y-m-d H:i:s'),
             'endTime' => date('Y-m-d H:i:s', strtotime("+" . $data['cardYear'] . " year")),
             'isActivated' => 1,
         ));

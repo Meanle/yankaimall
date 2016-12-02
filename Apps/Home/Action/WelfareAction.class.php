@@ -210,8 +210,6 @@ class WelfareAction extends BaseAction
                 $pkeys = explode("@", $pkey);
                 $userId = $pkeys [0];
                 $cardYear = $pkeys [1];
-
-
                 //分配一张会员卡给她
                 $m = D('Home/Welfare');
                 $card = $m->getCard();

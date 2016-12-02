@@ -686,6 +686,7 @@ class UsersAction extends BaseAction
     public function checkingVip()
     {
         $this->meta_title = '会员验证';
+        $this->assign("umark","checkingVip");
         $this->display("default/shops/checkvip");
     }
     /**
