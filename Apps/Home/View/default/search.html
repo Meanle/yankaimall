@@ -24,7 +24,7 @@
     jQuery.noConflict();
 </script>
 <div class="bar bar-header-secondary">
-    <form action="{:U('Home/goods/searchGoodsList','searchType=1')}" method="post" enctype="multipart/form-data">
+    <form name="searchForm" action="" onSubmit="searchCheck();" method="post" enctype="multipart/form-data">
         <div class="searchbar">
             <a class="searchbar-cancel">取消</a>
             <div class="search-input">
@@ -34,3 +34,9 @@
         </div>
     </form>
 </div>
+<script language="javascript">
+    function searchCheck(){
+        var keywords = $("input[name='keyWords']").val();
+            document.searchForm.action="{:U('Home/goods/searchGoodsList','searchType=1&keyWords=')}" + keywords;
+    }
+</script>

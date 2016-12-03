@@ -8,7 +8,7 @@
 <style>
 
 
-</style>   
+</style>
 <script>
 var ablumInit = false;
 $(function () {
@@ -29,7 +29,7 @@ $(function () {
 	   $("#goodsUnit").formValidator({onShow:"",onFocus:"",onCorrect:"输入正确"}).inputValidator({min:1,max:50,onError:"请输入商品单位"});
 	   $("#goodsCatId3").formValidator({onFocus:"请选择商城分类"}).inputValidator({min:1,onError: "请选择完整商城分类"});
 	   $("#shopCatId2").formValidator({onFocus:"请选择本店分类"}).inputValidator({min:1,onError: "请选择完整本店分类"});
-	   
+
 	   KindEditor.ready(function(K) {
 			editor1 = K.create('textarea[name="goodsDesc"]', {
 				height:'250px',
@@ -105,7 +105,7 @@ function imglimouseover(obj){
 }
 
 function imglimouseout(obj){
-	
+
 	$(obj).find('.setdel').removeClass('trconb');
 	$(obj).find('.setdel').css({"display":"none"});
 }
@@ -127,7 +127,7 @@ function delImg(obj){
     $(obj).parent().remove();
 }
 </script>
-       <div class="wst-body"> 
+       <div class="wst-body">
        <div class='wst-page-header'>卖家中心 > <if condition="$object['goodsId'] ==0 ">新增<else/>编辑</if>商品资料</div>
        <div class='wst-page-content'>
        <div id='tab' class="wst-tab-box">
@@ -137,13 +137,13 @@ function delImg(obj){
 	        <li>商品相册</li>
 	    </ul>
     	<div class="wst-tab-content" style='width:99%;margin-bottom: 10px;'>
-    	 
-    	
+
+
     	<!-- 商品基础信息 -->
     	<div class='wst-tab-item' style="position: relative;style='display:none'">
 	       <form name="myform" method="post" id="myform" autocomplete="off">
 	        <input type='hidden' id='id' class='wstipt' value='{$object.goodsId}'/>
-	      
+
 	        <input type='hidden' id='goodsThumbs' value='{$object.goodsThums}'/>
 	        <table class="wst-form" >
 	           <tr>
@@ -179,7 +179,7 @@ function delImg(obj){
 	             	<else/>
 	             		<input type='text' id='shopPrice' name='shopPrice' class="wstipt wst-ipt" value='{$object.shopPrice}' onkeypress="return WST.isNumberdoteKey(event)" onkeyup="javascript:WST.isChinese(this,1)" maxLength='10'/>
 	             	</if>
-	             	
+
 	             </td>
 	           </tr>
 				<tr>
@@ -307,14 +307,14 @@ function delImg(obj){
 	             <td colspan='3' style='padding-left:320px;'>
 	                 <button class='wst-btn-query' type="submit">保&nbsp;存</button>
 	                 <if condition="$umark !='toEdit' ">
-	                 <button class='wst-btn-query' type="button" onclick='javascript:location.href="{:U('Home/Goods/'.$umark)}"'>返&nbsp;回</button>
+	                 <button class='wst-btn-query' type="button" onclick='javascript:location.href=window.history.back()'>返&nbsp;回</button>
 	                 </if>
 	             </td>
 	           </tr>
 	        </table>
 	        </form>
 	      </div>
-	     
+
 	      <div class='wst-tab-item'>
 	      商品类型：<select id='attrCatId' class='wstipt' onchange='javascript:getAttrList(this.value)'>
 	         <option value='0'>请选择</option>
@@ -380,15 +380,15 @@ function delImg(obj){
 			<div style='width:100%;text-align:center;'>
 			<button class='wst-btn-query' type="button" onclick='javascript:$("#myform").submit()'>保&nbsp;存</button>
 	        <if condition="$umark !='toEdit' ">
-	             <button class='wst-btn-query' type="button" onclick='javascript:location.href="__ROOT__/index.php/Home/Goods/{$umark}"'>返&nbsp;回</button>
+	             <button class='wst-btn-query' type="button" onclick='javascript:location.href=window.history.back()'>返&nbsp;回</button>
 	        </if>
 			</div>
 	      </div>
 	      </div>
-	      
+
 	      <!-- 相册 -->
 	      <div class='wst-tab-item' style='display:none'>
-	      <!-- 
+	      <!--
 	       <div><input type='text' id='galleryImgUpload'/></div>
 	        -->
 	       <div id='galleryImgs' class='wst-gallery-imgs'>
@@ -430,12 +430,12 @@ function delImg(obj){
                                     </div>
                                  <ul class="filelist">
                                  	<volist name="object['gallery']" id="vo" key='i'>
-                                 	
+
                                  		<li style="border: 1px solid rgb(59, 114, 165)" order="100" onmouseover="imglimouseover(this)" onmouseout="imglimouseout(this)">
 	                                 		<input type="hidden" class="gallery-img" iv="{$vo.goodsThumbs}" v="{$vo.goodsImg}" />
 	                                 		<img width="152" height="152" class='lazyImg' src="__ROOT__/{$vo.goodsThumbs}"><span class="setdef" style="display:none">默认</span><span class="setdel" onclick="imglidel(this)" style="display:none">删除</span>
                                  		</li>
-                                 	
+
 							       	</volist>
                                  </ul>
                             </div>
@@ -457,12 +457,12 @@ function delImg(obj){
 	       </div>
 	       <div style='clear:both;'></div>
 	      </div>
-	      
+
        </div>
        </div>
-       
+
        </div>
        <div style='clear:both;'></div>
        </div>
-      
-</block>  
+
+</block>

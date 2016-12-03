@@ -327,7 +327,8 @@ function editGoods(menuId,p){
 					if((menuId=='toEditGoods')){
 						location.href= Think.U('Home/Goods/toEdit','umark=toEditGoods');
 					}else{
-						location.href=Think.U('Home/Goods/'+menuId,'p='+p);
+						window.location.href = document.referrer;//返回上一页并刷新
+						// location.href=Think.U('Home/Goods/'+menuId,'p='+p);
 					}
 				});
 			}else if(json.status=='-2'){

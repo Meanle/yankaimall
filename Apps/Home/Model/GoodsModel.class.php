@@ -1085,7 +1085,7 @@ class GoodsModel extends BaseModel {
         $goodsModel = M('goods');
         $importNum = 0;
         //循环读取每个单元格的数据
-        for ($row = 3; $row <= $rows; $row++){//行数是以第3行开始
+        for ($row = 2; $row <= $rows; $row++){//行数是以第3行开始
             $goods = array();
             $goods['shopId'] = $shopId;
             $goods['goodsSn'] = trim($sheet->getCell("A".$row)->getValue());
@@ -1098,11 +1098,20 @@ class GoodsModel extends BaseModel {
             $goods['goodsUnit'] = trim($sheet->getCell("G".$row)->getValue());
             $goods['goodsSpec'] = trim($sheet->getCell("H".$row)->getValue());
             $goods['goodsKeywords'] = trim($sheet->getCell("I".$row)->getValue());
-            $goods['isSale'] = 0;
             $goods['isRecomm'] = (trim($sheet->getCell("J".$row)->getValue())!='')?1:0;
             $goods['isBest'] = (trim($sheet->getCell("K".$row)->getValue())!='')?1:0;
             $goods['isNew'] = (trim($sheet->getCell("L".$row)->getValue())!='')?1:0;
             $goods['isHot'] = (trim($sheet->getCell("M".$row)->getValue())!='')?1:0;
+//            $sqls = "select g.goodsSn from __PREFIX__goods g";
+//            $gooslist = $this->query($sqls);
+
+//            for($i=0;$i<count($goods);$i++){
+//                for($j=0;$j<count($gooslist);$j++){
+//                    if ($goods[$i]["goodsSn"]==$gooslist[$j]["goodsSn"]){
+//                        $goods
+//                    }
+//                }
+//            }
             //查询商城分类
             $goodsCat = trim($sheet->getCell("N".$row)->getValue());
             if($goodsCatMap[$goodsCat]==''){
@@ -1119,7 +1128,7 @@ class GoodsModel extends BaseModel {
             $goods['goodsCatId2'] = (int)$goodsCatMap[$goodsCat]['catId2'];
             $goods['goodsCatId3'] = (int)$goodsCatMap[$goodsCat]['catId3'];
             //查询商城分类
-            $shopGoodsCat = (int)trim($sheet->getCell("O".$row)->getValue());
+            $shopGoodsCat = trim($sheet->getCell("O".$row)->getValue());
             if($shopGoodsCatMap[$shopGoodsCat]==''){
 	            $sql = "select sc1.catId catId1,sc2.catId catId2,sc2.catName
 	                    from __PREFIX__shops_cats sc2, __PREFIX__shops_cats sc1
@@ -1143,14 +1152,31 @@ class GoodsModel extends BaseModel {
             }
             $goods['brandId'] = (int)$brandMap[$brand]['brandId'];
             $goods['goodsDesc'] = trim($sheet->getCell("Q".$row)->getValue());
-            $goods['goodsStatus'] = 0;
             $goods['goodsFlag'] = 1;
             $goods["saleTime"] = date('Y-m-d H:i:s');
             $goods['createTime'] = date('Y-m-d H:i:s');
             $readData[] = $goods;
             $importNum++;
         }
-        if(count($readData)>0)$goodsModel->addAll($readData);
-        return array('status'=>1,'importNum'=>$importNum);
+        $addnum = 0;
+        $savenum = 0;
+        $re_data = array();
+        $re_string = '';
+        for ($i = 0; $i<count($readData); $i++){
+            if($goodsModel->where(array('goodsSn' => $readData[$i]['goodsSn'])) ->find()){
+                $goodsModel -> where(array('goodsSn' => $readData[$i]['goodsSn'])) -> save($readData[$i]);
+                $savenum ++;
+                $re_data[] = $readData[$i];
+                $re_string .= ','.$readData[$i]['goodsSn'];
+                continue;
+            }
+            $readData[$i]['isSale'] = 0;
+            $readData[$i]['goodsStatus'] = 0;
+            $goodsModel -> add($readData[$i]);
+            $addnum ++;
+        }
+
+        //if(count($readData)>0)$goodsModel->addAll($readData);
+        return array('status'=>1,'importNum'=>$importNum,'addnum' => $addnum,'savenum' => $savenum, 're_data' => $re_data,"re_string" => $re_string);
 	}
 }

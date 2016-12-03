@@ -92,7 +92,7 @@
         $(".last-time").html(now);
         $('#cardYear').val(year);
         var phone = "{:session('WST_USER.userPhone')}";
-        if(phone){
+        if(!phone){
             $.alert('办会员卡需先绑定手机号码~', '亲', function () {
                 location.href = "{:U('Home/Users/phonelogins')}";
             });
