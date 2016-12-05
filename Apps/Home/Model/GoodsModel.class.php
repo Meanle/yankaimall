@@ -1102,16 +1102,6 @@ class GoodsModel extends BaseModel {
             $goods['isBest'] = (trim($sheet->getCell("K".$row)->getValue())!='')?1:0;
             $goods['isNew'] = (trim($sheet->getCell("L".$row)->getValue())!='')?1:0;
             $goods['isHot'] = (trim($sheet->getCell("M".$row)->getValue())!='')?1:0;
-//            $sqls = "select g.goodsSn from __PREFIX__goods g";
-//            $gooslist = $this->query($sqls);
-
-//            for($i=0;$i<count($goods);$i++){
-//                for($j=0;$j<count($gooslist);$j++){
-//                    if ($goods[$i]["goodsSn"]==$gooslist[$j]["goodsSn"]){
-//                        $goods
-//                    }
-//                }
-//            }
             //查询商城分类
             $goodsCat = trim($sheet->getCell("N".$row)->getValue());
             if($goodsCatMap[$goodsCat]==''){
@@ -1127,7 +1117,7 @@ class GoodsModel extends BaseModel {
             $goods['goodsCatId1'] = (int)$goodsCatMap[$goodsCat]['catId1'];
             $goods['goodsCatId2'] = (int)$goodsCatMap[$goodsCat]['catId2'];
             $goods['goodsCatId3'] = (int)$goodsCatMap[$goodsCat]['catId3'];
-            //查询商城分类
+            //查询店铺分类
             $shopGoodsCat = trim($sheet->getCell("O".$row)->getValue());
             if($shopGoodsCatMap[$shopGoodsCat]==''){
 	            $sql = "select sc1.catId catId1,sc2.catId catId2,sc2.catName

@@ -590,20 +590,20 @@ class GoodsAction extends BaseAction
             }else{
                 $page[$i]['isRecomm'] = "否";
             }
-            if($page[$i]['isHot'] == 1){
-                $page[$i]['isHot'] = "是";
+            if($page[$i]['isbest'] == 1){
+                $page[$i]['isbest'] = "是";
             }else{
-                $page[$i]['isHot'] = "否";
-            }
-            if($page[$i]['isBest'] == 1){
-                $page[$i]['isBest'] = "是";
-            }else{
-                $page[$i]['isBest'] = "否";
+                $page[$i]['isbest'] = "否";
             }
             if($page[$i]['isNew'] == 1){
                 $page[$i]['isNew'] = "是";
             }else{
                 $page[$i]['isNew'] = "否";
+            }
+            if($page[$i]['isHot'] == 1){
+                $page[$i]['isHot'] = "是";
+            }else{
+                $page[$i]['isHot'] = "否";
             }
         }
         $xlsName  = "出售中的商品";
@@ -645,20 +645,20 @@ class GoodsAction extends BaseAction
             }else{
                 $page[$i]['isRecomm'] = "否";
             }
-            if($page[$i]['isHot'] == 1){
-                $page[$i]['isHot'] = "是";
+            if($page[$i]['isbest'] == 1){
+                $page[$i]['isbest'] = "是";
             }else{
-                $page[$i]['isHot'] = "否";
-            }
-            if($page[$i]['isBest'] == 1){
-                $page[$i]['isBest'] = "是";
-            }else{
-                $page[$i]['isBest'] = "否";
+                $page[$i]['isbest'] = "否";
             }
             if($page[$i]['isNew'] == 1){
                 $page[$i]['isNew'] = "是";
             }else{
                 $page[$i]['isNew'] = "否";
+            }
+            if($page[$i]['isHot'] == 1){
+                $page[$i]['isHot'] = "是";
+            }else{
+                $page[$i]['isHot'] = "否";
             }
         }
         $xlsName  = "仓库中的商品";
