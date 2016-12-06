@@ -631,7 +631,7 @@ class GoodsAction extends BaseAction
         $this->exportExcel($xlsName,$xlsCell,$xlsData);
 //        $this->ajaxReturn($page);
     }
-//查询仓库中的商品不分类并导出excel
+//导出仓库中的商品excel
     public function queryUnSaleByPageOutput()
     {
         $this->isShopLogin();
