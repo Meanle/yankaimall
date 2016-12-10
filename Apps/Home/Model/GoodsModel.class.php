@@ -1066,13 +1066,13 @@ class GoodsModel extends BaseModel {
 		return  $goods;
 	
 	}
-	
-	/**
-	 * 上传商品数据
-	 */
-	public function importGoods($data){
-		$objReader = WSTReadExcel($data['file']['savepath'].$data['file']['savename']);
-        $objReader->setActiveSheetIndex(0); 
+
+    /**
+     * 上传商品数据
+     */
+    public function importGoods($data){
+        $objReader = WSTReadExcel($data['file']['savepath'].$data['file']['savename']);
+        $objReader->setActiveSheetIndex(0);
         $sheet = $objReader->getActiveSheet();
         $rows = $sheet->getHighestRow();
         $cells = $sheet->getHighestColumn();
@@ -1093,55 +1093,59 @@ class GoodsModel extends BaseModel {
             $goods['goodsName'] = trim($sheet->getCell("B".$row)->getValue());
             $goods['marketPrice'] = trim($sheet->getCell("C".$row)->getValue());
             $goods['shopPrice'] = trim($sheet->getCell("D".$row)->getValue());
-            $goods['goodsStock'] = trim($sheet->getCell("E".$row)->getValue());
-            $goods['saleCount'] = trim($sheet->getCell("F".$row)->getValue());
-            $goods['goodsUnit'] = trim($sheet->getCell("G".$row)->getValue());
-            $goods['goodsSpec'] = trim($sheet->getCell("H".$row)->getValue());
+            $goods['activePrice'] = trim($sheet->getCell("E".$row)->getValue());
+            $goods['goodsStock'] = trim($sheet->getCell("F".$row)->getValue());
+            $goods['saleCount'] = trim($sheet->getCell("G".$row)->getValue());
+            $goods['goodsUnit'] = trim($sheet->getCell("H".$row)->getValue());
             $goods['goodsKeywords'] = trim($sheet->getCell("I".$row)->getValue());
-            $goods['isRecomm'] = (trim($sheet->getCell("J".$row)->getValue())!='')?1:0;
-            $goods['isBest'] = (trim($sheet->getCell("K".$row)->getValue())!='')?1:0;
-            $goods['isNew'] = (trim($sheet->getCell("L".$row)->getValue())!='')?1:0;
-            $goods['isHot'] = (trim($sheet->getCell("M".$row)->getValue())!='')?1:0;
+            $goods['goodsSpec'] = trim($sheet->getCell("J".$row)->getValue());
+            $goods['goodsCountry'] = trim($sheet->getCell("K".$row)->getValue());
+            $goods['goodsCountryImg'] = trim($sheet->getCell("L".$row)->getValue());
+            $goods['isRecomm'] = (trim($sheet->getCell("M".$row)->getValue()) =='是')?1:0;
+            $goods['isBest'] = (trim($sheet->getCell("N".$row)->getValue()) =='是')?1:0;
+            $goods['isNew'] = (trim($sheet->getCell("O".$row)->getValue()) =='是')?1:0;
+            $goods['isHot'] = (trim($sheet->getCell("P".$row)->getValue()) =='是')?1:0;
+
             //查询商城分类
-            $goodsCat = trim($sheet->getCell("N".$row)->getValue());
+            $goodsCat = trim($sheet->getCell("Q".$row)->getValue());
             if($goodsCatMap[$goodsCat]==''){
-	            $sql = "select gc1.catId catId1,gc2.catId catId2,gc3.catId catId3,gc3.catName 
+                $sql = "select gc1.catId catId1,gc2.catId catId2,gc3.catId catId3,gc3.catName 
 	                    from __PREFIX__goods_cats gc3, __PREFIX__goods_cats gc2,__PREFIX__goods_cats gc1
-	                    where gc3.parentId=gc2.catId and gc2.parentId=gc1.catId and gc3.isShow=1 and gc2.isShow=1 and gc1.isShow=1
+	                    where gc3.parentId=gc2.catId and gc2.parentId=gc1.catId
 	                    and gc3.catFlag=1 and gc2.catFlag=1 and gc1.catFlag=1 and gc3.catName='".$goodsCat."'";
-	            $trs = $this->queryRow($sql);
-	            if(!empty($trs)){
-	            	$goodsCatMap[$trs['catName']] = $trs;
-	            }
+                $trs = $this->queryRow($sql);
+                if(!empty($trs)){
+                    $goodsCatMap[$trs['catName']] = $trs;
+                }
             }
             $goods['goodsCatId1'] = (int)$goodsCatMap[$goodsCat]['catId1'];
             $goods['goodsCatId2'] = (int)$goodsCatMap[$goodsCat]['catId2'];
             $goods['goodsCatId3'] = (int)$goodsCatMap[$goodsCat]['catId3'];
-            //查询店铺分类
-            $shopGoodsCat = trim($sheet->getCell("O".$row)->getValue());
+            //查询商品店铺分类
+            $shopGoodsCat = trim($sheet->getCell("R".$row)->getValue());
             if($shopGoodsCatMap[$shopGoodsCat]==''){
-	            $sql = "select sc1.catId catId1,sc2.catId catId2,sc2.catName
+                $sql = "select sc1.catId catId1,sc2.catId catId2,sc2.catName
 	                    from __PREFIX__shops_cats sc2, __PREFIX__shops_cats sc1
 	                    where sc2.parentId=sc1.catId
 	                    and sc2.catFlag=1 and sc1.catFlag=1 and sc1.shopId=".$shopId." and sc2.catName='".$shopGoodsCat."'";
-	            $trs = $this->queryRow($sql);
-	            if(!empty($trs)){
-	            	$shopGoodsCatMap[$trs['catName']] = $trs;
-	            }
+                $trs = $this->queryRow($sql);
+                if(!empty($trs)){
+                    $shopGoodsCatMap[$trs['catName']] = $trs;
+                }
             }
             $goods['shopCatId1'] = (int)$shopGoodsCatMap[$shopGoodsCat]['catId1'];
             $goods['shopCatId2'] = (int)$shopGoodsCatMap[$shopGoodsCat]['catId2'];
             //查询品牌
-            $brand = WSTAddslashes(trim($sheet->getCell("P".$row)->getValue()));
+            $brand = WSTAddslashes(trim($sheet->getCell("S".$row)->getValue()));
             if($brand && $brandMap[$brand]==''){
-            	$sql="select brandId,brandName from __PREFIX__brands where brandName='".$brand."' and brandFlag=1";
-            	$trs = $this->queryRow($sql);
-	            if(!empty($trs)){
-	            	$brandMap[$trs['brandName']] = $trs;
-	            }
+                $sql="select brandId,brandName from __PREFIX__brands where brandName='".$brand."' and brandFlag=1";
+                $trs = $this->queryRow($sql);
+                if(!empty($trs)){
+                    $brandMap[$trs['brandName']] = $trs;
+                }
             }
             $goods['brandId'] = (int)$brandMap[$brand]['brandId'];
-            $goods['goodsDesc'] = trim($sheet->getCell("Q".$row)->getValue());
+            $goods['goodsDesc'] = trim($sheet->getCell("T".$row)->getValue());
             $goods['goodsFlag'] = 1;
             $goods["saleTime"] = date('Y-m-d H:i:s');
             $goods['createTime'] = date('Y-m-d H:i:s');
@@ -1168,5 +1172,5 @@ class GoodsModel extends BaseModel {
 
         //if(count($readData)>0)$goodsModel->addAll($readData);
         return array('status'=>1,'importNum'=>$importNum,'addnum' => $addnum,'savenum' => $savenum, 're_data' => $re_data,"re_string" => $re_string);
-	}
+    }
 }

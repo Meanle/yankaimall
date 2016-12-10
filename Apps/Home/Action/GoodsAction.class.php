@@ -441,12 +441,9 @@ class GoodsAction extends BaseAction
             if (strlen($rs['userPhone']) == 11) {
                 $this->assign('Phone', substr($rs['userPhone'], 0, 3) . '****' . substr($rs['userPhone'], 7, 10));
             }
-
             $this->display('default/detail');
-
-
         } else {
-            $this->error('$goodsDetails');
+            $this->error('分类信息未完善无法查看详情。');
         }
 
     }
@@ -612,11 +609,14 @@ class GoodsAction extends BaseAction
             array('goodsName','商品名称'),
             array('marketPrice','市场价格'),
             array('shopPrice','店铺价格'),
+            array('activePrice','活动价格'),
             array('goodsStock','库存'),
             array('saleCount','销量'),
             array('goodsUnit','单位'),
             array('goodsKeywords','商品SEO关键字'),
             array('goodsSpec','商品信息'),
+            array('goodsCountry','国家来源'),
+            array('	goodsCountryImg','国家图标地址'),
             array('isRecomm','精选促销'),
             array('isHot','今日疯抢'),
             array('isBest','超值热卖'),
@@ -625,7 +625,6 @@ class GoodsAction extends BaseAction
             array('shopCatName','本店分类'),
             array('brandId','品牌'),
             array('goodsDesc','商品描述'),
-
         );
         $xlsData  = $page;
         $this->exportExcel($xlsName,$xlsCell,$xlsData);
@@ -667,11 +666,14 @@ class GoodsAction extends BaseAction
             array('goodsName','商品名称'),
             array('marketPrice','市场价格'),
             array('shopPrice','店铺价格'),
+            array('activePrice','活动价格'),
             array('goodsStock','库存'),
             array('saleCount','销量'),
             array('goodsUnit','单位'),
             array('goodsKeywords','商品SEO关键字'),
             array('goodsSpec','商品信息'),
+            array('goodsCountry','国家来源'),
+            array('	goodsCountryImg','国家图标地址'),
             array('isRecomm','精选促销'),
             array('isHot','今日疯抢'),
             array('isBest','超值热卖'),
@@ -680,7 +682,6 @@ class GoodsAction extends BaseAction
             array('shopCatName','本店分类'),
             array('brandId','品牌'),
             array('goodsDesc','商品描述'),
-
         );
         $xlsData  = $page;
         $this->exportExcel($xlsName,$xlsCell,$xlsData);

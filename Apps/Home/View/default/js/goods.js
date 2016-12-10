@@ -120,6 +120,36 @@ function addCart(goodsId,type,goodsThums,userPhone){
 	}
 	// getnewList();
 }
+
+/**
+ * 加入购物车
+ */
+function addCarts(goodsId,type,goodsThums,userPhone){
+	//    检测用户是否绑定手机，若没有跳去绑定手机页面
+	if(userPhone.length == 0){
+		alert('请先绑定手机');
+		location.href =  Think.U('Home/Users/phonelogins');
+	}else {
+		var params = {};
+		params.goodsId = goodsId;
+		// params.gcount = parseInt($("#buy-num").val(),10);
+		params.rnd = Math.random();
+		params.goodsAttrId = $('#shopGoodsPrice_'+goodsId).attr('dataId');
+		$("#flyItem img").attr("src",WST.DOMAIN  +"/"+ goodsThums);
+		jQuery.post(Think.U('Home/Cart/addToCartAjax') ,params,function(data) {
+			var json = WST.toJson(data);
+			if(json.status==1){
+				if(type==1){
+					layer.msg("添加成功!");
+					gerGnum();
+					// location.href= Think.U('Home/Cart/getCartInfo');
+				}
+			}else{
+				layer.msg(json.msg);
+			}
+		});
+	}
+}
 function getnewList(){
 	jQuery.post(Think.U('Home/Cart/getCartInfo') ,{"axm":1},function(data) {
 		var cart = WST.toJson(data);

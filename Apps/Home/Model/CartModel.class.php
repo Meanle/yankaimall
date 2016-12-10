@@ -122,6 +122,7 @@ class CartModel extends BaseModel
                         $goods['goodsStock'] = $priceAttrs['attrStock'];
                     }
                 }
+                $forRatePrice = $goods ['shopPrice'];
                 //如果new，recommen，best，hot=0
                 if($goods ['isNew']==1 || $goods ['isBest']==1 || $goods['isHot']==1 || $goods['isRecomm']==1) {
                     $goods ['shopPrice'] = $goods ['activePrice'];
@@ -139,7 +140,8 @@ class CartModel extends BaseModel
                 if ($goods["ischk"] == 1) {
                     if(isValidVip() == 1){
                         if($goods['rate'] != 0) {
-                            $rateMoney += $goods['rate'] * $goods['cnt'] * $goods["shopPrice"];
+                            $rateMoney += $goods['rate'] * $goods['cnt'] * $forRatePrice;
+//                            $rateMoney += $goods['rate'] * $goods['cnt'] * $goods["shopPrice"];
                             $gtotalMoney += $goods["cnt"] * $goods["vipPrice"];
                             $totalMoney = $gtotalMoney + round($rateMoney, 2);
                             $goods['deliveryMoney'] = round($goods["shopPrice"] * $goods['rate'], 2);
@@ -149,7 +151,8 @@ class CartModel extends BaseModel
                         }
                     }else{
                         if($goods['rate'] != 0) {
-                            $rateMoney += $goods['rate'] * $goods['cnt'] * $goods["shopPrice"];
+                            $rateMoney += $goods['rate'] * $goods['cnt'] * $forRatePrice;
+//                            $rateMoney += $goods['rate'] * $goods['cnt'] * $goods["shopPrice"];
                             $gtotalMoney += $goods["cnt"] * $goods["shopPrice"];
                             $totalMoney = $gtotalMoney + round($rateMoney, 2);
                             $goods['deliveryMoney'] = round($goods["shopPrice"] * $goods['rate'], 2);

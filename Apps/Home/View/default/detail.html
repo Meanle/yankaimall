@@ -44,7 +44,7 @@
             </div>
             <div class='content-block goods-card'>
                 <h3>
-                    <notempty name="goodsDetails['goodsCountry']"><img style="height: 15px;width: 20px;margin-right:.2rem;vertical-align: middle;" src="__ROOT__/{$goodsDetails['goodsCountryImg']}"></notempty>
+                    <notempty name="goodsDetails['goodsCountry']"><img style="height: 15px;width: 20px;margin-right:.2rem;vertical-align: middle;" src="{$goodsDetails['goodsCountryImg']}"></notempty>
                     {$goodsDetails["goodsName"]}
                 </h3>
                 <p style="font-size: .6rem"><span style="font-size: .9rem;margin:0 .35rem 0 0;color: #3c3c3;" class="iconfont">&#xe665;</span>{$goodsDetails["goodsSn"]}</p>
@@ -149,7 +149,7 @@
                     </li>
                     <li class="add_shop ">
                             <span class="js_cartbtn">
-                                <a class="btna btn-addtocart" href="#" onclick="addCart({$goodsDetails['goodsId']},1,'{$goodsDetails['goodsThums']}','{$rs['userPhone']}');">加入购物车</a>
+                                <a class="btna btn-addtocart" href="#" onclick="addCarts('{$goodsDetails['goodsId']}',1,'{$goodsDetails['goodsThums']}','{$rs['userPhone']}');">加入购物车</a>
                             </span>
                     </li>
                 </ul>

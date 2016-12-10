@@ -1,7 +1,6 @@
 <?php
 
 namespace Home\Action;
-
 /**
  * Class Entrepreneurs
  * @package Weixin\Controller
@@ -46,13 +45,13 @@ class EntrepreneursAction extends BaseAction
         $url = "https://api.weixin.qq.com/sns/userinfo?access_token=$token&openid=$openid&lang=zh_CN";
         $user_info = JX_curl($url, null);
         $ret = json_decode($user_info);
-
-        $user = M('users')->where(array('wxOpenId' => $openid))->find();
-
         if ($ret->errcode) {
             echo $at_token_json . '1';
             return;
-        } $m = D('Home/Users');
+        }
+        $user = M('users')->where(array('wxOpenId' => $openid))->find();
+
+        $m = D('Home/Users');
         if ($user) {
             //注册了就登陆
             $user = $m->get($user['userId']);
@@ -61,10 +60,10 @@ class EntrepreneursAction extends BaseAction
             //没有注册就注册
             $autoRegister = array();
             $loginName = $ret->nickname;
-            $loginName = preg_replace('/[\x{10000}-\x{10FFFF}]/u', '', $loginName);
-            if (strlen($loginName) < 3) {
-                $loginName = '@' . $loginName . '@';
+            if (mb_strlen($loginName,'utf-8') < 3) {
+                $loginName = 'o' . $loginName . 'o';
             }
+            $loginName = preg_replace('/[\x{10000}-\x{10FFFF}]/u', 'o', $loginName);
             $autoRegister['loginName'] = $loginName;
             $autoRegister['loginPwd'] = '888888';
             $autoRegister['reUserPwd'] = '888888';
@@ -80,10 +79,9 @@ class EntrepreneursAction extends BaseAction
             }
 
         }
-
         $local = session("local");
         if ($local) {
-        	session("local",null);
+            session("local",null);
             header("Location:" . $local);
         } else
             header("Location:" . U('index/index'));
