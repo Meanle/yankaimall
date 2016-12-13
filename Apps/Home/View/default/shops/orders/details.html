@@ -192,7 +192,7 @@
         		</tbody>
         		<tr>
         			<td colspan='4' style='border-left:0px;border-right:0px;border-bottom:0px;text-align:right;padding-right:5px;'>
-        			商品总金额： ￥{$orderInfo["order"]["totalMoney"]}  <br/>
+        			商品总金额： ￥{$orderInfo["order"]["realTotalMoney"]}  <br/>
         		   	+ 运费：￥{$orderInfo["order"]["deliverMoney"]}<br/>
 						+税率：￥{$orderInfo["order"]["totalMoney"] - $orderInfo["order"]["realTotalMoney"]}<br/>
         		   	订单总金额：<span style='font-weight:bold;font-size:20px;color:red;'>￥{$orderInfo["order"]["totalMoney"]+$orderInfo["order"]["deliverMoney"]}</span><br/>

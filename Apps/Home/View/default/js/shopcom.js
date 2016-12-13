@@ -331,6 +331,9 @@ function editGoods(menuId,p){
 						// location.href=Think.U('Home/Goods/'+menuId,'p='+p);
 					}
 				});
+			}else if(json.status=='-1'){
+				WST.msg('发生了不可意料的错误,您可能填写了相同编号的商品!', {icon: 5});
+				return;
 			}else if(json.status=='-2'){
 				if(params.isSale==1){
 				    WST.msg('您的店铺已被封，如有疑问请与商城管理员联系!', {icon: 5,time:4000},function(){
@@ -873,7 +876,7 @@ function queryOrderPager(statusMark,pcurr){
 					}
 
 					html.push("<td width='100' style='color: red;'>"+order.totalMoney+"</td>");
-					html.push("<td width='100' style='font-weight:bold;color: red;'>"+order.realTotalMoney+"</td>");
+					html.push("<td width='100' style='font-weight:bold;color: red;'>"+order.totalMoney+"</td>");
 					html.push("<td width='100'><div style='line-height:20px;'>"+order.createTime+"</div></td>");
 					html.push("<td width='100'>");
 					html.push("<a href='javascript:;' style='color:"+((order.orderStatus==-6 || order.orderStatus==-3)?"red":"blue")+"' onclick=showOrder('"+order.orderId+"')>查看</a>");

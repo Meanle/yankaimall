@@ -285,18 +285,19 @@
             </ul>
         </div>
     </div>
-    <div id="alerter" style="position:fixed;height:100%;width:100%;top: 0;left: 0;background:rgba(103, 103, 103, 0.23);z-index: 999999">
+<!--    <div id="alerter" style="position:fixed;height:100%;width:100%;top: 0;left: 0;background:rgba(103, 103, 103, 0.23);z-index: 999999">
         <div style="margin: 50% auto; position: relative;">
             <p class="closealerter" style="position: absolute; top: 0; right: 0;width: 1.5rem;height: 1.5rem;"></p>
             <img style="width: 100%" src="__ROOT__/Apps/Home/View/default/img/alert.png">
             <p class="closealerter" style="position: absolute;bottom: 2.5rem;height: 2rem;width: 100%;"></p>
         </div>
-    </div>
+    </div>-->
 </div>
 <script src="__PUBLIC__/js/jquery.min.js"></script>
 <script>
 
-    var isfirst = sessionStorage.getItem("first");
+//    第一次进入弹出广告
+/*    var isfirst = sessionStorage.getItem("first");
     if(isfirst){
         jQuery("#alerter").css('display','none');
     }else{
@@ -304,7 +305,7 @@
             jQuery("#alerter").hide(100);
         });
         sessionStorage.setItem("first", "1");
-    }
+    }*/
 
 
     //    进入商品详情

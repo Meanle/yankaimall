@@ -587,10 +587,10 @@ class GoodsAction extends BaseAction
             }else{
                 $page[$i]['isRecomm'] = "否";
             }
-            if($page[$i]['isbest'] == 1){
-                $page[$i]['isbest'] = "是";
+            if($page[$i]['isBest'] == 1){
+                $page[$i]['isBest'] = "是";
             }else{
-                $page[$i]['isbest'] = "否";
+                $page[$i]['isBest'] = "否";
             }
             if($page[$i]['isNew'] == 1){
                 $page[$i]['isNew'] = "是";
@@ -618,9 +618,9 @@ class GoodsAction extends BaseAction
             array('goodsCountry','国家来源'),
             array('	goodsCountryImg','国家图标地址'),
             array('isRecomm','精选促销'),
-            array('isHot','今日疯抢'),
-            array('isBest','超值热卖'),
-            array('isNew','热选品牌'),
+            array('isBest','今日疯抢'),
+            array('isNew','超值热卖'),
+            array('isHot','热选品牌'),
             array('catName','商城分类'),
             array('shopCatName','本店分类'),
             array('brandId','品牌'),
@@ -644,10 +644,10 @@ class GoodsAction extends BaseAction
             }else{
                 $page[$i]['isRecomm'] = "否";
             }
-            if($page[$i]['isbest'] == 1){
-                $page[$i]['isbest'] = "是";
+            if($page[$i]['isBest'] == 1){
+                $page[$i]['isBest'] = "是";
             }else{
-                $page[$i]['isbest'] = "否";
+                $page[$i]['isBest'] = "否";
             }
             if($page[$i]['isNew'] == 1){
                 $page[$i]['isNew'] = "是";
@@ -675,9 +675,9 @@ class GoodsAction extends BaseAction
             array('goodsCountry','国家来源'),
             array('	goodsCountryImg','国家图标地址'),
             array('isRecomm','精选促销'),
-            array('isHot','今日疯抢'),
-            array('isBest','超值热卖'),
-            array('isNew','热选品牌'),
+            array('isBest','今日疯抢'),
+            array('isNew','超值热卖'),
+            array('isHot','热选品牌'),
             array('catName','商城分类'),
             array('shopCatName','本店分类'),
             array('brandId','品牌'),

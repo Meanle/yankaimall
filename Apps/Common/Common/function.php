@@ -371,6 +371,9 @@ function WSTWriteExcel($expCellName,$expTableData)
     $objPHPExcel->getActiveSheet()->getStyle('O')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
     $objPHPExcel->getActiveSheet()->getStyle('P')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
     $objPHPExcel->getActiveSheet()->getStyle('Q')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    $objPHPExcel->getActiveSheet()->getStyle('R')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    $objPHPExcel->getActiveSheet()->getStyle('S')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    $objPHPExcel->getActiveSheet()->getStyle('T')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 //    设置宽度
     $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(20);
     $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(30);
@@ -379,16 +382,19 @@ function WSTWriteExcel($expCellName,$expTableData)
     $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(10);
     $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(10);
     $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(10);
-    $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(30);
+    $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(10);
     $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(30);
-    $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(10);
+    $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(30);
     $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(10);
-    $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(10);
+    $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(35);
     $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(10);
     $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setWidth(10);
     $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setWidth(10);
     $objPHPExcel->getActiveSheet()->getColumnDimension('P')->setWidth(10);
-    $objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setWidth(50);
+    $objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setWidth(15);
+    $objPHPExcel->getActiveSheet()->getColumnDimension('R')->setWidth(15);
+    $objPHPExcel->getActiveSheet()->getColumnDimension('S')->setWidth(10);
+    $objPHPExcel->getActiveSheet()->getColumnDimension('T')->setWidth(80);
 
     for($i=0;$i<$cellNum;$i++){
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue($cellName[$i].'1', $expCellName[$i][1]);
